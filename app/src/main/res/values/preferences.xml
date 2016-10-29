@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="preferences_active">ACTIVE</string>
+    <bool name="preferences_active">true</bool>
+    <string name="preferences_on_birthday_active">ON_BIRTHDAY_ACTIVE</string>
+    <bool name="preferences_on_birthday_active">true</bool>
+    <string name="preferences_on_birthday_clock">ON_BIRTHDAY_CLOCK</string>
+    <integer name="preferences_on_birthday_clock">480</integer>
+    <string name="preferences_one_day_before_active">ONE_DAY_BEFORE_ACTIVE</string>
+    <bool name="preferences_one_day_before_active">false</bool>
+    <string name="preferences_one_day_before_clock">ONE_DAY_BEFORE_CLOCK</string>
+    <integer name="preferences_one_day_before_clock">480</integer>
+    <string name="preferences_x_days_before_active">X_DAYS_BEFORE_ACTIVE</string>
+    <bool name="preferences_x_days_before_active">false</bool>
+    <string name="preferences_x_days_before_clock">X_DAYS_BEFORE_CLOCK</string>
+    <integer name="preferences_x_days_before_clock">480</integer>
+    <string name="preferences_x_days_before_days">X_DAYS_BEFORE_DAYS</string>
+    <integer name="preferences_x_days_before_days">7</integer>
+
+</resources>

@@ -1,0 +1,85 @@
+<resources
+    xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">Geburtstage verwalten</string>
+    <string name="activity_main_label">Übersicht</string>
+    <string name="activity_add_label">Hinzufügen</string>
+    <string name="activity_edit_label">Bearbeiten</string>
+    <string name="activity_info_label">Information</string>
+    <string name="activity_notifications_label">Benachrichtigungen</string>
+
+    <string name="first_name">Vorname</string>
+    <string name="last_name">Nachame</string>
+    <string name="birthday">Geburtstag</string>
+    <string name="others">Sonstiges</string>
+
+    <string name="today">Heute</string>
+    <string name="tomorrow">Morgen</string>
+    <string name="in_x_days" tools:ignore="PluralsCandidate">in %1$d Tagen</string>
+
+    <string name="yes">Ja</string>
+    <string name="no">Nein</string>
+    <string name="ok">OK</string>
+
+    <string name="rate_app">App bewerten</string>
+    <string name="cancel">Abbrechen</string>
+
+    <string name="info_about_title">Informationen über diese App</string>
+    <string name="info_about_text">Falls der Speicher der App gelöscht wird, sind sämtliche Daten verloren und die App könnte unerwünschtes Verhalten zeigen.
+        \n\nDie App benötigt die Berechtigungen \"Alarm einstellen\" und \"Beim Start ausführen\", um korrekte Benachrichtigungen zu erstellen.
+    </string>
+
+    <string name="info_motivation_title">Was soll diese App?</string>
+    <string name="info_motivation_text">
+        Ich habe diese App entwickelt, um unabhängiger von anderen Diensten zu sein. Ich realisierte, dass ich den Geburtstag meines Mitbewohners nicht vergessen möchte, nur weil er sein Konto bei einem bestimmten sozialen Netzwerk gelöscht hat, welches mir seinen Geburtstag sonst angezeigt hätte.
+        \nAußerdem wollte ich einen simplen Dienst, keine bereits in Smartphone vorinstallierten Kalender-Funktionen, welche meistens eine große Anzahl an Zusatz-Features haben. Und ich wollte einen Dienst, der auf keinen Fall diese Daten weitergibt oder im Internet abspeichert.
+        \n\nDiese App ist sehr simpel gehalten, hat eine Begrenzung der Einträge auf 100 und besitzt gar nicht die Möglichkeit, auf das Internet zuzugreifen. Alles wird auf Deinem Smartphone gespeichert.
+    </string>
+
+    <string name="info_about_developer_title">Informationen über den Entwickler</string>
+    <string name="info_about_developer_text">Diese App wird von Sebastian Oltmanns entwickelt. Bei Kontaktwunsch bitte sebastian.oltmanns.developer@gmail.com nutzen.
+        \n\nDer Code dieser App ist unter der MIT Lizenz (http://choosealicense.com/licenses/mit/) auf GitHub veröffentlicht: https://github.com/SebastianOltmanns/birthdays.
+    </string>
+
+    <string name="activity_main_nothing_to_show">Keine Einträge verfügbar.</string>
+
+    <!-- - - - - - - - - - - - - - - - - - - DIALOGS - - - - - - - - - - - - - - - - - - - - - -->
+    <string name="sure_delete_title">Wirklich entfernen?</string>
+    <string name="sure_delete_text">Möchtest Du diesen Geburtstag wirklich entfernen?</string>
+
+    <string name="wrong_input_title">Falsche Eingabe</string>
+    <string name="wrong_input_no_firstname">Du hast keinen Vornamen angegeben.</string>
+    <string name="wrong_input_no_lastname">Du hast keinen Nachnamen angegeben.</string>
+
+    <string name="failure_loading_data_title">Fehler</string>
+    <string name="failure_loading_data_text">Es gab einen Fehler beim Laden der Daten. Bitte schließe die App und starte sie erneut.</string>
+
+    <string name="maximum_data_achieved_title">Maximale Anzahl erreicht</string>
+    <string name="maximum_data_achieved_text">Du hast die maximale Anzahl an Geburtstagen eingetragen. Bevor du einen neuen Geburtstag eintragen kannst, musst du einen anderen entfernen.</string>
+
+    <string name="rating_title">App bewerten</string>
+    <string name="rating_text">Wenn Dir diese App gefällt, dann bewerte Sie im Google Play Store!</string>
+
+    <string name="no_birthday_added_title">Geburtstag nicht gewählt</string>
+    <string name="no_birthday_added_text">Du hast keinen Geburtstag angegeben. Standardmäßig ist der 01.01.1970 eingestellt. Trotzdem speichern?</string>
+
+    <!-- - - - - - - - - - - - - - - - - - - NOTIFICATION - - - - - - - - - - - - - - - - - - - -->
+    <string name="content_title">Geburtstagserinnerung</string>
+    <string name="content_text_today">%1$s hat heute Geburtstag!</string>
+    <string name="content_text_tomorrow">%1$s hat morgen Geburtstag!</string>
+    <string name="content_text_in_x_days">%1$s hat in %2$d Tagen Geburtstag!</string>
+
+
+    <!-- - - - - - - - - - - - - - - - - - - MENU - - - - - - - - - - - - - - - - - - - -->
+    <string name="menu_title_delete">Löschen</string>
+    <string name="menu_title_save">Speichern</string>
+    <string name="menu_title_info">Information</string>
+    <string name="menu_title_notifications">Benachrichtigungen</string>
+
+    <!-- - - - - - - - - - - - - - - - - - - NOTIFICATION SETTINGS - - - - - - - - - - - - - - - - - - - -->
+    <string name="activity_notifications_active">Benachrichtigungen aktiv?</string>
+    <string name="activity_notifications_on_birthday">Am Geburtstag um %1$s</string>
+    <string name="activity_notifications_one_day_before">Einen Tag vor dem Geburtstag um %1$s</string>
+    <string name="activity_notifications_x_days_before">%1$d Tage vor dem Geburtstag um %2$s</string>
+    <string name="activity_notifications_x_days_before_without_time">%1$d Tage vor dem Geburtstag</string>
+
+</resources>
