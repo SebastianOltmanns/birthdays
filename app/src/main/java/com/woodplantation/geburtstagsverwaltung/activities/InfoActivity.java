@@ -3,8 +3,17 @@ package com.woodplantation.geburtstagsverwaltung.activities;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.widget.TextView;
 
 import com.woodplantation.geburtstagsverwaltung.R;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 
 /**
  * Created by Sebu on 22.03.2016.
@@ -20,6 +29,41 @@ public class InfoActivity extends AppCompatActivity {
 		setSupportActionBar(toolbar);
 
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+		readPrivacyPolicy();
+	}
+
+	private void readPrivacyPolicy() {
+		String title;
+		String text;
+		try {
+			InputStream is = getResources().openRawResource(R.raw.privacy_policy);
+			InputStreamReader isr = new InputStreamReader(is);
+			BufferedReader br = new BufferedReader(isr);
+
+			title = br.readLine();
+
+			String line;
+			StringBuilder builder = new StringBuilder();
+			while ((line = br.readLine()) != null) {
+				builder.append(line + "\n");
+			}
+			text = builder.toString();
+
+			is.close();
+			isr.close();
+			br.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			title = getString(R.string.info_privacy_error_title);
+			text = getString(R.string.info_privacy_error_text);
+		}
+
+		TextView privacyTitle = (TextView) findViewById(R.id.information_activity_privacy_title);
+		TextView privacyText = (TextView) findViewById(R.id.information_activity_privacy_text);
+
+		privacyTitle.setText(title);
+		privacyText.setText(text);
 	}
 
 }

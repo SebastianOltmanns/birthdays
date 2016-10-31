@@ -23,23 +23,6 @@
     <string name="rate_app">App bewerten</string>
     <string name="cancel">Abbrechen</string>
 
-    <string name="info_about_title">Informationen über diese App</string>
-    <string name="info_about_text">Falls der Speicher der App gelöscht wird, sind sämtliche Daten verloren und die App könnte unerwünschtes Verhalten zeigen.
-        \n\nDie App benötigt die Berechtigungen \"Alarm einstellen\" und \"Beim Start ausführen\", um korrekte Benachrichtigungen zu erstellen.
-    </string>
-
-    <string name="info_motivation_title">Was soll diese App?</string>
-    <string name="info_motivation_text">
-        Ich habe diese App entwickelt, um unabhängiger von anderen Diensten zu sein. Ich realisierte, dass ich den Geburtstag meines Mitbewohners nicht vergessen möchte, nur weil er sein Konto bei einem bestimmten sozialen Netzwerk gelöscht hat, welches mir seinen Geburtstag sonst angezeigt hätte.
-        \nAußerdem wollte ich einen simplen Dienst, keine bereits in Smartphone vorinstallierten Kalender-Funktionen, welche meistens eine große Anzahl an Zusatz-Features haben. Und ich wollte einen Dienst, der auf keinen Fall diese Daten weitergibt oder im Internet abspeichert.
-        \n\nDiese App ist sehr simpel gehalten, hat eine Begrenzung der Einträge auf 100 und besitzt gar nicht die Möglichkeit, auf das Internet zuzugreifen. Alles wird auf Deinem Smartphone gespeichert.
-    </string>
-
-    <string name="info_about_developer_title">Informationen über den Entwickler</string>
-    <string name="info_about_developer_text">Diese App wird von Sebastian Oltmanns entwickelt. Bei Kontaktwunsch bitte sebastian.oltmanns.developer@gmail.com nutzen.
-        \n\nDer Code dieser App ist unter der MIT Lizenz (http://choosealicense.com/licenses/mit/) auf GitHub veröffentlicht: https://github.com/SebastianOltmanns/birthdays.
-    </string>
-
     <string name="activity_main_nothing_to_show">Keine Einträge verfügbar.</string>
 
     <!-- - - - - - - - - - - - - - - - - - - DIALOGS - - - - - - - - - - - - - - - - - - - - - -->
@@ -81,5 +64,26 @@
     <string name="activity_notifications_one_day_before">Einen Tag vor dem Geburtstag um %1$s</string>
     <string name="activity_notifications_x_days_before">%1$d Tage vor dem Geburtstag um %2$s</string>
     <string name="activity_notifications_x_days_before_without_time">%1$d Tage vor dem Geburtstag</string>
+
+    <!-- - - - - - - - - - - - - - - - - - - INFORMATION STUFF - - - - - - - - - - - - - - - - - - - - - -->
+    <string name="info_about_title">Informationen über diese App</string>
+    <string name="info_about_text">Falls der Speicher der App gelöscht wird, sind sämtliche Daten verloren und die App könnte unerwünschtes Verhalten zeigen.
+        \n\nDie App benötigt die Berechtigungen \"Alarm einstellen\" und \"Beim Start ausführen\", um korrekte Benachrichtigungen zu erstellen.
+    </string>
+
+    <string name="info_motivation_title">Was soll diese App?</string>
+    <string name="info_motivation_text">
+        Ich habe diese App entwickelt, um unabhängiger von anderen Diensten zu sein. Ich realisierte, dass ich den Geburtstag meines Mitbewohners nicht vergessen möchte, nur weil er sein Konto bei einem bestimmten sozialen Netzwerk gelöscht hat, welches mir seinen Geburtstag sonst angezeigt hätte.
+        \nAußerdem wollte ich einen simplen Dienst, keine bereits in Smartphone vorinstallierten Kalender-Funktionen, welche meistens eine große Anzahl an Zusatz-Features haben. Und ich wollte einen Dienst, der auf keinen Fall diese Daten weitergibt oder im Internet abspeichert.
+        \n\nDiese App ist sehr simpel gehalten, hat eine Begrenzung der Einträge auf 100 und besitzt gar nicht die Möglichkeit, auf das Internet zuzugreifen. Alles wird auf Deinem Smartphone gespeichert.
+    </string>
+
+    <string name="info_about_developer_title">Informationen über den Entwickler</string>
+    <string name="info_about_developer_text">Diese App wird von Sebastian Oltmanns entwickelt. Bei Kontaktwunsch bitte sebastian.oltmanns.developer@gmail.com nutzen.
+        \n\nDer Code dieser App ist unter der MIT Lizenz (http://choosealicense.com/licenses/mit/) auf GitHub veröffentlicht: https://github.com/SebastianOltmanns/birthdays.
+    </string>
+
+    <string name="info_privacy_error_title">Datenschutzerklärung</string>
+    <string name="info_privacy_error_text">Es gab einen Fehler beim Laden der Datenschutzerklärung. Besuche https://github.com/SebastianOltmanns/birthdays/blob/master/app/src/main/res/raw/privacy_policy.txt, um die aktuelle Version der Datenschutzerklärung zu lesen.</string>
 
 </resources>
