@@ -8,7 +8,7 @@ This app is being developed by Sebastian Oltmanns. For contact, please use sebas
 ### Multiple language support
 So far this Application is only available in German language and in the German-speaking Google Play Store. In the future, I want to publish it in english, too. 
 If you are willing to translate the Strings of this Application into another language for publishing it into another national Play Store, feel free to contact me or just do a pull request.
-### iOs-Support
-This app is only available for Android, since I myself am only interested in Android programming so far. If you are interested in doing an iOs-Version of this app, feel free to contact me about it! 
+### Support for other OS (iOS, Windows, ...)
+This app is only available for Android, since I myself am only interested in Android programming so far. If you are interested in doing another Version of this app, feel free to contact me about it! 
 ### Google Play Store
 https://play.google.com/store/apps/details?id=com.woodplantation.geburtstagsverwaltung
