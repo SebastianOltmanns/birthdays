@@ -83,7 +83,7 @@
             android:id="@+id/information_activity_privacy_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:autoLink="web"
+            android:autoLink="email"
             android:textColor="@color/text_color"
             android:textSize="@dimen/text_size"/>
 
