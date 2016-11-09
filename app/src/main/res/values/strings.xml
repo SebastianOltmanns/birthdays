@@ -57,6 +57,7 @@
     <string name="menu_title_save">Speichern</string>
     <string name="menu_title_info">Information</string>
     <string name="menu_title_notifications">Benachrichtigungen</string>
+    <string name="menu_title_import_export">Import/Export</string>
 
     <!-- - - - - - - - - - - - - - - - - - - NOTIFICATION SETTINGS - - - - - - - - - - - - - - - - - - - -->
     <string name="activity_notifications_active">Benachrichtigungen aktiv?</string>

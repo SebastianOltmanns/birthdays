@@ -144,6 +144,8 @@ public class MainActivity extends AppCompatActivity {
 		} else if (id == R.id.main_notifications) {
 			Intent intent = new Intent(this, NotificationsActivity.class);
 			startActivityForResult(intent, REQUEST_INTENT_NOTIFICATIONS);
+		} else if (id == R.id.main_import_export) {
+			//TODO do import and export stuff
 		}
 		return true;
 	}

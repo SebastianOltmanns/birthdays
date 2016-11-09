@@ -3,6 +3,12 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/main_import_export"
+        android:title="@string/menu_title_import_export"
+        android:icon="@drawable/ic_import_export"
+        app:showAsAction="ifRoom"/>
+
+    <item
         android:id="@+id/main_rate"
         android:title="@string/rate_app"
         android:icon="@drawable/ic_thumb_up"
