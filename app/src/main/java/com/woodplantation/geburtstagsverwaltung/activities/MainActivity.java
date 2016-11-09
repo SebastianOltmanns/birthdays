@@ -26,6 +26,7 @@ import com.woodplantation.geburtstagsverwaltung.storage.StorageHandler;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * Created by Sebu on 09.03.2016.
@@ -36,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
 	public static final int REQUEST_INTENT_CREATE_DATA_SET = 1;
 	public static final int REQUEST_INTENT_EDIT_DATA_SET = 2;
 	public static final int REQUEST_INTENT_NOTIFICATIONS = 3;
+	public static final int REQUEST_INTENT_FILEPICKER_EXPORT = 4;
+	public static final int REQUEST_INTENT_FILEPICKER_IMPORT = 5;
 
 	public static final int MAXIMUM_DATA_SIZE = 100;
 
@@ -48,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
 	private StorageHandler storageHandler;
 	private ListView dataListView;
 	private DataListViewAdapter dataListViewAdapter;
+
+	private AlertDialog.Builder importExportFailDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +86,12 @@ public class MainActivity extends AppCompatActivity {
 			builder.setPositiveButton(R.string.ok, null);
 			builder.show();
 		}
+
+		importExportFailDialog =
+				new AlertDialog.Builder(this).
+						setTitle(R.string.import_export_failed_title).
+						setMessage(R.string.import_export_failed_text).
+						setNeutralButton(R.string.ok, null);
 	}
 
 	public void onAddButtonClick(View v) {
@@ -145,7 +156,12 @@ public class MainActivity extends AppCompatActivity {
 			Intent intent = new Intent(this, NotificationsActivity.class);
 			startActivityForResult(intent, REQUEST_INTENT_NOTIFICATIONS);
 		} else if (id == R.id.main_import_export) {
-			//TODO do import and export stuff
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle(R.string.import_export_dialog_title);
+			builder.setMessage(getString(R.string.import_export_dialog_text, MAXIMUM_DATA_SIZE));
+			builder.setPositiveButton(R.string.import_export_export, exportClickListener);
+			builder.setNeutralButton(R.string.import_export_import, importClickListener);
+			builder.show();
 		}
 		return true;
 	}
@@ -188,9 +204,25 @@ public class MainActivity extends AppCompatActivity {
 					Map<String, ?> map = (Map<String, ?>) data.getSerializableExtra(INTENT_CODE_OLD_PREFERENCES);
 					NotificationHandler.handlePreferences(this, map, this.data);
 				}
+				break;
+			case REQUEST_INTENT_FILEPICKER_EXPORT:
+				if (resultCode != RESULT_OK) {
+					importExportFailDialog.show();
+					break;
+				}
+				String exportPath = "";
+				Log.d("MainActivity","export: " + exportPath);
+				break;
+			case REQUEST_INTENT_FILEPICKER_IMPORT:
+				if (resultCode != RESULT_OK) {
+					importExportFailDialog.show();
+					break;
+				}
+				String importPath = "";
+				Log.d("MainActivity","import: " + importPath);
+				break;
 		}
 	}
-
 
 	private void refresh() {
 		Collections.sort(data);
@@ -206,5 +238,19 @@ public class MainActivity extends AppCompatActivity {
 			tv.setVisibility(View.GONE);
 		}
 	}
+
+	private DialogInterface.OnClickListener exportClickListener = new DialogInterface.OnClickListener() {
+		@Override
+		public void onClick(DialogInterface dialogInterface, int i) {
+			//export
+		}
+	};
+
+	private DialogInterface.OnClickListener importClickListener = new DialogInterface.OnClickListener() {
+		@Override
+		public void onClick(DialogInterface dialogInterface, int i) {
+			//import
+		}
+	};
 
 }

@@ -3,6 +3,7 @@ package com.woodplantation.geburtstagsverwaltung.activities;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.method.LinkMovementMethod;
 import android.widget.TextView;
 
 import com.woodplantation.geburtstagsverwaltung.R;
@@ -29,6 +30,11 @@ public class InfoActivity extends AppCompatActivity {
 		setSupportActionBar(toolbar);
 
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+		TextView infoTextView = (TextView) findViewById(R.id.information_activity_about_text);
+		infoTextView.setMovementMethod(LinkMovementMethod.getInstance());
+		TextView developerTextView = (TextView) findViewById(R.id.information_activity_developer_text);
+		developerTextView.setMovementMethod(LinkMovementMethod.getInstance());
 
 		readPrivacyPolicy();
 	}

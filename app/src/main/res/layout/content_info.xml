@@ -28,6 +28,7 @@
             android:textStyle="bold"/>
 
         <TextView
+            android:id="@+id/information_activity_about_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
@@ -62,6 +63,7 @@
             android:textStyle="bold"/>
 
         <TextView
+            android:id="@+id/information_activity_developer_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
