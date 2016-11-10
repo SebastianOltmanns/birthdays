@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -16,6 +17,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.nbsp.materialfilepicker.MaterialFilePicker;
+import com.nbsp.materialfilepicker.ui.FilePickerActivity;
 import com.woodplantation.geburtstagsverwaltung.adapter.DataListViewAdapter;
 import com.woodplantation.geburtstagsverwaltung.storage.DataSet;
 import com.woodplantation.geburtstagsverwaltung.notifications.IdGenerator;
@@ -23,8 +26,19 @@ import com.woodplantation.geburtstagsverwaltung.notifications.NotificationHandle
 import com.woodplantation.geburtstagsverwaltung.R;
 import com.woodplantation.geburtstagsverwaltung.storage.StorageHandler;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -37,8 +51,7 @@ public class MainActivity extends AppCompatActivity {
 	public static final int REQUEST_INTENT_CREATE_DATA_SET = 1;
 	public static final int REQUEST_INTENT_EDIT_DATA_SET = 2;
 	public static final int REQUEST_INTENT_NOTIFICATIONS = 3;
-	public static final int REQUEST_INTENT_FILEPICKER_EXPORT = 4;
-	public static final int REQUEST_INTENT_FILEPICKER_IMPORT = 5;
+	public static final int REQUEST_INTENT_FILEPICKER_IMPORT = 4;
 
 	public static final int MAXIMUM_DATA_SIZE = 100;
 
@@ -47,12 +60,18 @@ public class MainActivity extends AppCompatActivity {
 	public static final String INTENT_CODE_NEW_ID = "DATASET_NEW_ID";
 	public static final String INTENT_CODE_OLD_PREFERENCES = "OLD_PREFERENCES";
 
+	private static final String FILE_EXPORT_DIRECTORY = "birthdays";
+	private static final String FILE_EXPORT_NAME = "export_";
+	private static final String FILE_EXPORT_EXTENSION = ".birthdays";
+	private static final SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy_HH-mm-ss", Locale.US);
+
 	private ArrayList<DataSet> data;
 	private StorageHandler storageHandler;
 	private ListView dataListView;
 	private DataListViewAdapter dataListViewAdapter;
 
 	private AlertDialog.Builder importExportFailDialog;
+	private AlertDialog.Builder importExportStorageFailDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +111,12 @@ public class MainActivity extends AppCompatActivity {
 						setTitle(R.string.import_export_failed_title).
 						setMessage(R.string.import_export_failed_text).
 						setNeutralButton(R.string.ok, null);
+
+		importExportStorageFailDialog =
+				new AlertDialog.Builder(MainActivity.this).
+						setTitle(R.string.import_export_storage_error_title).
+						setMessage(R.string.import_export_storage_error_text).
+						setNeutralButton(R.string.ok, null);
 	}
 
 	public void onAddButtonClick(View v) {
@@ -101,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
 			builder.setTitle(R.string.maximum_data_achieved_title);
 			builder.setNeutralButton(R.string.ok, null);
 			builder.show();
+			return;
 		}
 
 		int id = IdGenerator.getNewId(this);
@@ -110,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
 			builder.setTitle(R.string.failure_loading_data_title);
 			builder.setNeutralButton(R.string.ok, null);
 			builder.show();
+			return;
 		}
 
 		Intent intent = new Intent(MainActivity.this, AddActivity.class);
@@ -205,21 +232,54 @@ public class MainActivity extends AppCompatActivity {
 					NotificationHandler.handlePreferences(this, map, this.data);
 				}
 				break;
-			case REQUEST_INTENT_FILEPICKER_EXPORT:
-				if (resultCode != RESULT_OK) {
-					importExportFailDialog.show();
-					break;
-				}
-				String exportPath = "";
-				Log.d("MainActivity","export: " + exportPath);
-				break;
 			case REQUEST_INTENT_FILEPICKER_IMPORT:
 				if (resultCode != RESULT_OK) {
 					importExportFailDialog.show();
 					break;
 				}
-				String importPath = "";
-				Log.d("MainActivity","import: " + importPath);
+				String filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
+				Log.d("MainActivity","import: " + filePath);
+				File file = new File(filePath);
+				if (!file.exists()) {
+					importExportFailDialog.show();
+				}
+				try {
+					FileInputStream fis = new FileInputStream(file);
+					BufferedInputStream bis = new BufferedInputStream(fis);
+					ObjectInputStream ois = new ObjectInputStream(bis);
+
+					ArrayList<DataSet> importedData = (ArrayList<DataSet>) ois.readObject();
+
+					ois.close();
+					bis.close();
+					fis.close();
+
+					if (importedData.size() + this.data.size() >= MAXIMUM_DATA_SIZE) {
+						new AlertDialog.Builder(this).
+								setMessage(getString(R.string.import_export_maximum_data_size_text, MAXIMUM_DATA_SIZE)).
+								setTitle(R.string.import_export_maximum_data_size_title).
+								setNeutralButton(R.string.ok, null).
+								show();
+						return;
+					}
+
+					for (DataSet dataSet : importedData) {
+						dataSet.id = IdGenerator.getNewId(this);
+						this.data.add(dataSet);
+						NotificationHandler.addBirthday(this, dataSet);
+					}
+					refresh();
+
+					new AlertDialog.Builder(this).
+							setMessage(R.string.import_export_import_successfull_text).
+							setTitle(R.string.import_export_import_successfull_title).
+							setNeutralButton(R.string.ok, null).
+							show();
+
+				} catch (IOException | ClassNotFoundException e) {
+					e.printStackTrace();
+					importExportFailDialog.show();
+				}
 				break;
 		}
 	}
@@ -242,14 +302,53 @@ public class MainActivity extends AppCompatActivity {
 	private DialogInterface.OnClickListener exportClickListener = new DialogInterface.OnClickListener() {
 		@Override
 		public void onClick(DialogInterface dialogInterface, int i) {
-			//export
+			String state = Environment.getExternalStorageState();
+			if (state.equals(Environment.MEDIA_MOUNTED) || state.equals(Environment.MEDIA_MOUNTED_READ_ONLY)) {
+				File dir = new File(Environment.getExternalStorageDirectory(), FILE_EXPORT_DIRECTORY);
+				if (!dir.exists() && !dir.mkdir()) {
+					Log.d("MainActivity","cancelling export. directory " + dir.getAbsolutePath() + " not creatable");
+					importExportStorageFailDialog.show();
+				}
+				String filename = FILE_EXPORT_NAME + sdf.format(new Date()) + FILE_EXPORT_EXTENSION;
+				File output = new File(dir + File.separator + filename);
+				if (data == null) {
+					importExportFailDialog.show();
+				}
+				try {
+					FileOutputStream fos = new FileOutputStream(output);
+					BufferedOutputStream bos = new BufferedOutputStream(fos);
+					ObjectOutputStream oos = new ObjectOutputStream(bos);
+
+					oos.writeObject(data);
+
+					oos.close();
+					bos.close();
+					fos.close();
+
+					new AlertDialog.Builder(MainActivity.this).
+							setTitle(R.string.import_export_export_successfull_title).
+							setMessage(getString(R.string.import_export_export_successfull_text, output.getAbsolutePath())).
+							setNeutralButton(R.string.ok, null).
+							show();
+				} catch (IOException e) {
+					e.printStackTrace();
+					importExportStorageFailDialog.show();
+				}
+			} else {
+				Log.d("MainActivity","cancelling export. state: " + state);
+				importExportStorageFailDialog.show();
+			}
 		}
 	};
 
 	private DialogInterface.OnClickListener importClickListener = new DialogInterface.OnClickListener() {
 		@Override
 		public void onClick(DialogInterface dialogInterface, int i) {
-			//import
+			new MaterialFilePicker()
+					.withActivity(MainActivity.this)
+					.withRequestCode(REQUEST_INTENT_FILEPICKER_IMPORT)
+					.withFilter(Pattern.compile(".*\\.birthdays")) // Filtering files and directories by file name using regexp
+					.start();
 		}
 	};
 

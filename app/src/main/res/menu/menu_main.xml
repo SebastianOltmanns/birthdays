@@ -3,18 +3,6 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/main_import_export"
-        android:title="@string/menu_title_import_export"
-        android:icon="@drawable/ic_import_export"
-        app:showAsAction="ifRoom"/>
-
-    <item
-        android:id="@+id/main_rate"
-        android:title="@string/rate_app"
-        android:icon="@drawable/ic_thumb_up"
-        app:showAsAction="ifRoom"/>
-
-    <item
         android:id="@+id/main_info"
         android:title="@string/menu_title_info"
         android:icon="@drawable/ic_info_outline"
@@ -24,6 +12,18 @@
         android:id="@+id/main_notifications"
         android:title="@string/menu_title_notifications"
         android:icon="@drawable/ic_notifications"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/main_import_export"
+        android:title="@string/menu_title_import_export"
+        android:icon="@drawable/ic_import_export"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/main_rate"
+        android:title="@string/rate_app"
+        android:icon="@drawable/ic_thumb_up"
         app:showAsAction="ifRoom"/>
 
 </menu>

@@ -67,8 +67,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:autoLink="web|email"
+            android:autoLink="email"
             android:text="@string/info_about_developer_text"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/text_size"/>
+
+        <TextView
+            android:id="@+id/information_activity_github_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:text="@string/info_about_github_text"
             android:textColor="@color/text_color"
             android:textSize="@dimen/text_size"/>
 

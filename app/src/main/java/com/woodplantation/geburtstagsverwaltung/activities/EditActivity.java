@@ -30,12 +30,12 @@ public class EditActivity extends InputActivity {
 			setResult(RESULT_CANCELED);
 			finish();
 		}
-		birthday = oldDataSet.getBirthday();
+		birthday = oldDataSet.birthday;
 
-		firstNameEdit.setText(oldDataSet.getFirstName());
-		lastNameEdit.setText(oldDataSet.getLastName());
+		firstNameEdit.setText(oldDataSet.firstName);
+		lastNameEdit.setText(oldDataSet.lastName);
 		birthdayText.setText(sdf.format(birthday.getTime()));
-		othersEdit.setText(oldDataSet.getOthers());
+		othersEdit.setText(oldDataSet.others);
 	}
 
 	@Override
@@ -59,7 +59,7 @@ public class EditActivity extends InputActivity {
 			Intent resultIntent = new Intent();
 			resultIntent.putExtra(MainActivity.INTENT_CODE_EDIT_INDEX, index);
 			DataSet newDataSet = new DataSet(
-					oldDataSet.getId(),
+					oldDataSet.id,
 					birthday,
 					firstNameEdit.getText().toString(),
 					lastNameEdit.getText().toString(),

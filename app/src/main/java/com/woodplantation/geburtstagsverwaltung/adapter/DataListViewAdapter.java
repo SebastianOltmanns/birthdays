@@ -39,11 +39,11 @@ public class DataListViewAdapter extends ArrayAdapter<DataSet> {
 		DataSet dataSet = getItem(position);
 
 		String remaining = getRemaining(dataSet);
-		String firstname = dataSet.getFirstName();
-		String lastname = dataSet.getLastName();
-		String others = dataSet.getOthers();
+		String firstname = dataSet.firstName;
+		String lastname = dataSet.lastName;
+		String others = dataSet.others;
 		others = others.replaceAll(System.getProperty("line.separator"), " ");
-		Calendar birthday = dataSet.getBirthday();
+		Calendar birthday = dataSet.birthday;
 
 		TextView nameTextView = (TextView) convertView.findViewById(R.id.data_list_view_text_name);
 		TextView othersTextView = (TextView) convertView.findViewById(R.id.data_list_view_text_others);

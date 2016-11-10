@@ -46,8 +46,8 @@
     <string name="no_birthday_added_text">Du hast keinen Geburtstag angegeben. Standardmäßig ist der 01.01.1970 eingestellt. Trotzdem speichern?</string>
 
     <string name="import_export_dialog_title">Import/Export</string>
-    <string name="import_export_dialog_text">
-        Du kannst alle eingegebenen Geburtstage in eine Datei exportieren. Diese Datei wird als Klartext gespeichert und wird nicht verschlüsselt. Das Risiko, welches hiervon ausgeht, insbesondere Datenschutz betreffend, liegt ganz alleine bei Dir.
+    <string name="import_export_dialog_text" tools:ignore="PluralsCandidate">
+        Du kannst alle eingegebenen Geburtstage in eine Datei exportieren. Diese Datei wird in dem Primärspeicher des Smartphones gespeichert und wird nicht verschlüsselt. Das Risiko, welches hiervon ausgeht, insbesondere Datenschutz betreffend, liegt ganz alleine bei Dir.
         \n\nFalls Du Geburtstage aus einer solchen Datei importieren möchtest, beachte, dass sie zu den aktuell in der App gespeicherten Geburtstagen hinzugefügt werden. Falls die Anzahl der Geburtstage aus beiden Quellen die maximale Anzahl von %1$d übersteigt, ist das Importieren nicht möglich.
     </string>
     <string name="import_export_import">Importieren</string>
@@ -56,11 +56,23 @@
     <string name="import_export_failed_title">Fehler beim Import/Export</string>
     <string name="import_export_failed_text">Es gab ein Problem beim Importieren oder Exportieren.</string>
 
+    <string name="import_export_storage_error_title">Problem mit dem Speicher</string>
+    <string name="import_export_storage_error_text">Es gab ein Problem mit der Verfügbarkeit des Speichers.</string>
+
+    <string name="import_export_export_successfull_title">Erfolgreich exportiert</string>
+    <string name="import_export_export_successfull_text">Die gespeicherten Daten wurden erfolgreich exportiert. Die Datei befindet sich hier: %1$s</string>
+
+    <string name="import_export_import_successfull_title">Erfolgreich importiert</string>
+    <string name="import_export_import_successfull_text">Die Datei wurde erfolgreich importiert und die Geburtstage zur App hinzugefügt.</string>
+
+    <string name="import_export_maximum_data_size_title">Maximale Anzahl überschritten</string>
+    <string name="import_export_maximum_data_size_text">Deine bereits gespeicherten Geburtstage sind zusammen mit den zu importierenden zu viele. Die maximale Anzahl beträgt %1$d. Damit die Datei erfolgreich importiert werden kann, musst Du Geburtstage entfernen.</string>
+
     <!-- - - - - - - - - - - - - - - - - - - NOTIFICATION - - - - - - - - - - - - - - - - - - - -->
     <string name="content_title">Geburtstagserinnerung</string>
     <string name="content_text_today">%1$s hat heute Geburtstag!</string>
     <string name="content_text_tomorrow">%1$s hat morgen Geburtstag!</string>
-    <string name="content_text_in_x_days">%1$s hat in %2$d Tagen Geburtstag!</string>
+    <string name="content_text_in_x_days" tools:ignore="PluralsCandidate">%1$s hat in %2$d Tagen Geburtstag!</string>
 
     <!-- - - - - - - - - - - - - - - - - - - MENU - - - - - - - - - - - - - - - - - - - -->
     <string name="menu_title_delete">Löschen</string>
@@ -73,15 +85,16 @@
     <string name="activity_notifications_active">Benachrichtigungen aktiv?</string>
     <string name="activity_notifications_on_birthday">Am Geburtstag um %1$s</string>
     <string name="activity_notifications_one_day_before">Einen Tag vor dem Geburtstag um %1$s</string>
-    <string name="activity_notifications_x_days_before">%1$d Tage vor dem Geburtstag um %2$s</string>
-    <string name="activity_notifications_x_days_before_without_time">%1$d Tage vor dem Geburtstag</string>
+    <string name="activity_notifications_x_days_before" tools:ignore="PluralsCandidate">%1$d Tage vor dem Geburtstag um %2$s</string>
+    <string name="activity_notifications_x_days_before_without_time" tools:ignore="PluralsCandidate">%1$d Tage vor dem Geburtstag</string>
 
     <!-- - - - - - - - - - - - - - - - - - - INFORMATION STUFF - - - - - - - - - - - - - - - - - - - - - -->
     <string name="info_about_title">Informationen über diese App</string>
     <string name="info_about_text">Falls der Speicher der App gelöscht wird, sind sämtliche Daten verloren und die App könnte unerwünschtes Verhalten zeigen.
         \n\nDie App benötigt die Berechtigungen \"Alarm einstellen\" und \"Beim Start ausführen\", um korrekte Benachrichtigungen zu erstellen.
+        \n\nDie App benötigt die Berechtigungen \"SD-Karteninhalte ändern oder löschen\" und \"SD-Karteninhalte lesen\", um auf Deinen Wunsch hin Daten zu importieren oder exportieren. Die App macht dies niemals automatisch.
         \n\nEs wird keine Verantwortung übernommen, falls die App Notifikationen falsch oder nicht anzeigt.
-        \n\nDas Modul, mit dem eine Datei zum Importieren/Exportieren ausgewählt werden kann, ist unter der <a href=""></a> auf <a href="">Github</a> veröffentlicht. Copyright für dieses Modul: <a href=""></a>.
+        \n\nDas Modul, mit dem eine Datei zum Importieren ausgewählt werden kann, ist unter der <a href="http://choosealicense.com/licenses/apache-2.0/">Apache 2.0 Lizenz</a> auf <a href="https://github.com/nbsp-team/MaterialFilePicker">Github</a> veröffentlicht. Copyright für dieses Modul: <a href="https://github.com/nbsp-team">nbsp-team</a>.
     </string>
 
     <string name="info_motivation_title">Was soll diese App?</string>
@@ -92,9 +105,8 @@
     </string>
 
     <string name="info_about_developer_title">Informationen über den Entwickler</string>
-    <string name="info_about_developer_text">Diese App wird von Sebastian Oltmanns entwickelt. Bei Kontaktwunsch bitte sebastian.oltmanns.developer@gmail.com nutzen.
-        \n\nDer Code dieser App ist unter der <a href="http://choosealicense.com/licenses/mit/">MIT-Lizenz</a> auf <a href="https://github.com/SebastianOltmanns/birthdays">GitHub</a> veröffentlicht.
-    </string>
+    <string name="info_about_developer_text">Diese App wird von Sebastian Oltmanns entwickelt. Bei Kontaktwunsch bitte sebastian.oltmanns.developer@gmail.com nutzen.</string>
+    <string name="info_about_github_text">Der Code dieser App ist unter der <a href="http://choosealicense.com/licenses/mit/">MIT-Lizenz</a> auf <a href="https://github.com/SebastianOltmanns/birthdays">GitHub</a> veröffentlicht.</string>
 
     <string name="info_privacy_error_title">Datenschutzerklärung</string>
     <string name="info_privacy_error_text">Es gab einen Fehler beim Laden der Datenschutzerklärung. Besuche https://github.com/SebastianOltmanns/birthdays/blob/master/app/src/main/res/raw/privacy_policy.txt, um die aktuelle Version der Datenschutzerklärung zu lesen.</string>

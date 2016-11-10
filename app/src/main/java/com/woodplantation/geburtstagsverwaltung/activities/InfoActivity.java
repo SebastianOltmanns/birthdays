@@ -33,8 +33,8 @@ public class InfoActivity extends AppCompatActivity {
 
 		TextView infoTextView = (TextView) findViewById(R.id.information_activity_about_text);
 		infoTextView.setMovementMethod(LinkMovementMethod.getInstance());
-		TextView developerTextView = (TextView) findViewById(R.id.information_activity_developer_text);
-		developerTextView.setMovementMethod(LinkMovementMethod.getInstance());
+		TextView githubTextView = (TextView) findViewById(R.id.information_activity_github_text);
+		githubTextView.setMovementMethod(LinkMovementMethod.getInstance());
 
 		readPrivacyPolicy();
 	}

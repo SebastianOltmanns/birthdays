@@ -11,11 +11,11 @@ public class DataSet implements Serializable, Comparable<DataSet> {
 
 	static final long serialVersionUID =-2227872867228907805L;
 
-	private int id;
-	private Calendar birthday;
-	private String firstName;
-	private String lastName;
-	private String others;
+	public int id;
+	public Calendar birthday;
+	public String firstName;
+	public String lastName;
+	public String others;
 
 	public DataSet(int id, Calendar birthday, String firstName, String lastName, String others) {
 		this.id = id;
@@ -23,26 +23,6 @@ public class DataSet implements Serializable, Comparable<DataSet> {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.others = others;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public Calendar getBirthday() {
-		return birthday;
-	}
-
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public String getOthers() {
-		return others;
 	}
 
 	public int getRemaining(Calendar now) {
@@ -75,7 +55,7 @@ public class DataSet implements Serializable, Comparable<DataSet> {
 		int tRemains = getRemaining(now);
 		int oRemains = another.getRemaining(now);
 		int tYear = birthday.get(Calendar.YEAR);
-		int oYear = another.getBirthday().get(Calendar.YEAR);
+		int oYear = another.birthday.get(Calendar.YEAR);
 
 		if (tRemains > oRemains) return 1;
 		if (tRemains < oRemains) return -1;

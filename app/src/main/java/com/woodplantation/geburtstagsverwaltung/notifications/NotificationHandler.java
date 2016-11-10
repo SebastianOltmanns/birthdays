@@ -116,13 +116,13 @@ public class NotificationHandler extends BroadcastReceiver {
 		} else {
 			idMap = (HashMap<Integer,Integer[]>) object;
 		}
-		Integer[] ids = idMap.get(dataSet.getId());
+		Integer[] ids = idMap.get(dataSet.id);
 		if (ids == null) {
 			ids = getNewIds(context);
 		} else {
 			ids[which] = getNewId(context);
 		}
-		idMap.put(dataSet.getId(), ids);
+		idMap.put(dataSet.id, ids);
 		save(context, FILEPATH_IDMAP, idMap);
 		return ids[which];
 	}
@@ -134,7 +134,7 @@ public class NotificationHandler extends BroadcastReceiver {
 			return;
 		}
 		idMap = (HashMap<Integer,Integer[]>) object;
-		Integer[] ids = idMap.get(dataSet.getId());
+		Integer[] ids = idMap.get(dataSet.id);
 		ids[which] = -1;
 		boolean flagDeleteAll = true;
 		for (int i = 0; i < 3; i++) {
@@ -144,9 +144,9 @@ public class NotificationHandler extends BroadcastReceiver {
 			}
 		}
 		if (flagDeleteAll) {
-			idMap.remove(dataSet.getId());
+			idMap.remove(dataSet.id);
 		} else {
-			idMap.put(dataSet.getId(), ids);
+			idMap.put(dataSet.id, ids);
 		}
 		save(context, FILEPATH_IDMAP, idMap);
 	}
@@ -160,11 +160,11 @@ public class NotificationHandler extends BroadcastReceiver {
 		} else {
 			idMap = (HashMap<Integer,Integer[]>) object;
 		}
-		Integer[] ids = idMap.get(dataSet.getId());
+		Integer[] ids = idMap.get(dataSet.id);
 		if (ids == null) {
 			Log.d("NotificationHandler","getIds. ids null!");
 			ids = getNewIds(context);
-			idMap.put(dataSet.getId(), ids);
+			idMap.put(dataSet.id, ids);
 			save(context, FILEPATH_IDMAP, idMap);
 			return ids;
 		}
@@ -173,7 +173,7 @@ public class NotificationHandler extends BroadcastReceiver {
 				ids[i] = getNewId(context);
 			}
 		}
-		idMap.put(dataSet.getId(), ids);
+		idMap.put(dataSet.id, ids);
 		save(context, FILEPATH_IDMAP, idMap);
 		Log.d("Notificationhandler","getids. idmap: " + idMap);
 		return ids;
@@ -224,7 +224,7 @@ public class NotificationHandler extends BroadcastReceiver {
 	}
 
 	private static void create(Context context, int id, Calendar when, DataSet dataSet, int which, boolean update) {
-		String name = dataSet.getFirstName() + " " + dataSet.getLastName();
+		String name = dataSet.firstName + " " + dataSet.lastName;
 		Intent intent = new Intent(context, NotificationHandler.class);
 		intent.putExtra(INTENT_NOTIFICATION_DATASET, dataSet);
 		intent.putExtra(INTENT_NOTIFICATION_ID, id);
@@ -241,7 +241,7 @@ public class NotificationHandler extends BroadcastReceiver {
 
 	private static void addOrChangeBirthday(Context context, DataSet dataSet, boolean[] which, int[] clocks, int xDaysBefore, boolean update) {
 		Integer[] ids = getIds(context, dataSet);
-		Calendar[] calendars = getCalendars(dataSet.getBirthday(), which, clocks, xDaysBefore);
+		Calendar[] calendars = getCalendars(dataSet.birthday, which, clocks, xDaysBefore);
 		for (int i = 0; i < 3; i++) {
 			if (which[i]) {
 				create(context,
@@ -258,7 +258,7 @@ public class NotificationHandler extends BroadcastReceiver {
 		Integer[] ids = getIds(context, dataSet);
 		for (int i = 0; i < 3; i++) {
 			if (which[i]) {
-				Log.d("notificationHandler","deleting " + dataSet.getFirstName() + " " + dataSet.getLastName() + " which: " + i);
+				Log.d("notificationHandler","deleting " + dataSet.firstName + " " + dataSet.lastName + " which: " + i);
 				deleteId(context, dataSet, i);
 				Intent intent = new Intent(context, NotificationHandler.class);
 				PendingIntent pendingIntent = PendingIntent.getBroadcast(context, ids[i], intent, PendingIntent.FLAG_CANCEL_CURRENT);
@@ -433,11 +433,11 @@ public class NotificationHandler extends BroadcastReceiver {
 
 		//check if we show notification now or if we are passed the time (e.g. user did time settings)
 
-		Calendar birthday = dataSet.getBirthday();
+		Calendar birthday = dataSet.birthday;
 		Calendar now = Calendar.getInstance();
 
 		String text = "";
-		String name = dataSet.getFirstName() + " " + dataSet.getLastName();
+		String name = dataSet.firstName + " " + dataSet.lastName;
 
 		if (when.get(Calendar.YEAR) != now.get(Calendar.YEAR)
 				|| when.get(Calendar.DAY_OF_YEAR) != now.get(Calendar.DAY_OF_YEAR)) {
