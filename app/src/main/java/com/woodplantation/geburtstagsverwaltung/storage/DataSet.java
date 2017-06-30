@@ -1,5 +1,7 @@
 package com.woodplantation.geburtstagsverwaltung.storage;
 
+import android.support.annotation.NonNull;
+
 import java.io.Serializable;
 import java.util.Calendar;
 
@@ -50,17 +52,22 @@ public class DataSet implements Serializable, Comparable<DataSet> {
 	}
 
 	@Override
-	public int compareTo(DataSet another) {
-		Calendar now = Calendar.getInstance();
-		int tRemains = getRemaining(now);
-		int oRemains = another.getRemaining(now);
-		int tYear = birthday.get(Calendar.YEAR);
-		int oYear = another.birthday.get(Calendar.YEAR);
+	public int compareTo(@NonNull DataSet another) {
+		try {
+			Calendar now = Calendar.getInstance();
+			int tRemains = getRemaining(now);
+			int oRemains = another.getRemaining(now);
+			int tYear = birthday.get(Calendar.YEAR);
+			int oYear = another.birthday.get(Calendar.YEAR);
 
-		if (tRemains > oRemains) return 1;
-		if (tRemains < oRemains) return -1;
+			if (tRemains > oRemains) return 1;
+			if (tRemains < oRemains) return -1;
 
-		if (tYear > oYear) return 1;
-		else return -1;
+			if (tYear > oYear) return 1;
+			else return -1;
+		} catch (NullPointerException e) {
+			//if we catch nullpointerexception, we dont know what to do - return 0. whatever.
+			return 0;
+		}
 	}
 }

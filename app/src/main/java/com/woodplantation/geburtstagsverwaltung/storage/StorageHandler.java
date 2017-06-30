@@ -63,10 +63,11 @@ public class StorageHandler {
 			return new ArrayList<DataSet>();
 		} catch (IOException e) {
 			e.printStackTrace();
+			return new ArrayList<DataSet>();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
+			return new ArrayList<DataSet>();
 		}
-		return null;
 	}
 
 }

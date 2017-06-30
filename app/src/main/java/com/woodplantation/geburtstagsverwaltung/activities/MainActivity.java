@@ -105,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
 			builder.setPositiveButton(R.string.ok, null);
 			builder.show();
 		}
+		Log.d("mainactivity","oncreate. data: "  + data);
 
 		importExportFailDialog =
 				new AlertDialog.Builder(this).
@@ -285,6 +286,9 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	private void refresh() {
+		if (data == null) {
+			data = new ArrayList<>();
+		}
 		Collections.sort(data);
 		storageHandler.saveData(data);
 		dataListViewAdapter.clear();
@@ -292,7 +296,7 @@ public class MainActivity extends AppCompatActivity {
 		dataListViewAdapter.notifyDataSetChanged();
 
 		TextView tv = (TextView) findViewById(R.id.activity_main_textview_nothing_to_show);
-		if (data == null || data.size() == 0) {
+		if (data.size() == 0) {
 			tv.setVisibility(View.VISIBLE);
 		} else {
 			tv.setVisibility(View.GONE);
