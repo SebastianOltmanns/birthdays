@@ -88,7 +88,11 @@
     <string name="activity_notifications_x_days_before" tools:ignore="PluralsCandidate">%1$d Tage vor dem Geburtstag um %2$s</string>
     <string name="activity_notifications_x_days_before_without_time" tools:ignore="PluralsCandidate">%1$d Tage vor dem Geburtstag</string>
 
+    <string name="activity_notifications_time_picker_title">Zeit wählen</string>
+    <string name="activity_notifications_date_picker_title">Tage wählen</string>
+
     <!-- - - - - - - - - - - - - - - - - - - INFORMATION STUFF - - - - - - - - - - - - - - - - - - - - - -->
+    <string name="info_about_version">Version: %1$s</string>
     <string name="info_about_title">Informationen über diese App</string>
     <string name="info_about_text">Falls der Speicher der App gelöscht wird, sind sämtliche Daten verloren und die App könnte unerwünschtes Verhalten zeigen.
         \n\nDie App benötigt die Berechtigungen \"Alarm einstellen\" und \"Beim Start ausführen\", um korrekte Benachrichtigungen zu erstellen.

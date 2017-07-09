@@ -1,36 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/activity_horizontal_margin"
+    android:gravity="center">
 
-
-    <Button
-        android:id="@+id/number_picker_button_cancel"
-        android:text="@string/cancel"
-        android:layout_centerVertical="true"
+    <TextView
+        android:id="@+id/dialog_number_picker_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/activity_horizontal_margin"/>
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:textColor="@color/text_color"
+        android:textSize="@dimen/text_size" />
 
     <NumberPicker
         android:id="@+id/number_picker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/number_picker_button_cancel"
-        android:layout_toEndOf="@+id/number_picker_button_cancel"
-        android:layout_centerVertical="true"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"/>
-
-    <Button
-        android:id="@+id/number_picker_button_ok"
-        android:text="@string/ok"
-        android:layout_toRightOf="@+id/number_picker"
-        android:layout_toEndOf="@+id/number_picker"
-        android:layout_centerVertical="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/activity_horizontal_margin"/>
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin" />
 
 
-</RelativeLayout>
+</LinearLayout>

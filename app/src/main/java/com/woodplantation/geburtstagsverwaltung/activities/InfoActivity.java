@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.method.LinkMovementMethod;
 import android.widget.TextView;
 
+import com.woodplantation.geburtstagsverwaltung.BuildConfig;
 import com.woodplantation.geburtstagsverwaltung.R;
 
 import java.io.BufferedInputStream;
@@ -31,6 +32,8 @@ public class InfoActivity extends AppCompatActivity {
 
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+		TextView versionTextView = (TextView) findViewById(R.id.information_activity_version_text);
+		versionTextView.setText(getResources().getString(R.string.info_about_version, BuildConfig.VERSION_NAME));
 		TextView infoTextView = (TextView) findViewById(R.id.information_activity_about_text);
 		infoTextView.setMovementMethod(LinkMovementMethod.getInstance());
 		TextView githubTextView = (TextView) findViewById(R.id.information_activity_github_text);

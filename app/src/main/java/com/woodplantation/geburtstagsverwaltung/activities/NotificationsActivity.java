@@ -1,7 +1,8 @@
 package com.woodplantation.geburtstagsverwaltung.activities;
 
-import android.app.Dialog;
+import android.app.AlertDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,10 +10,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
@@ -267,6 +268,7 @@ public class NotificationsActivity extends AppCompatActivity {
 			int m = clocks[which] % 60;
 			MyOnTimeSetListener myOnTimeSetListener = new MyOnTimeSetListener(which);
 			TimePickerDialog dialog = new TimePickerDialog(NotificationsActivity.this, myOnTimeSetListener, h, m, is24h);
+			dialog.setTitle(R.string.activity_notifications_time_picker_title);
 			dialog.show();
 		}
 
@@ -274,8 +276,9 @@ public class NotificationsActivity extends AppCompatActivity {
 
 			private int which;
 			private NumberPicker numberPicker;
-			private Dialog dialog;
+			private AlertDialog dialog;
 			private int hour, minute;
+			private TextView dialogTextView;
 
 			private MyOnTimeSetListener(int which) {
 				this.which = which;
@@ -287,22 +290,27 @@ public class NotificationsActivity extends AppCompatActivity {
 					this.hour = hour;
 					this.minute = minute;
 
-					dialog = new Dialog(NotificationsActivity.this);
-					dialog.setContentView(R.layout.dialog_number_picker);
-					dialog.setTitle(getString(R.string.activity_notifications_x_days_before_without_time, xDaysBeforeDays));
+                    OnButtonClickListener onButtonClickListener = new OnButtonClickListener();
 
-					numberPicker = (NumberPicker) dialog.findViewById(R.id.number_picker);
+					AlertDialog.Builder builder = new AlertDialog.Builder(NotificationsActivity.this)
+							.setTitle(R.string.activity_notifications_date_picker_title)
+                            .setPositiveButton(R.string.ok, onButtonClickListener)
+                            .setNegativeButton(R.string.cancel, onButtonClickListener);
+					dialog = builder.create();
+					LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+					View dialogNumberPicker = inflater.inflate(R.layout.dialog_number_picker, null);
+					dialog.setView(dialogNumberPicker);
+
+					dialogTextView = (TextView) dialogNumberPicker.findViewById(R.id.dialog_number_picker_text);
+					dialogTextView.setText(getResources().getString(R.string.activity_notifications_x_days_before_without_time, xDaysBeforeDays));
+
+					numberPicker = (NumberPicker) dialogNumberPicker.findViewById(R.id.number_picker);
+
 					numberPicker.setMaxValue(28);
 					numberPicker.setMinValue(2);
 					numberPicker.setValue(xDaysBeforeDays);
 					MyOnValueChangeListener myOnValueChangeListener = new MyOnValueChangeListener();
 					numberPicker.setOnValueChangedListener(myOnValueChangeListener);
-
-					Button buttonCancel = (Button) dialog.findViewById(R.id.number_picker_button_cancel);
-					Button buttonOk = (Button) dialog.findViewById(R.id.number_picker_button_ok);
-					OnButtonClickListener onButtonClickListener = new OnButtonClickListener();
-					buttonCancel.setOnClickListener(onButtonClickListener);
-					buttonOk.setOnClickListener(onButtonClickListener);
 
 					dialog.show();
 				} else {
@@ -312,27 +320,26 @@ public class NotificationsActivity extends AppCompatActivity {
 			}
 
 			private class MyOnValueChangeListener implements NumberPicker.OnValueChangeListener {
-
 				@Override
 				public void onValueChange(NumberPicker numberPicker, int oldVal, int newVal) {
-					dialog.setTitle(getString(R.string.activity_notifications_x_days_before_without_time, newVal));
+					dialogTextView.setText(getString(R.string.activity_notifications_x_days_before_without_time, newVal));
 				}
 			}
 
-			private class OnButtonClickListener implements View.OnClickListener {
+			private class OnButtonClickListener implements DialogInterface.OnClickListener {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    if (i == DialogInterface.BUTTON_NEGATIVE) {
+                        dialog.dismiss();
+                    } else if (i == DialogInterface.BUTTON_POSITIVE) {
+                        xDaysBeforeDays = numberPicker.getValue();
+                        clocks[which] = hour * 60 + minute;
+                        refreshTexts();
+                        dialog.dismiss();
+                    }
+                }
+            }
 
-				@Override
-				public void onClick(View view) {
-					if (view.getId() == R.id.number_picker_button_cancel) {
-						dialog.dismiss();
-					} else if (view.getId() == R.id.number_picker_button_ok) {
-						xDaysBeforeDays = numberPicker.getValue();
-						clocks[which] = hour * 60 + minute;
-						refreshTexts();
-						dialog.dismiss();
-					}
-				}
-			}
 		}
 	}
 }
