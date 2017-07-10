@@ -1,12 +1,17 @@
 package com.woodplantation.geburtstagsverwaltung.activities;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -52,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
 	public static final int REQUEST_INTENT_EDIT_DATA_SET = 2;
 	public static final int REQUEST_INTENT_NOTIFICATIONS = 3;
 	public static final int REQUEST_INTENT_FILEPICKER_IMPORT = 4;
+	public static final int REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE = 5;
+	public static final int REQUEST_PERMISSION_READ_EXTERNAL_STORAGE = 6;
 
 	public static final int MAXIMUM_DATA_SIZE = 100;
 
@@ -72,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
 
 	private AlertDialog.Builder importExportFailDialog;
 	private AlertDialog.Builder importExportStorageFailDialog;
+	private AlertDialog.Builder importExportPermissionFailDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +126,12 @@ public class MainActivity extends AppCompatActivity {
 						setTitle(R.string.import_export_storage_error_title).
 						setMessage(R.string.import_export_storage_error_text).
 						setNeutralButton(R.string.ok, null);
+
+		importExportPermissionFailDialog =
+				new AlertDialog.Builder(MainActivity.this).
+						setTitle(R.string.import_export_permissions_fail_title).
+						setMessage(R.string.import_export_permissions_fail_text).
+						setNegativeButton(R.string.cancel, null);
 	}
 
 	public void onAddButtonClick(View v) {
@@ -200,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
 		Log.d("mainactivity", "onactivity result! requestcode: " + requestCode + " resultCode : " + resultCode);
 		switch (requestCode) {
 
-			case REQUEST_INTENT_CREATE_DATA_SET:
+			case REQUEST_INTENT_CREATE_DATA_SET: {
 				if (resultCode == RESULT_OK) {
 					DataSet dataSet = (DataSet) data.getSerializableExtra(INTENT_CODE_DATA_SET);
 					this.data.add(dataSet);
@@ -209,7 +223,8 @@ public class MainActivity extends AppCompatActivity {
 					refresh();
 				}
 				break;
-			case REQUEST_INTENT_EDIT_DATA_SET:
+			}
+			case REQUEST_INTENT_EDIT_DATA_SET: {
 				if (resultCode == RESULT_OK) {
 					DataSet newDataSet = (DataSet) data.getSerializableExtra(INTENT_CODE_DATA_SET);
 					int index = data.getIntExtra(INTENT_CODE_EDIT_INDEX, -1);
@@ -227,19 +242,21 @@ public class MainActivity extends AppCompatActivity {
 					refresh();
 				}
 				break;
-			case REQUEST_INTENT_NOTIFICATIONS:
+			}
+			case REQUEST_INTENT_NOTIFICATIONS: {
 				if (resultCode == RESULT_OK) {
 					Map<String, ?> map = (Map<String, ?>) data.getSerializableExtra(INTENT_CODE_OLD_PREFERENCES);
 					NotificationHandler.handlePreferences(this, map, this.data);
 				}
 				break;
-			case REQUEST_INTENT_FILEPICKER_IMPORT:
+			}
+			case REQUEST_INTENT_FILEPICKER_IMPORT: {
 				if (resultCode != RESULT_OK) {
 					importExportFailDialog.show();
 					break;
 				}
 				String filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
-				Log.d("MainActivity","import: " + filePath);
+				Log.d("MainActivity", "import: " + filePath);
 				File file = new File(filePath);
 				if (!file.exists()) {
 					importExportFailDialog.show();
@@ -282,6 +299,15 @@ public class MainActivity extends AppCompatActivity {
 					importExportFailDialog.show();
 				}
 				break;
+			}
+			case REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE: {
+				exportWithPermissionCheck();
+				break;
+			}
+			case REQUEST_PERMISSION_READ_EXTERNAL_STORAGE: {
+				importWithPermissionCheck();
+				break;
+			}
 		}
 	}
 
@@ -303,57 +329,146 @@ public class MainActivity extends AppCompatActivity {
 		}
 	}
 
+	private void exportWithPermissionCheck() {
+		//check permissions to write external storage
+		if (PackageManager.PERMISSION_GRANTED ==
+				ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+			exportWithoutPermissionCheck();
+		} else {
+			//no permission to write external storage. ask for it.
+			ActivityCompat.requestPermissions(MainActivity.this,
+					new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+					REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE);
+		}
+	}
+
+	private void exportWithoutPermissionCheck() {
+		String state = Environment.getExternalStorageState();
+		if (state.equals(Environment.MEDIA_MOUNTED) || state.equals(Environment.MEDIA_MOUNTED_READ_ONLY)) {
+			File dir = new File(Environment.getExternalStorageDirectory(), FILE_EXPORT_DIRECTORY);
+			if (!dir.exists() && !dir.mkdir()) {
+				Log.d("MainActivity", "cancelling export. directory " + dir.getAbsolutePath() + " not creatable");
+				importExportStorageFailDialog.show();
+			}
+			String filename = FILE_EXPORT_NAME + sdf.format(new Date()) + FILE_EXPORT_EXTENSION;
+			File output = new File(dir + File.separator + filename);
+			if (data == null) {
+				importExportFailDialog.show();
+			}
+			try {
+				FileOutputStream fos = new FileOutputStream(output);
+				BufferedOutputStream bos = new BufferedOutputStream(fos);
+				ObjectOutputStream oos = new ObjectOutputStream(bos);
+
+				oos.writeObject(data);
+
+				oos.close();
+				bos.close();
+				fos.close();
+
+				new AlertDialog.Builder(MainActivity.this).
+						setTitle(R.string.import_export_export_successfull_title).
+						setMessage(getString(R.string.import_export_export_successfull_text, output.getAbsolutePath())).
+						setNeutralButton(R.string.ok, null).
+						show();
+			} catch (IOException e) {
+				e.printStackTrace();
+				importExportStorageFailDialog.show();
+			}
+		} else {
+			Log.d("MainActivity", "cancelling export. state: " + state);
+			importExportStorageFailDialog.show();
+		}
+	}
+
+	private void importWithPermissionCheck() {
+		//check permissions to read external storage
+		if (PackageManager.PERMISSION_GRANTED ==
+				ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+			importWithoutPermissionCheck();
+		} else {
+			//no permission to read external storage. ask for it.
+			ActivityCompat.requestPermissions(MainActivity.this,
+					new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+					REQUEST_PERMISSION_READ_EXTERNAL_STORAGE);
+		}
+	}
+
+	private void importWithoutPermissionCheck() {
+		new MaterialFilePicker()
+				.withActivity(MainActivity.this)
+				.withRequestCode(REQUEST_INTENT_FILEPICKER_IMPORT)
+				.withFilter(Pattern.compile(".*\\.birthdays")) // Filtering files and directories by file name using regexp
+				.start();
+	}
+
 	private DialogInterface.OnClickListener exportClickListener = new DialogInterface.OnClickListener() {
 		@Override
 		public void onClick(DialogInterface dialogInterface, int i) {
-			String state = Environment.getExternalStorageState();
-			if (state.equals(Environment.MEDIA_MOUNTED) || state.equals(Environment.MEDIA_MOUNTED_READ_ONLY)) {
-				File dir = new File(Environment.getExternalStorageDirectory(), FILE_EXPORT_DIRECTORY);
-				if (!dir.exists() && !dir.mkdir()) {
-					Log.d("MainActivity","cancelling export. directory " + dir.getAbsolutePath() + " not creatable");
-					importExportStorageFailDialog.show();
-				}
-				String filename = FILE_EXPORT_NAME + sdf.format(new Date()) + FILE_EXPORT_EXTENSION;
-				File output = new File(dir + File.separator + filename);
-				if (data == null) {
-					importExportFailDialog.show();
-				}
-				try {
-					FileOutputStream fos = new FileOutputStream(output);
-					BufferedOutputStream bos = new BufferedOutputStream(fos);
-					ObjectOutputStream oos = new ObjectOutputStream(bos);
-
-					oos.writeObject(data);
-
-					oos.close();
-					bos.close();
-					fos.close();
-
-					new AlertDialog.Builder(MainActivity.this).
-							setTitle(R.string.import_export_export_successfull_title).
-							setMessage(getString(R.string.import_export_export_successfull_text, output.getAbsolutePath())).
-							setNeutralButton(R.string.ok, null).
-							show();
-				} catch (IOException e) {
-					e.printStackTrace();
-					importExportStorageFailDialog.show();
-				}
-			} else {
-				Log.d("MainActivity","cancelling export. state: " + state);
-				importExportStorageFailDialog.show();
-			}
+			exportWithPermissionCheck();
 		}
 	};
 
 	private DialogInterface.OnClickListener importClickListener = new DialogInterface.OnClickListener() {
 		@Override
 		public void onClick(DialogInterface dialogInterface, int i) {
-			new MaterialFilePicker()
-					.withActivity(MainActivity.this)
-					.withRequestCode(REQUEST_INTENT_FILEPICKER_IMPORT)
-					.withFilter(Pattern.compile(".*\\.birthdays")) // Filtering files and directories by file name using regexp
-					.start();
+			importWithPermissionCheck();
 		}
 	};
+
+	private class PermissionSettingsClickListener implements DialogInterface.OnClickListener {
+		private int requestCode;
+		public PermissionSettingsClickListener(int requestCode) {
+			this.requestCode = requestCode;
+		}
+
+		@Override
+		public void onClick(DialogInterface dialogInterface, int i) {
+			Intent intent = new Intent();
+			intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+			Uri uri = Uri.fromParts("package", getPackageName(), null);
+			intent.setData(uri);
+			startActivityForResult(intent, requestCode);
+		}
+	}
+
+	private DialogInterface.OnClickListener exportPermissionSettingsClickListener = new PermissionSettingsClickListener(REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE);
+	private DialogInterface.OnClickListener importPermissionSettingsClickListener = new PermissionSettingsClickListener(REQUEST_PERMISSION_READ_EXTERNAL_STORAGE);
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+		switch (requestCode) {
+			case REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE: {
+				if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+					exportWithoutPermissionCheck();
+				} else {
+					if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+						//ask again
+						importExportPermissionFailDialog.setPositiveButton(R.string.allow, exportClickListener);
+					} else {
+						//go to settings
+						importExportPermissionFailDialog.setPositiveButton(R.string.allow, exportPermissionSettingsClickListener);
+					}
+					importExportPermissionFailDialog.show();
+				}
+				break;
+			}
+			case REQUEST_PERMISSION_READ_EXTERNAL_STORAGE: {
+				if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+					importWithoutPermissionCheck();
+				} else {
+					if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE))  {
+						//ask again
+						importExportPermissionFailDialog.setPositiveButton(R.string.allow, importClickListener);
+					} else {
+						//go to settings
+						importExportPermissionFailDialog.setPositiveButton(R.string.allow, importPermissionSettingsClickListener);
+					}
+					importExportPermissionFailDialog.show();
+				}
+				break;
+			}
+		}
+	}
 
 }
