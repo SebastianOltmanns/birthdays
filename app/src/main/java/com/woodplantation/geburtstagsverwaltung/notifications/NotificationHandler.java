@@ -392,7 +392,7 @@ public class NotificationHandler extends BroadcastReceiver {
 		return birthday;
 	}
 
-	public static void afterBootCompleted(Context context) {
+	public static void createAllNotifications(Context context) {
 		StorageHandler storageHandler = new StorageHandler(context);
 		ArrayList<DataSet> data = storageHandler.loadData();
 		boolean[] which = getWhich(new MyPreferences(context));
