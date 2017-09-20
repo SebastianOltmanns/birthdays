@@ -28,7 +28,7 @@ public class AddActivity extends InputActivity {
 		birthday.setTimeInMillis(0);
 		birthday.set(Calendar.HOUR_OF_DAY, 8);
 
-		birthdayText.setText(sdf.format(birthday.getTime()));
+		//birthdayText.setText(sdf.format(birthday.getTime()));
 
 		Intent intent = getIntent();
 		newId = intent.getIntExtra(MainActivity.INTENT_CODE_NEW_ID, -1);

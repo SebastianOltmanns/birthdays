@@ -20,19 +20,68 @@
             android:layout_marginBottom="5dp"
             android:layout_marginEnd="5dp"
             android:layout_marginRight="5dp"
+            android:layout_gravity="center_vertical"
             android:text="@string/birthday"
             />
 
-        <TextView
-            android:id="@+id/text_input_birthday"
-            android:layout_marginStart="3dp"
-            android:layout_marginLeft="3dp"
-            android:clickable="true"
-            android:onClick="changeBirthday"
-            android:textColor="@color/text_color"
-            android:textSize="@dimen/text_size"/>
+        <LinearLayout
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/text_input_birthday_day"
+                android:ems="2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:lines="1"
+                android:maxLength="2"
+                android:gravity="center"
+                android:inputType="number"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/text_size"
+                android:nextFocusForward="@+id/text_input_birthday_month"
+                android:nextFocusDown="@+id/text_input_birthday_month"
+                >
+                <requestFocus />
+            </EditText>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="."/>
+            <EditText
+                android:id="@+id/text_input_birthday_month"
+                android:ems="2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:lines="1"
+                android:maxLength="2"
+                android:gravity="center"
+                android:inputType="number"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/text_size"
+                android:nextFocusForward="@+id/text_input_birthday_year"
+                android:nextFocusDown="@+id/text_input_birthday_year"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="."/>
+            <EditText
+                android:id="@+id/text_input_birthday_year"
+                android:ems="4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:lines="1"
+                android:maxLength="4"
+                android:gravity="center"
+                android:inputType="number"
+                android:textColor="@color/text_color"
+                android:textSize="@dimen/text_size"
+                />
+
+        </LinearLayout>
 
         <TextView
+            android:layout_gravity="center_vertical"
             android:text="@string/first_name"/>
 
         <EditText
@@ -48,6 +97,7 @@
             android:textSize="@dimen/text_size"/>
 
         <TextView
+            android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/last_name"/>
@@ -65,6 +115,7 @@
             android:textSize="@dimen/text_size"/>
 
         <TextView
+            android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/others"/>

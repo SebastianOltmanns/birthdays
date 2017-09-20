@@ -25,7 +25,7 @@ public abstract class InputActivity extends AppCompatActivity {
 
 	protected EditText firstNameEdit;
 	protected EditText lastNameEdit;
-	protected TextView birthdayText;
+	//protected TextView birthdayText;
 	protected EditText othersEdit;
 
 	protected SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy", Locale.GERMAN);
@@ -42,7 +42,7 @@ public abstract class InputActivity extends AppCompatActivity {
 
 		firstNameEdit = (EditText) findViewById(R.id.text_input_firstname);
 		lastNameEdit = (EditText) findViewById(R.id.text_input_lastname);
-		birthdayText = (TextView) findViewById(R.id.text_input_birthday);
+		//birthdayText = (TextView) findViewById(R.id.text_input_birthday);
 		othersEdit = (EditText) findViewById(R.id.text_input_others);
 	}
 
@@ -59,13 +59,13 @@ public abstract class InputActivity extends AppCompatActivity {
 	}
 
 	public void changeBirthday(View view) {
-		final TextView birthdayTextView = (TextView) findViewById(R.id.text_input_birthday);
+		//final TextView birthdayTextView = (TextView) findViewById(R.id.text_input_birthday);
 
 		DatePickerDialog.OnDateSetListener callback = new DatePickerDialog.OnDateSetListener() {
 			@Override
 			public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 				birthday.set(year, monthOfYear, dayOfMonth);
-				birthdayTextView.setText(sdf.format(birthday.getTime()));
+				//birthdayTextView.setText(sdf.format(birthday.getTime()));
 				flagAddedBirthday = true;
 			}
 		};

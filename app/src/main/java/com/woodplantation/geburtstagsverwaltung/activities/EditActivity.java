@@ -34,7 +34,7 @@ public class EditActivity extends InputActivity {
 
 		firstNameEdit.setText(oldDataSet.firstName);
 		lastNameEdit.setText(oldDataSet.lastName);
-		birthdayText.setText(sdf.format(birthday.getTime()));
+		//birthdayText.setText(sdf.format(birthday.getTime()));
 		othersEdit.setText(oldDataSet.others);
 	}
 

@@ -51,6 +51,20 @@ public class DataSet implements Serializable, Comparable<DataSet> {
 		}
 	}
 
+	public int getNextAge(Calendar now) {
+		//make copy from birthday since we dont want to change original
+		Calendar tempBirthday = Calendar.getInstance();
+		tempBirthday.setTimeInMillis(birthday.getTimeInMillis());
+		//set birthday year to this year
+		tempBirthday.set(Calendar.YEAR, now.get(Calendar.YEAR));
+
+		//calculate the next age if birthday was this year already
+		int nextAge = now.get(Calendar.YEAR) - birthday.get(Calendar.YEAR);
+
+		//if birthday was already this year, need to add one year for next age
+		return (now.get(Calendar.DAY_OF_YEAR) <= tempBirthday.get(Calendar.DAY_OF_YEAR)) ? nextAge : nextAge + 1;
+	}
+
 	@Override
 	public int compareTo(@NonNull DataSet another) {
 		try {

@@ -38,7 +38,7 @@ public class DataListViewAdapter extends ArrayAdapter<DataSet> {
 
 		DataSet dataSet = getItem(position);
 
-		String remaining = getRemaining(dataSet);
+		String remaining = getRemainingWithAge(dataSet);
 		String firstname = dataSet.firstName;
 		String lastname = dataSet.lastName;
 		String others = dataSet.others;
@@ -59,7 +59,7 @@ public class DataListViewAdapter extends ArrayAdapter<DataSet> {
 		return convertView;
 	}
 
-	private String getRemaining(DataSet dataSet) {
+	private String getRemainingWithAge(DataSet dataSet) {
 		Calendar now = Calendar.getInstance();
 		int daysRemaining = dataSet.getRemaining(now);
 
@@ -77,6 +77,8 @@ public class DataListViewAdapter extends ArrayAdapter<DataSet> {
 				break;
 		}
 
-		return textRemaining;
+		int age = dataSet.getNextAge(now);
+
+		return getContext().getString(R.string.xth_birthday, textRemaining, age);
 	}
 }
