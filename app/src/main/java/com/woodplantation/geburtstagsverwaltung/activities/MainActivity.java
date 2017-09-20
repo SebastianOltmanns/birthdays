@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
 	public static final int REQUEST_INTENT_FILEPICKER_IMPORT = 4;
 	public static final int REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE = 5;
 	public static final int REQUEST_PERMISSION_READ_EXTERNAL_STORAGE = 6;
+	public static final int REQUEST_PERMISSION_SET_ALARM = 7;
 
 	public static final int MAXIMUM_DATA_SIZE = 100;
 
@@ -89,6 +90,10 @@ public class MainActivity extends AppCompatActivity {
 		toolbar.setTitle(R.string.activity_main_label);
 		setSupportActionBar(toolbar);
 		//getSupportActionBar().setTitle(R.string.activity_main_label);
+
+		ActivityCompat.requestPermissions(this,
+				new String[]{Manifest.permission.SET_ALARM},
+				REQUEST_PERMISSION_SET_ALARM);
 
 		dataListViewAdapter = new DataListViewAdapter(this, R.layout.data_list_view_item);
 		dataListView = (ListView) findViewById(R.id.data_list_view);
@@ -467,6 +472,25 @@ public class MainActivity extends AppCompatActivity {
 					importExportPermissionFailDialog.show();
 				}
 				break;
+			}
+			case REQUEST_PERMISSION_SET_ALARM: {
+				if (grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+					if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.SET_ALARM)) {
+						AlertDialog.Builder builder = new AlertDialog.Builder(this);
+						builder.setTitle(R.string.set_alarm_permissions_explanation_title);
+						builder.setMessage(R.string.set_alarm_permissions_explanation_text);
+						builder.setCancelable(false);
+						builder.setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialogInterface, int i) {
+								ActivityCompat.requestPermissions(MainActivity.this,
+										new String[] {Manifest.permission.SET_ALARM},
+										REQUEST_PERMISSION_SET_ALARM);
+							}
+						});
+						builder.show();
+					}
+				}
 			}
 		}
 	}

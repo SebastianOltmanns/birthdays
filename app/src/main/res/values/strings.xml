@@ -8,7 +8,7 @@
     <string name="activity_notifications_label">Benachrichtigungen</string>
 
     <string name="first_name">Vorname</string>
-    <string name="last_name">Nachame</string>
+    <string name="last_name">Nachname</string>
     <string name="birthday">Geburtstag</string>
     <string name="others">Sonstiges</string>
 
@@ -70,6 +70,9 @@
 
     <string name="import_export_maximum_data_size_title">Maximale Anzahl überschritten</string>
     <string name="import_export_maximum_data_size_text">Deine bereits gespeicherten Geburtstage sind zusammen mit den zu importierenden zu viele. Die maximale Anzahl beträgt %1$d. Damit die Datei erfolgreich importiert werden kann, musst Du Geburtstage entfernen.</string>
+
+    <string name="set_alarm_permissions_explanation_title">Bitte Berechtigung aktivieren</string>
+    <string name="set_alarm_permissions_explanation_text">Damit die App Dich an Geburtstage erinnern kann, benötigt sie die Berechtigung, Alarme zu erstellen. Falls Du der App diese Berechtigung verweigerst, kann Dich die App auch nicht erinnern.</string>
 
     <!-- - - - - - - - - - - - - - - - - - - NOTIFICATION - - - - - - - - - - - - - - - - - - - -->
     <string name="content_title">Geburtstagserinnerung</string>
