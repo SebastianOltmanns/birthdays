@@ -8,4 +8,6 @@
     <dimen name="text_gap">10dp</dimen>
 
     <dimen name="checkbox_size">40dp</dimen>
+
+    <dimen name="rounded_button_corner_radius">5dp</dimen>
 </resources>

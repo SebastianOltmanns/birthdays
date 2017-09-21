@@ -1,9 +1,12 @@
 package com.woodplantation.geburtstagsverwaltung.activities;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.os.Debug;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
@@ -25,12 +28,10 @@ public abstract class InputActivity extends AppCompatActivity {
 
 	protected EditText firstNameEdit;
 	protected EditText lastNameEdit;
-	//protected TextView birthdayText;
+	protected EditText birthdayDayEdit, birthdayMonthEdit, birthdayYearEdit;
 	protected EditText othersEdit;
 
-	protected SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy", Locale.GERMAN);
 	protected Calendar birthday;
-	protected boolean flagAddedBirthday = false;
 
 	protected void onCreate(Bundle savedInstanceState, int contentView) {
 		super.onCreate(savedInstanceState);
@@ -40,10 +41,12 @@ public abstract class InputActivity extends AppCompatActivity {
 
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-		firstNameEdit = (EditText) findViewById(R.id.text_input_firstname);
-		lastNameEdit = (EditText) findViewById(R.id.text_input_lastname);
-		//birthdayText = (TextView) findViewById(R.id.text_input_birthday);
-		othersEdit = (EditText) findViewById(R.id.text_input_others);
+		firstNameEdit = findViewById(R.id.text_input_firstname);
+		lastNameEdit = findViewById(R.id.text_input_lastname);
+		birthdayDayEdit = findViewById(R.id.text_input_birthday_day);
+		birthdayMonthEdit = findViewById(R.id.text_input_birthday_month);
+		birthdayYearEdit = findViewById(R.id.text_input_birthday_year);
+		othersEdit = findViewById(R.id.text_input_others);
 	}
 
 	@Override
@@ -59,14 +62,13 @@ public abstract class InputActivity extends AppCompatActivity {
 	}
 
 	public void changeBirthday(View view) {
-		//final TextView birthdayTextView = (TextView) findViewById(R.id.text_input_birthday);
-
 		DatePickerDialog.OnDateSetListener callback = new DatePickerDialog.OnDateSetListener() {
 			@Override
 			public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 				birthday.set(year, monthOfYear, dayOfMonth);
-				//birthdayTextView.setText(sdf.format(birthday.getTime()));
-				flagAddedBirthday = true;
+				birthdayDayEdit.setText(String.valueOf(dayOfMonth));
+				birthdayMonthEdit.setText(String.valueOf(monthOfYear+1));
+				birthdayYearEdit.setText(String.valueOf(year));
 			}
 		};
 
@@ -76,5 +78,70 @@ public abstract class InputActivity extends AppCompatActivity {
 				birthday.get(Calendar.DAY_OF_MONTH));
 
 		datePickerDialog.show();
+	}
+
+	protected boolean checkInput() {
+        String birthdayDay = birthdayDayEdit.getText().toString();
+        String birthdayMonth = birthdayMonthEdit.getText().toString();
+        String birthdayYear = birthdayYearEdit.getText().toString();
+        String firstName = firstNameEdit.getText().toString();
+        String lastName = lastNameEdit.getText().toString();
+
+        boolean flag = true;
+        int messageResource = 0;
+
+        //check for valid birthday: first, check if all fields are set
+        if (birthdayDay.equals("") || birthdayDay.length() == 0
+                || birthdayMonth.equals("") || birthdayMonth.length() == 0
+                || birthdayYear.equals("") || birthdayYear.length() == 0) {
+            messageResource = R.string.wrong_input_birthday;
+            flag = false;
+        } else {
+            //all fields are set. check if the actual values are fine, e.g. 41.15.2088 is not valid
+            int birthdayD = Integer.parseInt(birthdayDay);
+            int birthdayM = Integer.parseInt(birthdayMonth);
+            int birthdayY = Integer.parseInt(birthdayYear);
+            Calendar inputBirthday = Calendar.getInstance();
+            inputBirthday.set(birthdayY, birthdayM-1, birthdayD);
+            if (inputBirthday.after(Calendar.getInstance())
+                    || inputBirthday.get(Calendar.YEAR) != birthdayY
+                    || inputBirthday.get(Calendar.MONTH) != birthdayM-1
+                    || inputBirthday.get(Calendar.DAY_OF_MONTH) != birthdayD) {
+                messageResource = R.string.wrong_input_birthday;
+                flag = false;
+            } else if (firstName.equals("") ||  firstName.length() == 0) {
+                messageResource = R.string.wrong_input_no_firstname;
+                flag = false;
+            } else if (lastName.equals("") ||  lastName.length() == 0) {
+                messageResource = R.string.wrong_input_no_lastname;
+                flag = false;
+            }
+        }
+
+        if (!flag) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage(messageResource);
+            builder.setTitle(R.string.wrong_input_title);
+            builder.setPositiveButton(R.string.ok, null);
+            builder.show();
+            return false;
+        }
+
+        return true;
+    }
+
+	/**
+	 * only call this function when checkInput() was called before AND returned true !
+	 */
+	protected void setBirthdayFromEditTexts() {
+		String birthdayDay = birthdayDayEdit.getText().toString();
+		String birthdayMonth = birthdayMonthEdit.getText().toString();
+		String birthdayYear = birthdayYearEdit.getText().toString();
+		int birthdayD = Integer.parseInt(birthdayDay);
+		int birthdayM = Integer.parseInt(birthdayMonth);
+		int birthdayY = Integer.parseInt(birthdayYear);
+
+		birthday.set(birthdayY, birthdayM-1, birthdayD);
+
 	}
 }

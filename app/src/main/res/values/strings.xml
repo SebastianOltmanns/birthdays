@@ -34,6 +34,7 @@
     <string name="wrong_input_title">Falsche Eingabe</string>
     <string name="wrong_input_no_firstname">Du hast keinen Vornamen angegeben.</string>
     <string name="wrong_input_no_lastname">Du hast keinen Nachnamen angegeben.</string>
+    <string name="wrong_input_birthday">Du hast keinen oder einen ungültigen Geburtstag angegeben.</string>
 
     <string name="failure_loading_data_title">Fehler</string>
     <string name="failure_loading_data_text">Es gab einen Fehler beim Laden der Daten. Bitte schließe die App und starte sie erneut.</string>
@@ -43,9 +44,6 @@
 
     <string name="rating_title">App bewerten</string>
     <string name="rating_text">Wenn Dir diese App gefällt, dann bewerte Sie im Google Play Store!</string>
-
-    <string name="no_birthday_added_title">Geburtstag nicht gewählt</string>
-    <string name="no_birthday_added_text">Du hast keinen Geburtstag angegeben. Standardmäßig ist der 01.01.1970 eingestellt. Trotzdem speichern?</string>
 
     <string name="import_export_dialog_title">Import/Export</string>
     <string name="import_export_dialog_text" tools:ignore="PluralsCandidate">

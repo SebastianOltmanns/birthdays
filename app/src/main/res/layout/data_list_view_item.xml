@@ -27,7 +27,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.4"
             android:ellipsize="end"
-            android:gravity="end"
             android:lines="1"
             android:textStyle="bold"/>
 
@@ -54,7 +53,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.4"
             android:ellipsize="end"
-            android:gravity="end"
             android:lines="1"/>
     </LinearLayout>
 

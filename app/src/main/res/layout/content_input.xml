@@ -78,6 +78,17 @@
                 android:textSize="@dimen/text_size"
                 />
 
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/text_gap"
+                android:layout_marginStart="@dimen/text_gap"
+                android:background="@drawable/rounded_corners_button"
+                android:padding="@dimen/rounded_button_corner_radius"
+                android:onClick="changeBirthday"
+                android:src="@drawable/ic_event" />
+
+
         </LinearLayout>
 
         <TextView

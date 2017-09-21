@@ -10,6 +10,8 @@ import android.view.MenuItem;
 import com.woodplantation.geburtstagsverwaltung.storage.DataSet;
 import com.woodplantation.geburtstagsverwaltung.R;
 
+import java.util.Calendar;
+
 /**
  * Created by Sebu on 10.03.2016.
  * Contact: sebastian.oltmanns.developer@googlemail.com
@@ -34,7 +36,9 @@ public class EditActivity extends InputActivity {
 
 		firstNameEdit.setText(oldDataSet.firstName);
 		lastNameEdit.setText(oldDataSet.lastName);
-		//birthdayText.setText(sdf.format(birthday.getTime()));
+		birthdayDayEdit.setText(String.valueOf(birthday.get(Calendar.DAY_OF_MONTH)));
+		birthdayMonthEdit.setText(String.valueOf(birthday.get(Calendar.MONTH)+1));
+		birthdayYearEdit.setText(String.valueOf(birthday.get(Calendar.YEAR)));
 		othersEdit.setText(oldDataSet.others);
 	}
 
@@ -56,6 +60,7 @@ public class EditActivity extends InputActivity {
 			if (!checkInput()) {
 				return true;
 			}
+			setBirthdayFromEditTexts();
 			Intent resultIntent = new Intent();
 			resultIntent.putExtra(MainActivity.INTENT_CODE_EDIT_INDEX, index);
 			DataSet newDataSet = new DataSet(
@@ -88,32 +93,5 @@ public class EditActivity extends InputActivity {
 		}
 
 		return super.onOptionsItemSelected(item);
-	}
-
-	private boolean checkInput() {
-		String firstName = firstNameEdit.getText().toString();
-		String lastName = lastNameEdit.getText().toString();
-
-		boolean flag = true;
-		int messageResource = 0;
-		if (firstName == "") {
-			messageResource = R.string.wrong_input_no_firstname;
-			flag = false;
-		}
-		if (lastName == "") {
-			messageResource = R.string.wrong_input_no_lastname;
-			flag = false;
-		}
-
-		if (flag) {
-			return true;
-		} else {
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setMessage(messageResource);
-			builder.setTitle(R.string.wrong_input_title);
-			builder.setPositiveButton(R.string.ok, null);
-			builder.show();
-			return false;
-		}
 	}
 }
