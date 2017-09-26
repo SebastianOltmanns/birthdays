@@ -1,31 +1,31 @@
 <resources
     xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">Manage birthdays</string>
-    <string name="activity_main_label">Overview</string>
-    <string name="activity_add_label">Add</string>
-    <string name="activity_edit_label">Edit</string>
+    <string name="app_name">Geburtstage verwalten</string>
+    <string name="activity_main_label">Übersicht</string>
+    <string name="activity_add_label">Hinzufügen</string>
+    <string name="activity_edit_label">Bearbeiten</string>
     <string name="activity_info_label">Information</string>
-    <string name="activity_notifications_label">Notifications</string>
+    <string name="activity_notifications_label">Benachrichtigungen</string>
 
-    <string name="first_name">First name</string>
+    <string name="first_name">Vorname</string>
     <string name="last_name">Nachname</string>
-    <string name="birthday">Birthday</string>
+    <string name="birthday">Geburtstag</string>
     <string name="others">Sonstiges</string>
 
     <string name="today">Heute</string>
     <string name="tomorrow">Morgen</string>
-    <string name="in_x_days" tools:ignore="PluralsCandidate">in %1$d days</string>
+    <string name="in_x_days" tools:ignore="PluralsCandidate">in %1$d Tagen</string>
 
     <string name="xth_birthday">%1$s (%2$d)</string>
 
     <string name="yes">Ja</string>
     <string name="no">Nein</string>
     <string name="ok">OK</string>
-    <string name="allow">Allow</string>
+    <string name="allow">Erlauben</string>
     <string name="rate_app">App bewerten</string>
-    <string name="cancel">Cancel</string>
+    <string name="cancel">Abbrechen</string>
 
-    <string name="activity_main_nothing_to_show">No entries available.</string>
+    <string name="activity_main_nothing_to_show">Keine Einträge verfügbar.</string>
 
     <!-- - - - - - - - - - - - - - - - - - - DIALOGS - - - - - - - - - - - - - - - - - - - - - -->
     <string name="sure_delete_title">Wirklich entfernen?</string>
@@ -36,8 +36,8 @@
     <string name="wrong_input_no_lastname">Du hast keinen Nachnamen angegeben.</string>
     <string name="wrong_input_birthday">Du hast keinen oder einen ungültigen Geburtstag angegeben.</string>
 
-    <string name="failure_loading_data_title">Problem</string>
-    <string name="failure_loading_data_text">There has been a problem loading data. Please restart the application.</string>
+    <string name="failure_loading_data_title">Fehler</string>
+    <string name="failure_loading_data_text">Es gab einen Fehler beim Laden der Daten. Bitte schließe die App und starte sie erneut.</string>
 
     <string name="maximum_data_achieved_title">Maximale Anzahl erreicht</string>
     <string name="maximum_data_achieved_text">Du hast die maximale Anzahl an Geburtstagen eingetragen. Bevor du einen neuen Geburtstag eintragen kannst, musst du einen anderen entfernen.</string>
@@ -47,38 +47,38 @@
 
     <string name="import_export_dialog_title">Import/Export</string>
     <string name="import_export_dialog_text" tools:ignore="PluralsCandidate">
-        You can export all entered birthdays into a file. This file will be saved in the primary smartphone storage and is not going to be encoded. The risk that comes from this, especially regarding data protection, is entirely up to you.
-        \n\nIf you want to import birthdays from such a file, note that they will be added to the birthdays saved currently in the app. If the amount of birthdays from both sources exceeds the maximum amount of $1$d, the import is not possible.
+        Du kannst alle eingegebenen Geburtstage in eine Datei exportieren. Diese Datei wird in dem Primärspeicher des Smartphones gespeichert und wird nicht verschlüsselt. Das Risiko, welches hiervon ausgeht, insbesondere Datenschutz betreffend, liegt ganz alleine bei Dir.
+        \n\nFalls Du Geburtstage aus einer solchen Datei importieren möchtest, beachte, dass sie zu den aktuell in der App gespeicherten Geburtstagen hinzugefügt werden. Falls die Anzahl der Geburtstage aus beiden Quellen die maximale Anzahl von %1$d übersteigt, ist das Importieren nicht möglich.
     </string>
-    <string name="import_export_import">Import</string>
-    <string name="import_export_export">Export</string>
+    <string name="import_export_import">Importieren</string>
+    <string name="import_export_export">Exportieren</string>
 
-    <string name="import_export_failed_title">Problem with import/export</string>
-    <string name="import_export_failed_text">There has been a problem importing or exporting.</string>
+    <string name="import_export_failed_title">Fehler beim Import/Export</string>
+    <string name="import_export_failed_text">Es gab ein Problem beim Importieren oder Exportieren.</string>
 
-    <string name="import_export_storage_error_title">Storage problem</string>
-    <string name="import_export_storage_error_text">There has been a problem with the availability of the storage.</string>
+    <string name="import_export_storage_error_title">Problem mit dem Speicher</string>
+    <string name="import_export_storage_error_text">Es gab ein Problem mit der Verfügbarkeit des Speichers.</string>
 
-    <string name="import_export_permissions_fail_title">Missing permissions</string>
-    <string name="import_export_permissions_fail_text">Without the missing permission, the app can not access the external storage. For a successful import or export, please allow the app access.</string>
+    <string name="import_export_permissions_fail_title">Berechtigungen fehlen</string>
+    <string name="import_export_permissions_fail_text">Die App kann ohne fehlende Berechtigung nicht auf den externen Speicher zugreifen. Bitte erlaube der App den Zugriff, damit der Import/Export durchgeführt werden kann.</string>
 
-    <string name="import_export_export_successfull_title">Export successful</string>
-    <string name="import_export_export_successfull_text">The saved data was exported successfully. The file is located at: %1$s</string>
+    <string name="import_export_export_successfull_title">Erfolgreich exportiert</string>
+    <string name="import_export_export_successfull_text">Die gespeicherten Daten wurden erfolgreich exportiert. Die Datei befindet sich hier: %1$s</string>
 
-    <string name="import_export_import_successfull_title">Import successful</string>
-    <string name="import_export_import_successfull_text">The file was imported successfully and the birthdays were added to the app.</string>
+    <string name="import_export_import_successfull_title">Erfolgreich importiert</string>
+    <string name="import_export_import_successfull_text">Die Datei wurde erfolgreich importiert und die Geburtstage zur App hinzugefügt.</string>
 
-    <string name="import_export_maximum_data_size_title">Maximum amount exceeded</string>
-    <string name="import_export_maximum_data_size_text">The amount of saved and imported birthdays exceed the maximum amount of %1$d. To import the file successfully, remove one or more saved birthdays.</string>
+    <string name="import_export_maximum_data_size_title">Maximale Anzahl überschritten</string>
+    <string name="import_export_maximum_data_size_text">Deine bereits gespeicherten Geburtstage sind zusammen mit den zu importierenden zu viele. Die maximale Anzahl beträgt %1$d. Damit die Datei erfolgreich importiert werden kann, musst Du Geburtstage entfernen.</string>
 
     <string name="set_alarm_permissions_explanation_title">Bitte Berechtigung aktivieren</string>
     <string name="set_alarm_permissions_explanation_text">Damit die App Dich an Geburtstage erinnern kann, benötigt sie die Berechtigung, Alarme zu erstellen. Falls Du der App diese Berechtigung verweigerst, kann Dich die App auch nicht erinnern.</string>
 
     <!-- - - - - - - - - - - - - - - - - - - NOTIFICATION - - - - - - - - - - - - - - - - - - - -->
-    <string name="content_title">Birthday reminder</string>
-    <string name="content_text_today">%1$s has birthday today!</string>
-    <string name="content_text_tomorrow">%1$s has birthday tomorrow!</string>
-    <string name="content_text_in_x_days" tools:ignore="PluralsCandidate">%1$s has birthday in %2$d days!</string>
+    <string name="content_title">Geburtstagserinnerung</string>
+    <string name="content_text_today">%1$s hat heute Geburtstag!</string>
+    <string name="content_text_tomorrow">%1$s hat morgen Geburtstag!</string>
+    <string name="content_text_in_x_days" tools:ignore="PluralsCandidate">%1$s hat in %2$d Tagen Geburtstag!</string>
 
     <!-- - - - - - - - - - - - - - - - - - - MENU - - - - - - - - - - - - - - - - - - - -->
     <string name="menu_title_delete">Löschen</string>
@@ -88,14 +88,14 @@
     <string name="menu_title_import_export">Import/Export</string>
 
     <!-- - - - - - - - - - - - - - - - - - - NOTIFICATION SETTINGS - - - - - - - - - - - - - - - - - - - -->
-    <string name="activity_notifications_active">Activate notifications?</string>
-    <string name="activity_notifications_on_birthday">On birthday at %1$s</string>
-    <string name="activity_notifications_one_day_before">One day before birthday at %1$s</string>
-    <string name="activity_notifications_x_days_before" tools:ignore="PluralsCandidate">%1$d days before birthday at %2$s</string>
-    <string name="activity_notifications_x_days_before_without_time" tools:ignore="PluralsCandidate">%1$d days before birthday</string>
+    <string name="activity_notifications_active">Benachrichtigungen aktiv?</string>
+    <string name="activity_notifications_on_birthday">Am Geburtstag um %1$s</string>
+    <string name="activity_notifications_one_day_before">Einen Tag vor dem Geburtstag um %1$s</string>
+    <string name="activity_notifications_x_days_before" tools:ignore="PluralsCandidate">%1$d Tage vor dem Geburtstag um %2$s</string>
+    <string name="activity_notifications_x_days_before_without_time" tools:ignore="PluralsCandidate">%1$d Tage vor dem Geburtstag</string>
 
-    <string name="activity_notifications_time_picker_title">Choose time</string>
-    <string name="activity_notifications_date_picker_title">Choose days</string>
+    <string name="activity_notifications_time_picker_title">Zeit wählen</string>
+    <string name="activity_notifications_date_picker_title">Tage wählen</string>
 
     <!-- - - - - - - - - - - - - - - - - - - INFORMATION STUFF - - - - - - - - - - - - - - - - - - - - - -->
     <string name="info_about_version">Version: %1$s</string>
@@ -114,9 +114,9 @@
         \n\nDiese App ist sehr simpel gehalten, hat eine Begrenzung der Einträge auf 100 und besitzt gar nicht die Möglichkeit, auf das Internet zuzugreifen. Alles wird auf Deinem Smartphone gespeichert.
     </string>
 
-    <string name="info_about_developer_title">Information about the developer</string>
-    <string name="info_about_developer_text">This app is being developed by Sebastian Oltmanns. For contact, please use sebastian.oltmanns.developer@gmail.com.</string>
-    <string name="info_about_github_text">The code of this app is licensed with <a href="http://choosealicense.com/licenses/mit/">MIT-License</a> and published on <a href="https://github.com/SebastianOltmanns/birthdays">GitHub</a>.</string>
+    <string name="info_about_developer_title">Informationen über den Entwickler</string>
+    <string name="info_about_developer_text">Diese App wird von Sebastian Oltmanns entwickelt. Bei Kontaktwunsch bitte sebastian.oltmanns.developer@gmail.com nutzen.</string>
+    <string name="info_about_github_text">Der Code dieser App ist unter der <a href="http://choosealicense.com/licenses/mit/">MIT-Lizenz</a> auf <a href="https://github.com/SebastianOltmanns/birthdays">GitHub</a> veröffentlicht.</string>
 
     <string name="info_privacy_error_title">Datenschutzerklärung</string>
     <string name="info_privacy_error_text">Es gab einen Fehler beim Laden der Datenschutzerklärung. Besuche https://github.com/SebastianOltmanns/birthdays/blob/master/app/src/main/res/raw/privacy_policy.txt, um die aktuelle Version der Datenschutzerklärung zu lesen.</string>
