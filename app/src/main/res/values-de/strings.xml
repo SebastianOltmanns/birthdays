@@ -14,7 +14,7 @@
 
     <string name="today">Heute</string>
     <string name="tomorrow">Morgen</string>
-    <string name="in_x_days" tools:ignore="PluralsCandidate">in %1$d Tagen</string>
+    <string name="in_x_days" tools:ignore="PluralsCandidate">In %1$d Tagen</string>
 
     <string name="xth_birthday">%1$s (%2$d)</string>
 
@@ -76,9 +76,8 @@
 
     <!-- - - - - - - - - - - - - - - - - - - NOTIFICATION - - - - - - - - - - - - - - - - - - - -->
     <string name="content_title">Geburtstagserinnerung</string>
-    <string name="content_text_today">%1$s hat heute Geburtstag!</string>
-    <string name="content_text_tomorrow">%1$s hat morgen Geburtstag!</string>
-    <string name="content_text_in_x_days" tools:ignore="PluralsCandidate">%1$s hat in %2$d Tagen Geburtstag!</string>
+    <string name="content_text">%1$s ist %2$s\'s Geburtstag</string>
+    <string name="content_text_name_ending_with_s">%1$s ist %2$s\' Geburtstag</string>
 
     <!-- - - - - - - - - - - - - - - - - - - MENU - - - - - - - - - - - - - - - - - - - -->
     <string name="menu_title_delete">Löschen</string>
@@ -119,6 +118,6 @@
     <string name="info_about_github_text">Der Code dieser App ist unter der <a href="http://choosealicense.com/licenses/mit/">MIT-Lizenz</a> auf <a href="https://github.com/SebastianOltmanns/birthdays">GitHub</a> veröffentlicht.</string>
 
     <string name="info_privacy_error_title">Datenschutzerklärung</string>
-    <string name="info_privacy_error_text">Es gab einen Fehler beim Laden der Datenschutzerklärung. Besuche https://github.com/SebastianOltmanns/birthdays/blob/master/app/src/main/res/raw/privacy_policy.txt, um die aktuelle Version der Datenschutzerklärung zu lesen.</string>
+    <string name="info_privacy_error_text">Es gab einen Fehler beim Laden der Datenschutzerklärung. Bitte besuche https://github.com/SebastianOltmanns/birthdays/blob/master/app/src/main/res/raw-de/privacy_policy.txt, um die aktuelle Datenschutzerklärung zu lesen.</string>
 
 </resources>

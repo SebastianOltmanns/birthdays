@@ -8,42 +8,42 @@
     <string name="activity_notifications_label">Notifications</string>
 
     <string name="first_name">First name</string>
-    <string name="last_name">Nachname</string>
+    <string name="last_name">Last name</string>
     <string name="birthday">Birthday</string>
-    <string name="others">Sonstiges</string>
+    <string name="others">Others</string>
 
-    <string name="today">Heute</string>
-    <string name="tomorrow">Morgen</string>
-    <string name="in_x_days" tools:ignore="PluralsCandidate">in %1$d days</string>
+    <string name="today">Today</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name="in_x_days" tools:ignore="PluralsCandidate">In %1$d days</string>
 
     <string name="xth_birthday">%1$s (%2$d)</string>
 
-    <string name="yes">Ja</string>
-    <string name="no">Nein</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
     <string name="ok">OK</string>
     <string name="allow">Allow</string>
-    <string name="rate_app">App bewerten</string>
+    <string name="rate_app">Rate app</string>
     <string name="cancel">Cancel</string>
 
     <string name="activity_main_nothing_to_show">No entries available.</string>
 
     <!-- - - - - - - - - - - - - - - - - - - DIALOGS - - - - - - - - - - - - - - - - - - - - - -->
-    <string name="sure_delete_title">Wirklich entfernen?</string>
-    <string name="sure_delete_text">Möchtest Du diesen Geburtstag wirklich entfernen?</string>
+    <string name="sure_delete_title">Confirm deletion</string>
+    <string name="sure_delete_text">Do you really want to remove this birthday?</string>
 
-    <string name="wrong_input_title">Falsche Eingabe</string>
-    <string name="wrong_input_no_firstname">Du hast keinen Vornamen angegeben.</string>
-    <string name="wrong_input_no_lastname">Du hast keinen Nachnamen angegeben.</string>
-    <string name="wrong_input_birthday">Du hast keinen oder einen ungültigen Geburtstag angegeben.</string>
+    <string name="wrong_input_title">Wrong input</string>
+    <string name="wrong_input_no_firstname">You did not specify a first name.</string>
+    <string name="wrong_input_no_lastname">You did not specify a last name.</string>
+    <string name="wrong_input_birthday">You specified an invalid birthday or none.</string>
 
     <string name="failure_loading_data_title">Problem</string>
     <string name="failure_loading_data_text">There has been a problem loading data. Please restart the application.</string>
 
-    <string name="maximum_data_achieved_title">Maximale Anzahl erreicht</string>
-    <string name="maximum_data_achieved_text">Du hast die maximale Anzahl an Geburtstagen eingetragen. Bevor du einen neuen Geburtstag eintragen kannst, musst du einen anderen entfernen.</string>
+    <string name="maximum_data_achieved_title">Maximum amount reached</string>
+    <string name="maximum_data_achieved_text">You reached the maximum amount for birthdays. Before adding a new birthday, you need to remove another one.</string>
 
-    <string name="rating_title">App bewerten</string>
-    <string name="rating_text">Wenn Dir diese App gefällt, dann bewerte Sie im Google Play Store!</string>
+    <string name="rating_title">Rate this app</string>
+    <string name="rating_text">If you like this app, rate it in the Google Play Store!</string>
 
     <string name="import_export_dialog_title">Import/Export</string>
     <string name="import_export_dialog_text" tools:ignore="PluralsCandidate">
@@ -71,20 +71,19 @@
     <string name="import_export_maximum_data_size_title">Maximum amount exceeded</string>
     <string name="import_export_maximum_data_size_text">The amount of saved and imported birthdays exceed the maximum amount of %1$d. To import the file successfully, remove one or more saved birthdays.</string>
 
-    <string name="set_alarm_permissions_explanation_title">Bitte Berechtigung aktivieren</string>
-    <string name="set_alarm_permissions_explanation_text">Damit die App Dich an Geburtstage erinnern kann, benötigt sie die Berechtigung, Alarme zu erstellen. Falls Du der App diese Berechtigung verweigerst, kann Dich die App auch nicht erinnern.</string>
+    <string name="set_alarm_permissions_explanation_title">Please activate permission</string>
+    <string name="set_alarm_permissions_explanation_text">To notify you about birthdays, the app needs permission to set alarms. If you deny this, the app can not notify you.</string>
 
     <!-- - - - - - - - - - - - - - - - - - - NOTIFICATION - - - - - - - - - - - - - - - - - - - -->
     <string name="content_title">Birthday reminder</string>
-    <string name="content_text_today">%1$s has birthday today!</string>
-    <string name="content_text_tomorrow">%1$s has birthday tomorrow!</string>
-    <string name="content_text_in_x_days" tools:ignore="PluralsCandidate">%1$s has birthday in %2$d days!</string>
+    <string name="content_text">%1$s, it\'s %2$s\'s birthday</string>
+    <string name="content_text_name_ending_with_s">%1$s, it\'s %2$s\' birthday</string>
 
     <!-- - - - - - - - - - - - - - - - - - - MENU - - - - - - - - - - - - - - - - - - - -->
-    <string name="menu_title_delete">Löschen</string>
-    <string name="menu_title_save">Speichern</string>
+    <string name="menu_title_delete">Delete</string>
+    <string name="menu_title_save">Save</string>
     <string name="menu_title_info">Information</string>
-    <string name="menu_title_notifications">Benachrichtigungen</string>
+    <string name="menu_title_notifications">Notifications</string>
     <string name="menu_title_import_export">Import/Export</string>
 
     <!-- - - - - - - - - - - - - - - - - - - NOTIFICATION SETTINGS - - - - - - - - - - - - - - - - - - - -->
@@ -99,26 +98,26 @@
 
     <!-- - - - - - - - - - - - - - - - - - - INFORMATION STUFF - - - - - - - - - - - - - - - - - - - - - -->
     <string name="info_about_version">Version: %1$s</string>
-    <string name="info_about_title">Informationen über diese App</string>
-    <string name="info_about_text">Falls der Speicher der App gelöscht wird, sind sämtliche Daten verloren und die App könnte unerwünschtes Verhalten zeigen.
-        \n\nDie App benötigt die Berechtigungen \"Alarm einstellen\" und \"Beim Start ausführen\", um korrekte Benachrichtigungen zu erstellen.
-        \n\nDie App benötigt die Berechtigungen \"SD-Karteninhalte ändern oder löschen\" und \"SD-Karteninhalte lesen\", um auf Deinen Wunsch hin Daten zu importieren oder exportieren. Die App macht dies niemals automatisch.
-        \n\nEs wird keine Verantwortung übernommen, falls die App Notifikationen falsch oder nicht anzeigt.
-        \n\nDas Modul, mit dem eine Datei zum Importieren ausgewählt werden kann, ist unter der <a href="http://choosealicense.com/licenses/apache-2.0/">Apache 2.0 Lizenz</a> auf <a href="https://github.com/nbsp-team/MaterialFilePicker">Github</a> veröffentlicht. Copyright für dieses Modul: <a href="https://github.com/nbsp-team">nbsp-team</a>.
+    <string name="info_about_title">Information about this app</string>
+    <string name="info_about_text">If the storage of this app gets deleted, all data is lost and the app may behave incorrect.
+        \n\nThe app needs the permission \"set alarm\" and \"execute after boot completed\", to create correct notifications.
+        \n\nThe app needs the permission \"change or delete external storage\" and \"read external storage\", to import or export data when you want it. The app will never do this automatically.
+        \n\nNo responsibility will be accepted if the app displays notifications incorrectly or not.
+        \n\nThe module for choosing a file to import is available by <a href="http://choosealicense.com/licenses/apache-2.0/">Apache 2.0 License</a> and published at <a href="https://github.com/nbsp-team/MaterialFilePicker">Github</a>. Copyright for this module: <a href="https://github.com/nbsp-team">nbsp-team</a>.
     </string>
 
-    <string name="info_motivation_title">Was soll diese App?</string>
+    <string name="info_motivation_title">What\'s the purpose of this app?</string>
     <string name="info_motivation_text">
-        Ich habe diese App entwickelt, um unabhängiger von anderen Diensten zu sein. Ich realisierte, dass ich den Geburtstag meines Mitbewohners nicht vergessen möchte, nur weil er sein Konto bei einem bestimmten sozialen Netzwerk gelöscht hat, welches mir seinen Geburtstag sonst angezeigt hätte.
-        \nAußerdem wollte ich einen simplen Dienst, keine bereits in Smartphone vorinstallierten Kalender-Funktionen, welche meistens eine große Anzahl an Zusatz-Features haben. Und ich wollte einen Dienst, der auf keinen Fall diese Daten weitergibt oder im Internet abspeichert.
-        \n\nDiese App ist sehr simpel gehalten, hat eine Begrenzung der Einträge auf 100 und besitzt gar nicht die Möglichkeit, auf das Internet zuzugreifen. Alles wird auf Deinem Smartphone gespeichert.
+        I developed this app to be more independent from other services. I realized that I do not want to forget my roommate\'s birthday just because he deleted his account in a certain social network, which would otherwise have indicated his birthday.
+        \nFurthermore I wanted a simple service, no integrated calendar services that for the most part have additional features I do not use. And I wanted a service that by no means passes on data or saves data on the Internet.
+        \n\nThis app is really simple, limited to 100 entries and does not have the possibility to access the Internet. Everything is storaged on your smartphone.
     </string>
 
     <string name="info_about_developer_title">Information about the developer</string>
     <string name="info_about_developer_text">This app is being developed by Sebastian Oltmanns. For contact, please use sebastian.oltmanns.developer@gmail.com.</string>
     <string name="info_about_github_text">The code of this app is licensed with <a href="http://choosealicense.com/licenses/mit/">MIT-License</a> and published on <a href="https://github.com/SebastianOltmanns/birthdays">GitHub</a>.</string>
 
-    <string name="info_privacy_error_title">Datenschutzerklärung</string>
-    <string name="info_privacy_error_text">Es gab einen Fehler beim Laden der Datenschutzerklärung. Besuche https://github.com/SebastianOltmanns/birthdays/blob/master/app/src/main/res/raw/privacy_policy.txt, um die aktuelle Version der Datenschutzerklärung zu lesen.</string>
+    <string name="info_privacy_error_title">Privacy policy</string>
+    <string name="info_privacy_error_text">There has been a mistake loading the privacy policy. Please visit https://github.com/SebastianOltmanns/birthdays/blob/master/app/src/main/res/raw/privacy_policy.txt to read the current privacy policy.</string>
 
 </resources>

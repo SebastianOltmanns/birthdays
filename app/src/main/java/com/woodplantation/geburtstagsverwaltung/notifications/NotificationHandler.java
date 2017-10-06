@@ -456,15 +456,23 @@ public class NotificationHandler extends BroadcastReceiver {
 
 		Log.d("NotificationHandler","before switch. which: " + which);
 
+		int textResource;
+		String dayText;
+		if (name.endsWith("s")) {
+			textResource = R.string.content_text_name_ending_with_s;
+		} else {
+			textResource = R.string.content_text;
+		}
+
 		switch (which) {
 			case 0:
-				text = context.getString(R.string.content_text_today, name);
+				dayText = context.getString(R.string.today);
 				break;
 			case 1: {
-				text = context.getString(R.string.content_text_tomorrow, name);
+				dayText = context.getString(R.string.tomorrow);
 				break;
 			}
-			case 2: {
+			default: {
 				Calendar nextBirthday = getNextBirthday(birthday);
 				int diff = nextBirthday.get(Calendar.DAY_OF_YEAR) - now.get(Calendar.DAY_OF_YEAR);
 				if (diff < 0) {
@@ -473,10 +481,12 @@ public class NotificationHandler extends BroadcastReceiver {
 				if (diff < 2 || diff > 28) {
 					return;
 				}
-				text = context.getString(R.string.content_text_in_x_days, name, diff);
+				dayText = context.getString(R.string.in_x_days, diff);
 				break;
 			}
 		}
+
+		text = context.getString(textResource, dayText, name);
 
 		//create notification:
 		Intent notificationIntent = new Intent(context, MainActivity.class);
