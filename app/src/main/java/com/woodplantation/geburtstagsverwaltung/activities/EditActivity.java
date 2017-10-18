@@ -22,6 +22,7 @@ public class EditActivity extends InputActivity {
 	private int index;
 
 	@Override
+	@SuppressWarnings("MissingSuperCall")
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState, R.layout.activity_edit);
 

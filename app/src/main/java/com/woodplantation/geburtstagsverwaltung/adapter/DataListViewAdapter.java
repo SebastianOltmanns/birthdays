@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.woodplantation.geburtstagsverwaltung.R;
 import com.woodplantation.geburtstagsverwaltung.storage.DataSet;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -21,7 +22,6 @@ import java.util.Locale;
 public class DataListViewAdapter extends ArrayAdapter<DataSet> {
 
 	private int resource;
-	private SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy", Locale.GERMAN);
 
 	public DataListViewAdapter(Context context, int resource) {
 		super(context, resource);
@@ -53,7 +53,7 @@ public class DataListViewAdapter extends ArrayAdapter<DataSet> {
 		String name = firstname + " " + lastname;
 		nameTextView.setText(name);
 		othersTextView.setText(others);
-		birthdayTextView.setText(sdf.format(birthday.getTime()));
+		birthdayTextView.setText(DateFormat.getDateInstance(DateFormat.MEDIUM).format(birthday.getTime()));
 		remainingTextView.setText(remaining);
 
 		return convertView;

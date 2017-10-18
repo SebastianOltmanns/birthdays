@@ -48,7 +48,7 @@
     <string name="import_export_dialog_title">Import/Export</string>
     <string name="import_export_dialog_text" tools:ignore="PluralsCandidate">
         You can export all entered birthdays into a file. This file will be saved in the primary smartphone storage and is not going to be encoded. The risk that comes from this, especially regarding data protection, is entirely up to you.
-        \n\nIf you want to import birthdays from such a file, note that they will be added to the birthdays saved currently in the app. If the amount of birthdays from both sources exceeds the maximum amount of $1$d, the import is not possible.
+        \n\nIf you want to import birthdays from such a file, note that they will be added to the birthdays saved currently in the app. If the amount of birthdays from both sources exceeds the maximum amount of %1$d, the import is not possible.
     </string>
     <string name="import_export_import">Import</string>
     <string name="import_export_export">Export</string>
@@ -88,9 +88,11 @@
 
     <!-- - - - - - - - - - - - - - - - - - - NOTIFICATION SETTINGS - - - - - - - - - - - - - - - - - - - -->
     <string name="activity_notifications_active">Activate notifications?</string>
-    <string name="activity_notifications_on_birthday">On birthday at %1$s</string>
-    <string name="activity_notifications_one_day_before">One day before birthday at %1$s</string>
-    <string name="activity_notifications_x_days_before" tools:ignore="PluralsCandidate">%1$d days before birthday at %2$s</string>
+    <string-array name="activity_notifications_settings">
+        <item>On birthday at %1$s</item>
+        <item>One day before birthday at %1$s</item>
+        <item>%1$d days before birthday at %2$s</item>
+    </string-array>
     <string name="activity_notifications_x_days_before_without_time" tools:ignore="PluralsCandidate">%1$d days before birthday</string>
 
     <string name="activity_notifications_time_picker_title">Choose time</string>
@@ -100,8 +102,8 @@
     <string name="info_about_version">Version: %1$s</string>
     <string name="info_about_title">Information about this app</string>
     <string name="info_about_text">If the storage of this app gets deleted, all data is lost and the app may behave incorrect.
-        \n\nThe app needs the permission \"set alarm\" and \"execute after boot completed\", to create correct notifications.
-        \n\nThe app needs the permission \"change or delete external storage\" and \"read external storage\", to import or export data when you want it. The app will never do this automatically.
+        \n\nThe app needs the permission \"set alarm\" and \"execute after boot completed\" to create correct notifications.
+        \n\nThe app needs the permission \"change or delete external storage\" and \"read external storage\" to import or export data when you want it. The app will never do this automatically.
         \n\nNo responsibility will be accepted if the app displays notifications incorrectly or not.
         \n\nThe module for choosing a file to import is available by <a href="http://choosealicense.com/licenses/apache-2.0/">Apache 2.0 License</a> and published at <a href="https://github.com/nbsp-team/MaterialFilePicker">Github</a>. Copyright for this module: <a href="https://github.com/nbsp-team">nbsp-team</a>.
     </string>
@@ -109,7 +111,7 @@
     <string name="info_motivation_title">What\'s the purpose of this app?</string>
     <string name="info_motivation_text">
         I developed this app to be more independent from other services. I realized that I do not want to forget my roommate\'s birthday just because he deleted his account in a certain social network, which would otherwise have indicated his birthday.
-        \nFurthermore I wanted a simple service, no integrated calendar services that for the most part have additional features I do not use. And I wanted a service that by no means passes on data or saves data on the Internet.
+        \nFurthermore I wanted a simple service, no integrated calendar services that for the most part have additional features I do not use. And I wanted a service that by no means passes on data to third parties or transfers data over the Internet.
         \n\nThis app is really simple, limited to 100 entries and does not have the possibility to access the Internet. Everything is storaged on your smartphone.
     </string>
 

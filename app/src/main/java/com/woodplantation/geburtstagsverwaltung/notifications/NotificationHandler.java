@@ -37,6 +37,7 @@ import java.util.Map;
  * Contact: sebastian.oltmanns.developer@gmail.com
  *
  */
+@SuppressWarnings("UseSparseArrays") //tried SparseArrays. Didnt work for serializing.
 public class NotificationHandler extends BroadcastReceiver {
 
 	public static final String INTENT_NOTIFICATION_DATASET = "NOTIFICATION_DATASET";

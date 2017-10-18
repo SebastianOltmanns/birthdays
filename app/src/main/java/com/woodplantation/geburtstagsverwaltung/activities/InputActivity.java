@@ -3,21 +3,18 @@ package com.woodplantation.geburtstagsverwaltung.activities;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
-import android.os.Debug;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.woodplantation.geburtstagsverwaltung.R;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Locale;
 
 /**
  * Created by Sebu on 10.03.2016.
@@ -33,6 +30,23 @@ public abstract class InputActivity extends AppCompatActivity {
 
 	protected Calendar birthday;
 
+	private class FocusNextViewTextWatcher implements TextWatcher {
+		int count;
+		View view;
+		FocusNextViewTextWatcher(int count, View view) {
+			this.count = count;
+			this.view = view;
+		}
+		@Override
+		public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+		@Override
+		public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+		@Override
+		public void afterTextChanged(Editable editable) {
+			if (editable.length() == count) view.requestFocus();
+		}
+	}
+
 	protected void onCreate(Bundle savedInstanceState, int contentView) {
 		super.onCreate(savedInstanceState);
 		setContentView(contentView);
@@ -47,6 +61,9 @@ public abstract class InputActivity extends AppCompatActivity {
 		birthdayMonthEdit = findViewById(R.id.text_input_birthday_month);
 		birthdayYearEdit = findViewById(R.id.text_input_birthday_year);
 		othersEdit = findViewById(R.id.text_input_others);
+
+        birthdayDayEdit.addTextChangedListener(new FocusNextViewTextWatcher(2, birthdayMonthEdit));
+		birthdayMonthEdit.addTextChangedListener(new FocusNextViewTextWatcher(2, birthdayYearEdit));
 	}
 
 	@Override

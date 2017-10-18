@@ -8,7 +8,10 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.format.DateFormat;
+import android.text.SpannableStringBuilder;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,6 +28,7 @@ import com.woodplantation.geburtstagsverwaltung.notifications.MyPreferences;
 import com.woodplantation.geburtstagsverwaltung.R;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Map;
 
 /**
@@ -40,17 +44,20 @@ public class NotificationsActivity extends AppCompatActivity {
 
 	private Switch switchActive;
 	private LinearLayout layoutActive;
-	private CheckBox checkBoxOnBirthday;
+	private CheckBox[] checkBoxes = new CheckBox[3];
+	private TextView[] textViews = new TextView[3];
+	/*private CheckBox checkBoxOnBirthday;
 	private TextView textViewOnBirthday;
 	private CheckBox checkBoxOneDayBefore;
 	private TextView textViewOneDayBefore;
 	private CheckBox checkBoxXDaysBefore;
-	private TextView textViewXDaysBefore;
+	private TextView textViewXDaysBefore;*/
 
 	private boolean active;
-	private boolean onBirthdayActive;
+	private boolean[] actives = new boolean[3];
+	/*private boolean onBirthdayActive;
 	private boolean oneDayBeforeActive;
-	private boolean xDaysBeforeActive;
+	private boolean xDaysBeforeActive;*/
 	int[] clocks = new int[3];
 	private int xDaysBeforeDays;
 
@@ -63,18 +70,18 @@ public class NotificationsActivity extends AppCompatActivity {
 
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-		is24h = DateFormat.is24HourFormat(this);
+		is24h = android.text.format.DateFormat.is24HourFormat(this);
 
 		//initalize the layout variables
 
 		switchActive = (Switch) findViewById(R.id.activity_notifications_switch_active);
 		layoutActive = (LinearLayout) findViewById(R.id.activity_notifications_layout_active);
-		checkBoxOnBirthday = (CheckBox) findViewById(R.id.activity_notifications_checkbox_on_birthday);
-		textViewOnBirthday = (TextView) findViewById(R.id.activity_notifications_textview_on_birthday);
-		checkBoxOneDayBefore = (CheckBox) findViewById(R.id.activity_notifications_checkbox_one_day_before);
-		textViewOneDayBefore = (TextView) findViewById(R.id.activity_notifications_textview_one_day_before);
-		checkBoxXDaysBefore = (CheckBox) findViewById(R.id.activity_notifications_checkbox_x_days_before);
-		textViewXDaysBefore = (TextView) findViewById(R.id.activity_notifications_textview_x_days_before);
+		checkBoxes[0] = (CheckBox) findViewById(R.id.activity_notifications_checkbox_on_birthday);
+		textViews[0] = (TextView) findViewById(R.id.activity_notifications_textview_on_birthday);
+		checkBoxes[1] = (CheckBox) findViewById(R.id.activity_notifications_checkbox_one_day_before);
+		textViews[1] = (TextView) findViewById(R.id.activity_notifications_textview_one_day_before);
+		checkBoxes[2] = (CheckBox) findViewById(R.id.activity_notifications_checkbox_x_days_before);
+		textViews[2] = (TextView) findViewById(R.id.activity_notifications_textview_x_days_before);
 
 		//get preferences
 
@@ -83,9 +90,9 @@ public class NotificationsActivity extends AppCompatActivity {
 		//load all preferences and save it once so the preferences are initialized
 
 		active = preferences.getActive();
-		onBirthdayActive = preferences.getOnBirthdayActive();
-		oneDayBeforeActive = preferences.getOneDayBeforeActive();
-		xDaysBeforeActive = preferences.getXDaysBeforeActive();
+		actives[0] = preferences.getOnBirthdayActive();
+		actives[1] = preferences.getOneDayBeforeActive();
+		actives[2] = preferences.getXDaysBeforeActive();
 		clocks[0] = preferences.getOnBirthdayClock();
 		clocks[1] = preferences.getOneDayBeforeClock();
 		clocks[2] = preferences.getXDaysBeforeClock();
@@ -99,14 +106,9 @@ public class NotificationsActivity extends AppCompatActivity {
 		//set listeners
 
 		switchActive.setOnClickListener(new OnSwitchClickListener());
-		OnCheckBoxClickListener onCheckBoxClickListener = new OnCheckBoxClickListener();
-		checkBoxOnBirthday.setOnClickListener(onCheckBoxClickListener);
-		checkBoxOneDayBefore.setOnClickListener(onCheckBoxClickListener);
-		checkBoxXDaysBefore.setOnClickListener(onCheckBoxClickListener);
-		OnTextViewClickListener onTextViewClickListener = new OnTextViewClickListener();
-		textViewOnBirthday.setOnClickListener(onTextViewClickListener);
-		textViewOneDayBefore.setOnClickListener(onTextViewClickListener);
-		textViewXDaysBefore.setOnClickListener(onTextViewClickListener);
+		for (int i = 0; i < 3; i++) {
+			checkBoxes[i].setOnClickListener(new OnCheckBoxClickListener(i));
+		}
 	}
 
 	@Override
@@ -144,12 +146,12 @@ public class NotificationsActivity extends AppCompatActivity {
 		SharedPreferences.Editor editor = preferences.preferences.edit();
 		Log.d("NotificationsActivity","Pref set active: " + active);
 		editor.putBoolean(getString(R.string.preferences_active), active);
-		Log.d("NotificationsActivity","Pref set active: " + onBirthdayActive);
-		editor.putBoolean(getString(R.string.preferences_on_birthday_active), onBirthdayActive);
-		Log.d("NotificationsActivity","Pref set active: " + oneDayBeforeActive);
-		editor.putBoolean(getString(R.string.preferences_one_day_before_active), oneDayBeforeActive);
-		Log.d("NotificationsActivity","Pref set active: " + xDaysBeforeActive);
-		editor.putBoolean(getString(R.string.preferences_x_days_before_active), xDaysBeforeActive);
+		Log.d("NotificationsActivity","Pref set active: " + actives[0]);
+		editor.putBoolean(getString(R.string.preferences_on_birthday_active), actives[0]);
+		Log.d("NotificationsActivity","Pref set active: " + actives[1]);
+		editor.putBoolean(getString(R.string.preferences_one_day_before_active), actives[1]);
+		Log.d("NotificationsActivity","Pref set active: " + actives[2]);
+		editor.putBoolean(getString(R.string.preferences_x_days_before_active), actives[2]);
 		Log.d("NotificationsActivity","Pref set active: " + clocks[0]);
 		editor.putInt(getString(R.string.preferences_on_birthday_clock), clocks[0]);
 		Log.d("NotificationsActivity","Pref set active: " + clocks[1]);
@@ -175,95 +177,40 @@ public class NotificationsActivity extends AppCompatActivity {
 	}
 
 	private void refreshCheckBoxActives() {
-		checkBoxOnBirthday.setChecked(onBirthdayActive);
-
-		checkBoxOneDayBefore.setChecked(oneDayBeforeActive);
-
-		checkBoxXDaysBefore.setChecked(xDaysBeforeActive);
+		for (int i = 0; i < 3; i++) {
+			checkBoxes[i].setChecked(actives[i]);
+			textViews[i].setEnabled(actives[i]);
+		}
 	}
 
-	private void refreshTexts() {
-		String[] stringClocks = new String[3];
-		for (int i = 0; i < clocks.length; i++) {
-			int h = clocks[i] / 60;
-			int m = clocks[i] % 60;
-			if (!is24h) {
-				boolean am = h < 12;
-				h = h % 12;
-				if (h == 0) {
-					h = 12;
-				}
-				String hS = (h < 10) ? ("0" + h) : String.valueOf(h);
-				String mS = (m < 10) ? ("0" + m) : String.valueOf(m);
-				stringClocks[i] = hS + ":" + mS + (am ? " AM" : " PM");
+	private Calendar c = Calendar.getInstance(); {
+		c.set(Calendar.SECOND, 0);
+		c.set(Calendar.MILLISECOND, 0);
+	}
+
+	private abstract class DisableableClickableSpan extends ClickableSpan {
+		protected int which;
+		DisableableClickableSpan(int which) {
+			this.which = which;
+		}
+		@Override
+		public void updateDrawState(TextPaint ds) {
+			if (textViews[which].isEnabled()) {
+				ds.setColor(getColor(R.color.colorAccent));
+				ds.setUnderlineText(true);
 			} else {
-				String hS = (h < 10) ? ("0" + h) : String.valueOf(h);
-				String mS = (m < 10) ? ("0" + m) : String.valueOf(m);
-				stringClocks[i] = hS + ":" + mS;
+				ds.setColor(getColor(R.color.text_color_disabled));
+				ds.setUnderlineText(false);
 			}
-		}
-
-		textViewOnBirthday.setText(getString(R.string.activity_notifications_on_birthday, stringClocks[0]));
-		textViewOneDayBefore.setText(getString(R.string.activity_notifications_one_day_before, stringClocks[1]));
-		textViewXDaysBefore.setText(getString(R.string.activity_notifications_x_days_before, xDaysBeforeDays, stringClocks[2]));
-	}
-
-	private class OnSwitchClickListener implements View.OnClickListener {
-
-		@Override
-		public void onClick(View view) {
-			active = !active;
-			refreshActive();
 		}
 	}
 
-	private class OnCheckBoxClickListener implements View.OnClickListener {
-
-		@Override
-		public void onClick(View view) {
-			switch (view.getId()) {
-				case R.id.activity_notifications_checkbox_on_birthday:
-					onBirthdayActive = !onBirthdayActive;
-					break;
-				case R.id.activity_notifications_checkbox_one_day_before:
-					oneDayBeforeActive = !oneDayBeforeActive;
-					break;
-				case R.id.activity_notifications_checkbox_x_days_before:
-					xDaysBeforeActive = !xDaysBeforeActive;
-					break;
-			}
-			refreshTexts();
+	private class ClickableTimeSpan extends DisableableClickableSpan {
+		ClickableTimeSpan(int which) {
+			super(which);
 		}
-	}
-
-	private class OnTextViewClickListener implements View.OnClickListener {
-
 		@Override
 		public void onClick(View view) {
-			int which = -1;
-			switch (view.getId()) {
-				case R.id.activity_notifications_textview_on_birthday:
-					if (!onBirthdayActive) {
-						return;
-					}
-					which=0;
-					break;
-				case R.id.activity_notifications_textview_one_day_before:
-					if (!oneDayBeforeActive) {
-						return;
-					}
-					which=1;
-					break;
-				case R.id.activity_notifications_textview_x_days_before:
-					if (!xDaysBeforeActive) {
-						return;
-					}
-					which=2;
-					break;
-			}
-			if (which == -1) {
-				return;
-			}
 			int h = clocks[which] / 60;
 			int m = clocks[which] % 60;
 			MyOnTimeSetListener myOnTimeSetListener = new MyOnTimeSetListener(which);
@@ -271,75 +218,118 @@ public class NotificationsActivity extends AppCompatActivity {
 			dialog.setTitle(R.string.activity_notifications_time_picker_title);
 			dialog.show();
 		}
-
-		private class MyOnTimeSetListener implements TimePickerDialog.OnTimeSetListener {
-
+		class MyOnTimeSetListener implements TimePickerDialog.OnTimeSetListener {
 			private int which;
-			private NumberPicker numberPicker;
-			private AlertDialog dialog;
-			private int hour, minute;
-			private TextView dialogTextView;
-
 			private MyOnTimeSetListener(int which) {
 				this.which = which;
 			}
-
 			@Override
 			public void onTimeSet(TimePicker timePicker, int hour, int minute) {
-				if (which == 2) {
-					this.hour = hour;
-					this.minute = minute;
+				clocks[which] = hour * 60 + minute;
+				refreshTexts();
+			}
+		}
 
-                    OnButtonClickListener onButtonClickListener = new OnButtonClickListener();
+	};
 
-					AlertDialog.Builder builder = new AlertDialog.Builder(NotificationsActivity.this)
-							.setTitle(R.string.activity_notifications_date_picker_title)
-                            .setPositiveButton(R.string.ok, onButtonClickListener)
-                            .setNegativeButton(R.string.cancel, onButtonClickListener);
-					dialog = builder.create();
-					LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-					View dialogNumberPicker = inflater.inflate(R.layout.dialog_number_picker, null);
-					dialog.setView(dialogNumberPicker);
+	private ClickableSpan clickableSetDaysBeforeSpan = new DisableableClickableSpan(2) {
+		private AlertDialog dialog;
+		private TextView dialogTextView;
+		private NumberPicker numberPicker;
+		@Override
+		public void onClick(View view) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(NotificationsActivity.this)
+					.setTitle(R.string.activity_notifications_date_picker_title)
+					.setPositiveButton(R.string.ok, new OnButtonClickListener())
+					.setNegativeButton(R.string.cancel, null);
+			dialog = builder.create();
+			LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+			View dialogNumberPicker = inflater.inflate(R.layout.dialog_number_picker, null);
+			dialog.setView(dialogNumberPicker);
 
-					dialogTextView = (TextView) dialogNumberPicker.findViewById(R.id.dialog_number_picker_text);
-					dialogTextView.setText(getResources().getString(R.string.activity_notifications_x_days_before_without_time, xDaysBeforeDays));
+			dialogTextView = (TextView) dialogNumberPicker.findViewById(R.id.dialog_number_picker_text);
+			dialogTextView.setText(getResources().getString(R.string.activity_notifications_x_days_before_without_time, xDaysBeforeDays));
 
-					numberPicker = (NumberPicker) dialogNumberPicker.findViewById(R.id.number_picker);
+			numberPicker = (NumberPicker) dialogNumberPicker.findViewById(R.id.number_picker);
 
-					numberPicker.setMaxValue(28);
-					numberPicker.setMinValue(2);
-					numberPicker.setValue(xDaysBeforeDays);
-					MyOnValueChangeListener myOnValueChangeListener = new MyOnValueChangeListener();
-					numberPicker.setOnValueChangedListener(myOnValueChangeListener);
+			numberPicker.setMaxValue(28);
+			numberPicker.setMinValue(2);
+			numberPicker.setValue(xDaysBeforeDays);
+			MyOnValueChangeListener myOnValueChangeListener = new MyOnValueChangeListener();
+			numberPicker.setOnValueChangedListener(myOnValueChangeListener);
 
-					dialog.show();
-				} else {
-					clocks[which] = hour * 60 + minute;
+			dialog.show();
+		}
+		class MyOnValueChangeListener implements NumberPicker.OnValueChangeListener {
+			@Override
+			public void onValueChange(NumberPicker numberPicker, int oldVal, int newVal) {
+				dialogTextView.setText(getString(R.string.activity_notifications_x_days_before_without_time, newVal));
+			}
+		}
+		class OnButtonClickListener implements DialogInterface.OnClickListener {
+			@Override
+			public void onClick(DialogInterface dialogInterface, int i) {
+				if (i == DialogInterface.BUTTON_POSITIVE) {
+					xDaysBeforeDays = numberPicker.getValue();
 					refreshTexts();
+					dialog.dismiss();
 				}
 			}
+		}
+	};
 
-			private class MyOnValueChangeListener implements NumberPicker.OnValueChangeListener {
-				@Override
-				public void onValueChange(NumberPicker numberPicker, int oldVal, int newVal) {
-					dialogTextView.setText(getString(R.string.activity_notifications_x_days_before_without_time, newVal));
-				}
+	private void refreshTexts() {
+		SpannableStringBuilder[] ssb = new SpannableStringBuilder[3];
+		String[] stringClocks = getResources().getStringArray(R.array.activity_notifications_settings);
+
+		for (int i = 0; i < clocks.length; i++) {
+			c.set(Calendar.HOUR_OF_DAY, clocks[i]/60);
+			c.set(Calendar.MINUTE, clocks[i]%60);
+			String clock = java.text.DateFormat.getTimeInstance(java.text.DateFormat.SHORT).format(c.getTime());
+
+			String string;
+			if (i == 2) {
+				string = String.format(stringClocks[i], xDaysBeforeDays, clock);
+			} else {
+				string = String.format(stringClocks[i], clock);
 			}
 
-			private class OnButtonClickListener implements DialogInterface.OnClickListener {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    if (i == DialogInterface.BUTTON_NEGATIVE) {
-                        dialog.dismiss();
-                    } else if (i == DialogInterface.BUTTON_POSITIVE) {
-                        xDaysBeforeDays = numberPicker.getValue();
-                        clocks[which] = hour * 60 + minute;
-                        refreshTexts();
-                        dialog.dismiss();
-                    }
-                }
-            }
+			ssb[i] = new SpannableStringBuilder(string);
+			ssb[i].setSpan(new ClickableTimeSpan(i), string.length()-clock.length(), string.length(), 0);
 
+			if (i == 2) {
+				ssb[i].setSpan(clickableSetDaysBeforeSpan, 0, String.valueOf(xDaysBeforeDays).length(), 0);
+			}
+		}
+
+		for (int i = 0; i < 3; i++) {
+			textViews[i].setMovementMethod(LinkMovementMethod.getInstance());
+			textViews[i].setText(ssb[i], TextView.BufferType.SPANNABLE);
 		}
 	}
+
+	private class OnSwitchClickListener implements View.OnClickListener {
+		@Override
+		public void onClick(View view) {
+			active = !active;
+			refreshActive();
+		}
+	}
+
+
+	private class OnCheckBoxClickListener implements View.OnClickListener {
+
+		int which;
+
+		public OnCheckBoxClickListener(int which) {
+			this.which = which;
+		}
+
+		@Override
+		public void onClick(View view) {
+			actives[which] = !actives[which];
+            refreshCheckBoxActives();
+		}
+	}
+
 }

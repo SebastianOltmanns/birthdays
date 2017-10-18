@@ -52,7 +52,7 @@
                     android:id="@+id/activity_notifications_textview_on_birthday"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/text_color"
+                    android:textColor="@drawable/color_enable_disable"
                     android:textSize="@dimen/text_size"/>
 
             </LinearLayout>
@@ -76,7 +76,7 @@
                     android:id="@+id/activity_notifications_textview_one_day_before"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/text_color"
+                    android:textColor="@drawable/color_enable_disable"
                     android:textSize="@dimen/text_size"/>
 
             </LinearLayout>
@@ -99,7 +99,7 @@
                     android:id="@+id/activity_notifications_textview_x_days_before"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/text_color"
+                    android:textColor="@drawable/color_enable_disable"
                     android:textSize="@dimen/text_size"/>
 
             </LinearLayout>

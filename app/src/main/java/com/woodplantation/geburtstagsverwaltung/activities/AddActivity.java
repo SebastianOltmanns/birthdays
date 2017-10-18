@@ -21,6 +21,8 @@ public class AddActivity extends InputActivity {
 
 	private int newId;
 
+	@Override
+	@SuppressWarnings("MissingSuperCall")
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState, R.layout.activity_add);
 
