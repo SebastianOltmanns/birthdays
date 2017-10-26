@@ -6,8 +6,8 @@ So this app lets you input and manage birthdays you do not want to forget about.
 ### Developer
 This app is being developed by Sebastian Oltmanns. For contact, please use sebastian.oltmanns.developer@gmail.com.
 ### Multiple language support
-So far this Application is only available in German and English language and in the German-speaking Google Play Store (English-speaking Google Play Store coming soon). In the future, I want to support multiple other languages.
-If you are willing to translate the Strings of this Application into another language for publishing it into another national Play Store, feel free to contact me or just do a pull request.
+The app is available in every Google Play Store world wide with standard language being en-GB. But the application has only german and english strings.
+If you are willing to translate the Strings of this Application into another language, feel free to contact me or just do a pull request.
 ### Support for other OS (iOS, Windows, ...)
 This app is only available for Android, since I myself am only interested in Android programming so far. If you are interested in doing another Version of this app, feel free to contact me about it! 
 ### Google Play Store
