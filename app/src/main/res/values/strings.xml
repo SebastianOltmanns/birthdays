@@ -27,6 +27,10 @@
 
     <string name="activity_main_nothing_to_show">No entries available.</string>
 
+    <string name="activity_input_day_hint">dd</string>
+    <string name="activity_input_month_hint">mm</string>
+    <string name="activity_input_year_hint">yyyy</string>
+
     <!-- - - - - - - - - - - - - - - - - - - DIALOGS - - - - - - - - - - - - - - - - - - - - - -->
     <string name="sure_delete_title">Confirm deletion</string>
     <string name="sure_delete_text">Do you really want to remove this birthday?</string>

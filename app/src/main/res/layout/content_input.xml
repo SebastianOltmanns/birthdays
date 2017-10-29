@@ -41,6 +41,7 @@
                 android:textSize="@dimen/text_size"
                 android:nextFocusForward="@+id/text_input_birthday_month"
                 android:nextFocusDown="@+id/text_input_birthday_month"
+                android:hint="@string/activity_input_day_hint"
                 >
                 <requestFocus />
             </EditText>
@@ -61,6 +62,7 @@
                 android:textSize="@dimen/text_size"
                 android:nextFocusForward="@+id/text_input_birthday_year"
                 android:nextFocusDown="@+id/text_input_birthday_year"
+                android:hint="@string/activity_input_month_hint"
                 />
             <TextView
                 android:layout_width="wrap_content"
@@ -77,6 +79,7 @@
                 android:inputType="number"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/text_size"
+                android:hint="@string/activity_input_year_hint"
                 />
 
             <ImageButton
