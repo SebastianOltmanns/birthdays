@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
@@ -46,18 +47,9 @@ public class NotificationsActivity extends AppCompatActivity {
 	private LinearLayout layoutActive;
 	private CheckBox[] checkBoxes = new CheckBox[3];
 	private TextView[] textViews = new TextView[3];
-	/*private CheckBox checkBoxOnBirthday;
-	private TextView textViewOnBirthday;
-	private CheckBox checkBoxOneDayBefore;
-	private TextView textViewOneDayBefore;
-	private CheckBox checkBoxXDaysBefore;
-	private TextView textViewXDaysBefore;*/
 
 	private boolean active;
 	private boolean[] actives = new boolean[3];
-	/*private boolean onBirthdayActive;
-	private boolean oneDayBeforeActive;
-	private boolean xDaysBeforeActive;*/
 	int[] clocks = new int[3];
 	private int xDaysBeforeDays;
 
@@ -196,10 +188,10 @@ public class NotificationsActivity extends AppCompatActivity {
 		@Override
 		public void updateDrawState(TextPaint ds) {
 			if (textViews[which].isEnabled()) {
-				ds.setColor(getColor(R.color.colorAccent));
+				ds.setColor(ContextCompat.getColor(NotificationsActivity.this, R.color.colorAccent));
 				ds.setUnderlineText(true);
 			} else {
-				ds.setColor(getColor(R.color.text_color_disabled));
+				ds.setColor(ContextCompat.getColor(NotificationsActivity.this, R.color.text_color_disabled));
 				ds.setUnderlineText(false);
 			}
 		}

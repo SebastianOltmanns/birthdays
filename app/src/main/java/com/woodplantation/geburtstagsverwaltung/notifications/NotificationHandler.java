@@ -228,24 +228,20 @@ public class NotificationHandler extends BroadcastReceiver {
 	}
 
 	private static void create(Context context, int id, Calendar when, DataSet dataSet, int which, boolean update) {
-		if (PackageManager.PERMISSION_GRANTED ==
-				ContextCompat.checkSelfPermission(context, Manifest.permission.SET_ALARM)) {
+		String name = dataSet.firstName + " " + dataSet.lastName;
+		Intent intent = new Intent(context, NotificationHandler.class);
+		intent.putExtra(INTENT_NOTIFICATION_DATASET, dataSet);
+		intent.putExtra(INTENT_NOTIFICATION_ID, id);
+		intent.putExtra(INTENT_NOTIFICATION_WHICH, which);
+		intent.putExtra(INTENT_NOTIFICATION_WHEN, when);
+		int flag = update ? PendingIntent.FLAG_CANCEL_CURRENT : 0;
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, intent, flag);
 
-			String name = dataSet.firstName + " " + dataSet.lastName;
-			Intent intent = new Intent(context, NotificationHandler.class);
-			intent.putExtra(INTENT_NOTIFICATION_DATASET, dataSet);
-			intent.putExtra(INTENT_NOTIFICATION_ID, id);
-			intent.putExtra(INTENT_NOTIFICATION_WHICH, which);
-			intent.putExtra(INTENT_NOTIFICATION_WHEN, when);
-			int flag = update ? PendingIntent.FLAG_CANCEL_CURRENT : 0;
-			PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, intent, flag);
+		AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+		am.set(AlarmManager.RTC, when.getTimeInMillis(), pendingIntent);
 
-			AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-			am.set(AlarmManager.RTC, when.getTimeInMillis(), pendingIntent);
+		Log.d("NotificationHandler", "alarm for " + name + " got created! time: " + sdf.format(when.getTime()) + " with id: " + id);
 
-			Log.d("NotificationHandler", "alarm for " + name + " got created! time: " + sdf.format(when.getTime()) + " with id: " + id);
-			
-		}
 	}
 
 	private static void addOrChangeBirthday(Context context, DataSet dataSet, boolean[] which, int[] clocks, int xDaysBefore, boolean update) {

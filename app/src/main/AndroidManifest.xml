@@ -4,7 +4,6 @@
           xmlns:tools="http://schemas.android.com/tools"
           tools:ignore="AllowBackup,GoogleAppIndexingWarning">
 
-    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
