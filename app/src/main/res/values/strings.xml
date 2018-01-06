@@ -36,15 +36,14 @@
     <string name="sure_delete_text">Do you really want to remove this birthday?</string>
 
     <string name="wrong_input_title">Wrong input</string>
-    <string name="wrong_input_no_firstname">You did not specify a first name.</string>
-    <string name="wrong_input_no_lastname">You did not specify a last name.</string>
+    <string name="wrong_input_no_name">You did not specify a name.</string>
     <string name="wrong_input_birthday">You specified an invalid birthday or none.</string>
 
     <string name="failure_loading_data_title">Problem</string>
     <string name="failure_loading_data_text">There has been a problem loading data. Please restart the application.</string>
 
     <string name="maximum_data_achieved_title">Maximum amount reached</string>
-    <string name="maximum_data_achieved_text">You reached the maximum amount for birthdays. Before adding a new birthday, you need to remove another one.</string>
+    <string name="maximum_data_achieved_text">You reached the maximum amount for birthdays (%1$d). Before adding a new birthday, you need to remove another one.</string>
 
     <string name="rating_title">Rate this app</string>
     <string name="rating_text">If you like this app, rate it in the Google Play Store!</string>
@@ -116,7 +115,7 @@
     <string name="info_motivation_text">
         I developed this app to be more independent from other services. I realized that I do not want to forget my roommate\'s birthday just because he deleted his account in a certain social network, which would otherwise have indicated his birthday.
         \nFurthermore I wanted a simple service, no integrated calendar services that for the most part have additional features I do not use. And I wanted a service that by no means passes on data to third parties or transfers data over the Internet.
-        \n\nThis app is really simple, limited to 100 entries and does not have the possibility to access the Internet. Everything is storaged on your smartphone.
+        \n\nThis app is really simple, limited to %1$d entries and does not have the possibility to access the Internet. Everything is storaged on your smartphone.
     </string>
 
     <string name="info_about_developer_title">Information about the developer</string>

@@ -61,8 +61,6 @@ public class MainActivity extends AppCompatActivity {
 	public static final int REQUEST_PERMISSION_READ_EXTERNAL_STORAGE = 6;
 	public static final int REQUEST_PERMISSION_SET_ALARM = 7;
 
-	public static final int MAXIMUM_DATA_SIZE = 100;
-
 	public static final String INTENT_CODE_DATA_SET = "DATASET";
 	public static final String INTENT_CODE_EDIT_INDEX = "DATASET_INDEX";
 	public static final String INTENT_CODE_NEW_ID = "DATASET_NEW_ID";
@@ -81,87 +79,68 @@ public class MainActivity extends AppCompatActivity {
 	private AlertDialog.Builder importExportFailDialog;
 	private AlertDialog.Builder importExportStorageFailDialog;
 	private AlertDialog.Builder importExportPermissionFailDialog;
+	private AlertDialog.Builder failureLoadingDataDialog;
+
+	private void initDialogs() {
+		importExportFailDialog =
+				new AlertDialog.Builder(this).
+						setTitle(R.string.import_export_failed_title).
+						setMessage(R.string.import_export_failed_text).
+						setNeutralButton(R.string.ok, null);
+		importExportStorageFailDialog =
+				new AlertDialog.Builder(MainActivity.this).
+						setTitle(R.string.import_export_storage_error_title).
+						setMessage(R.string.import_export_storage_error_text).
+						setNeutralButton(R.string.ok, null);
+		importExportPermissionFailDialog =
+				new AlertDialog.Builder(MainActivity.this).
+						setTitle(R.string.import_export_permissions_fail_title).
+						setMessage(R.string.import_export_permissions_fail_text).
+						setNegativeButton(R.string.cancel, null);
+		failureLoadingDataDialog =
+				new AlertDialog.Builder(this).
+						setTitle(R.string.failure_loading_data_title).
+						setMessage(R.string.failure_loading_data_text).
+						setPositiveButton(R.string.ok, null);
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		//initialize layout and toolbar
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		toolbar.setTitle(R.string.activity_main_label);
 		setSupportActionBar(toolbar);
-		//getSupportActionBar().setTitle(R.string.activity_main_label);
 
+		//check about alarm permissions
 		ActivityCompat.requestPermissions(this,
 				new String[]{Manifest.permission.SET_ALARM},
 				REQUEST_PERMISSION_SET_ALARM);
 
+		//bind the list layout to data adapter
 		dataListViewAdapter = new DataListViewAdapter(this, R.layout.data_list_view_item);
 		dataListView = (ListView) findViewById(R.id.data_list_view);
 		dataListView.setAdapter(dataListViewAdapter);
 		dataListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Log.d("mainactivity", "onitemclicklistener");
 				DataSet dataSet = dataListViewAdapter.getItem(position);
-				Intent intent = new Intent(MainActivity.this, EditActivity.class);
-				intent.putExtra(INTENT_CODE_EDIT_INDEX, data.indexOf(dataSet));
-				intent.putExtra(INTENT_CODE_DATA_SET, dataSet);
-				startActivityForResult(intent, REQUEST_INTENT_EDIT_DATA_SET);
+				Intent editIntent = new Intent(MainActivity.this, EditActivity.class);
+				editIntent.putExtra(INTENT_CODE_EDIT_INDEX, data.indexOf(dataSet));
+				editIntent.putExtra(INTENT_CODE_DATA_SET, dataSet);
+				startActivityForResult(editIntent, REQUEST_INTENT_EDIT_DATA_SET);
 			}
 		});
 
+		//initialize storage handler
 		storageHandler = new StorageHandler(this);
 		if ((data = storageHandler.loadData()) == null) {
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setTitle(R.string.failure_loading_data_title);
-			builder.setMessage(R.string.failure_loading_data_text);
-			builder.setPositiveButton(R.string.ok, null);
-			builder.show();
-		}
-		Log.d("mainactivity","oncreate. data: "  + data);
-
-		importExportFailDialog =
-				new AlertDialog.Builder(this).
-						setTitle(R.string.import_export_failed_title).
-						setMessage(R.string.import_export_failed_text).
-						setNeutralButton(R.string.ok, null);
-
-		importExportStorageFailDialog =
-				new AlertDialog.Builder(MainActivity.this).
-						setTitle(R.string.import_export_storage_error_title).
-						setMessage(R.string.import_export_storage_error_text).
-						setNeutralButton(R.string.ok, null);
-
-		importExportPermissionFailDialog =
-				new AlertDialog.Builder(MainActivity.this).
-						setTitle(R.string.import_export_permissions_fail_title).
-						setMessage(R.string.import_export_permissions_fail_text).
-						setNegativeButton(R.string.cancel, null);
-	}
-
-	public void onAddButtonClick(View v) {
-		if (data != null && data.size() >= MAXIMUM_DATA_SIZE) {
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setMessage(R.string.maximum_data_achieved_text);
-			builder.setTitle(R.string.maximum_data_achieved_title);
-			builder.setNeutralButton(R.string.ok, null);
-			builder.show();
-			return;
+			failureLoadingDataDialog.show();
 		}
 
-		int id = IdGenerator.getNewId(this);
-		if (id == -1) {
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setMessage(R.string.failure_loading_data_text);
-			builder.setTitle(R.string.failure_loading_data_title);
-			builder.setNeutralButton(R.string.ok, null);
-			builder.show();
-			return;
-		}
-
-		Intent intent = new Intent(MainActivity.this, AddActivity.class);
-		intent.putExtra(INTENT_CODE_NEW_ID, id);
-		startActivityForResult(intent, REQUEST_INTENT_CREATE_DATA_SET);
+		//init dialogs
+		initDialogs();
 	}
 
 	@Override
@@ -174,6 +153,30 @@ public class MainActivity extends AppCompatActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.menu_main, menu);
 		return true;
+	}
+
+	public void onAddButtonClick(View v) {
+		//check for entry limit
+		if (data.size() >= getResources().getInteger(R.integer.MAXIMUM_DATA_SIZE)) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setMessage(getString(R.string.maximum_data_achieved_text, getResources().getInteger(R.integer.MAXIMUM_DATA_SIZE)));
+			builder.setTitle(R.string.maximum_data_achieved_title);
+			builder.setNeutralButton(R.string.ok, null);
+			builder.show();
+			return;
+		}
+
+		//get new id
+		int id = IdGenerator.getNewId(this);
+		if (id == -1) {
+			failureLoadingDataDialog.show();
+			return;
+		}
+
+		//open the create activity and pass the new id
+		Intent intent = new Intent(MainActivity.this, AddActivity.class);
+		intent.putExtra(INTENT_CODE_NEW_ID, id);
+		startActivityForResult(intent, REQUEST_INTENT_CREATE_DATA_SET);
 	}
 
 	@Override
@@ -205,7 +208,7 @@ public class MainActivity extends AppCompatActivity {
 		} else if (id == R.id.main_import_export) {
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle(R.string.import_export_dialog_title);
-			builder.setMessage(getString(R.string.import_export_dialog_text, MAXIMUM_DATA_SIZE));
+			builder.setMessage(getString(R.string.import_export_dialog_text, getResources().getInteger(R.integer.MAXIMUM_DATA_SIZE)));
 			builder.setPositiveButton(R.string.import_export_export, exportClickListener);
 			builder.setNeutralButton(R.string.import_export_import, importClickListener);
 			builder.show();
@@ -277,9 +280,9 @@ public class MainActivity extends AppCompatActivity {
 					bis.close();
 					fis.close();
 
-					if (importedData.size() + this.data.size() >= MAXIMUM_DATA_SIZE) {
+					if (importedData.size() + this.data.size() >= getResources().getInteger(R.integer.MAXIMUM_DATA_SIZE)) {
 						new AlertDialog.Builder(this).
-								setMessage(getString(R.string.import_export_maximum_data_size_text, MAXIMUM_DATA_SIZE)).
+								setMessage(getString(R.string.import_export_maximum_data_size_text, getResources().getInteger(R.integer.MAXIMUM_DATA_SIZE))).
 								setTitle(R.string.import_export_maximum_data_size_title).
 								setNeutralButton(R.string.ok, null).
 								show();
@@ -352,7 +355,6 @@ public class MainActivity extends AppCompatActivity {
 		if (state.equals(Environment.MEDIA_MOUNTED) || state.equals(Environment.MEDIA_MOUNTED_READ_ONLY)) {
 			File dir = new File(Environment.getExternalStorageDirectory(), FILE_EXPORT_DIRECTORY);
 			if (!dir.exists() && !dir.mkdir()) {
-				Log.d("MainActivity", "cancelling export. directory " + dir.getAbsolutePath() + " not creatable");
 				importExportStorageFailDialog.show();
 			}
 			String filename = FILE_EXPORT_NAME + sdf.format(new Date()) + FILE_EXPORT_EXTENSION;
@@ -381,7 +383,6 @@ public class MainActivity extends AppCompatActivity {
 				importExportStorageFailDialog.show();
 			}
 		} else {
-			Log.d("MainActivity", "cancelling export. state: " + state);
 			importExportStorageFailDialog.show();
 		}
 	}

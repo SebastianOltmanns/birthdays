@@ -126,11 +126,8 @@ public abstract class InputActivity extends AppCompatActivity {
                     || inputBirthday.get(Calendar.DAY_OF_MONTH) != birthdayD) {
                 messageResource = R.string.wrong_input_birthday;
                 flag = false;
-            } else if (firstName.equals("") ||  firstName.length() == 0) {
-                messageResource = R.string.wrong_input_no_firstname;
-                flag = false;
-            } else if (lastName.equals("") ||  lastName.length() == 0) {
-                messageResource = R.string.wrong_input_no_lastname;
+            } else if ((firstName.equals("") ||  firstName.length() == 0) && (lastName.equals("") ||  lastName.length() == 0)) {
+                messageResource = R.string.wrong_input_no_name;
                 flag = false;
             }
         }

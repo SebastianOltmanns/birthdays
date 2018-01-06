@@ -28,7 +28,6 @@ public class StorageHandler {
 
 	public void saveData(ArrayList<DataSet> data) {
 		try {
-			long time = System.currentTimeMillis();
 			FileOutputStream fos = context.openFileOutput(filePath, Context.MODE_PRIVATE);
 			BufferedOutputStream bos = new BufferedOutputStream(fos);
 			ObjectOutputStream output = new ObjectOutputStream(bos);
@@ -38,7 +37,6 @@ public class StorageHandler {
 			output.close();
 			bos.close();
 			fos.close();
-			Log.d("storagehandler", "savedata, size: " + data.size() + " time needed: " + (System.currentTimeMillis() - time));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -46,7 +44,6 @@ public class StorageHandler {
 
 	public ArrayList<DataSet> loadData() {
 		try {
-			long time = System.currentTimeMillis();
 			FileInputStream fis = context.openFileInput(filePath);
 			BufferedInputStream bis = new BufferedInputStream(fis);
 			ObjectInputStream input = new ObjectInputStream(bis);
@@ -56,7 +53,6 @@ public class StorageHandler {
 			input.close();
 			bis.close();
 			fis.close();
-			Log.d("storagehandler", "loaddata, size: " + result.size() + " time needed: " + (System.currentTimeMillis() - time));
 			return result;
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

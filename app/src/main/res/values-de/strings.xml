@@ -36,15 +36,14 @@
     <string name="sure_delete_text">Möchtest Du diesen Geburtstag wirklich entfernen?</string>
 
     <string name="wrong_input_title">Falsche Eingabe</string>
-    <string name="wrong_input_no_firstname">Du hast keinen Vornamen angegeben.</string>
-    <string name="wrong_input_no_lastname">Du hast keinen Nachnamen angegeben.</string>
+    <string name="wrong_input_no_name">Du hast keinen Namen angegeben.</string>
     <string name="wrong_input_birthday">Du hast keinen oder einen ungültigen Geburtstag angegeben.</string>
 
     <string name="failure_loading_data_title">Fehler</string>
     <string name="failure_loading_data_text">Es gab einen Fehler beim Laden der Daten. Bitte schließe die App und starte sie erneut.</string>
 
     <string name="maximum_data_achieved_title">Maximale Anzahl erreicht</string>
-    <string name="maximum_data_achieved_text">Du hast die maximale Anzahl an Geburtstagen eingetragen. Bevor du einen neuen Geburtstag eintragen kannst, musst du einen anderen entfernen.</string>
+    <string name="maximum_data_achieved_text">Du hast die maximale Anzahl an Geburtstagen eingetragen (%1$d). Bevor du einen neuen Geburtstag eintragen kannst, musst du einen anderen entfernen.</string>
 
     <string name="rating_title">App bewerten</string>
     <string name="rating_text">Wenn Dir diese App gefällt, dann bewerte Sie im Google Play Store!</string>
@@ -116,7 +115,7 @@
     <string name="info_motivation_text">
         Ich habe diese App entwickelt, um unabhängiger von anderen Diensten zu sein. Ich realisierte, dass ich den Geburtstag meines Mitbewohners nicht vergessen möchte, nur weil er sein Konto bei einem bestimmten sozialen Netzwerk gelöscht hat, welches mir seinen Geburtstag sonst angezeigt hätte.
         \nAußerdem wollte ich einen simplen Dienst, keine bereits in Smartphone vorinstallierten Kalender-Funktionen, welche meistens eine große Anzahl an Zusatz-Features haben. Und ich wollte einen Dienst, der auf keinen Fall diese Daten weitergibt oder im Internet abspeichert.
-        \n\nDiese App ist sehr simpel gehalten, hat eine Begrenzung der Einträge auf 100 und besitzt gar nicht die Möglichkeit, auf das Internet zuzugreifen. Alles wird auf Deinem Smartphone gespeichert.
+        \n\nDiese App ist sehr simpel gehalten, hat eine Begrenzung der Einträge auf %1$d und besitzt gar nicht die Möglichkeit, auf das Internet zuzugreifen. Alles wird auf Deinem Smartphone gespeichert.
     </string>
 
     <string name="info_about_developer_title">Informationen über den Entwickler</string>

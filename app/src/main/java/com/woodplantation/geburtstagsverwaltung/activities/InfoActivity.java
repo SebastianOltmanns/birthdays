@@ -34,6 +34,8 @@ public class InfoActivity extends AppCompatActivity {
 
 		TextView versionTextView = (TextView) findViewById(R.id.information_activity_version_text);
 		versionTextView.setText(getResources().getString(R.string.info_about_version, BuildConfig.VERSION_NAME));
+		TextView motivationTextView = (TextView) findViewById(R.id.information_activity_motivation_text);
+		motivationTextView.setText(getString(R.string.info_motivation_text, getResources().getInteger(R.integer.MAXIMUM_DATA_SIZE)));
 		TextView infoTextView = (TextView) findViewById(R.id.information_activity_about_text);
 		infoTextView.setMovementMethod(LinkMovementMethod.getInstance());
 		TextView githubTextView = (TextView) findViewById(R.id.information_activity_github_text);
