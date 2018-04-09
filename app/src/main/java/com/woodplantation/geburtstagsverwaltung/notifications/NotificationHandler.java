@@ -275,17 +275,17 @@ public class NotificationHandler extends BroadcastReceiver {
 	}
 
 	public static void addBirthday(Context context, DataSet dataSet) {
-		MyPreferences pref = new MyPreferences(context);
+		MyPreferences pref = new MyPreferences(context, MyPreferences.FILEPATH_NOTIFICATION);
 		addOrChangeBirthday(context, dataSet, getWhich(pref), getClocks(pref), pref.getXDaysBeforeDays(), false);
 	}
 
 	public static void updateBirthday(Context context, DataSet dataSet) {
-		MyPreferences pref = new MyPreferences(context);
+		MyPreferences pref = new MyPreferences(context, MyPreferences.FILEPATH_NOTIFICATION);
 		addOrChangeBirthday(context, dataSet, getWhich(pref), getClocks(pref), pref.getXDaysBeforeDays(), true);
 	}
 
 	public static void deleteBirthday(Context context, DataSet dataSet) {
-		MyPreferences pref = new MyPreferences(context);
+		MyPreferences pref = new MyPreferences(context, MyPreferences.FILEPATH_NOTIFICATION);
 		deleteBirthday(context, dataSet, getWhich(pref));
 	}
 
@@ -301,7 +301,7 @@ public class NotificationHandler extends BroadcastReceiver {
 			return;
 		}
 
-		MyPreferences pref = new MyPreferences(context);
+		MyPreferences pref = new MyPreferences(context, MyPreferences.FILEPATH_NOTIFICATION);
 		int[] clocks = getClocks(pref);
 		int xDaysBefore = pref.getXDaysBeforeDays();
 		for (DataSet dataSet : data) {
@@ -332,7 +332,7 @@ public class NotificationHandler extends BroadcastReceiver {
 		oldWhich[1] = (Boolean) oldPref.get(context.getString(R.string.preferences_one_day_before_active));
 		oldWhich[2] = (Boolean) oldPref.get(context.getString(R.string.preferences_x_days_before_active));
 
-		MyPreferences pref = new MyPreferences(context);
+		MyPreferences pref = new MyPreferences(context, MyPreferences.FILEPATH_NOTIFICATION);
 		boolean[] newWhich = getWhich(pref);
 
 		int[] oldClocks = new int[3];
@@ -400,7 +400,7 @@ public class NotificationHandler extends BroadcastReceiver {
 	public static void createAllNotifications(Context context) {
 		StorageHandler storageHandler = new StorageHandler(context);
 		ArrayList<DataSet> data = storageHandler.loadData();
-		boolean[] which = getWhich(new MyPreferences(context));
+		boolean[] which = getWhich(new MyPreferences(context, MyPreferences.FILEPATH_NOTIFICATION));
 		addOrChangeAllBirthdays(context, data, which, false);
 	}
 
@@ -491,12 +491,13 @@ public class NotificationHandler extends BroadcastReceiver {
 		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		PendingIntent pi = PendingIntent.getActivity(context, id, notificationIntent, 0);
 
-		NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+		NotificationCompat.Builder builder = new NotificationCompat.Builder(context, context.getString(R.string.notification_channel_id));
 		builder.setSmallIcon(R.drawable.ic_event_note);
 		builder.setContentTitle(context.getString(R.string.content_title));
 		builder.setContentText(text);
 		builder.setContentIntent(pi);
 		builder.setAutoCancel(true);
+		builder.setCategory(NotificationCompat.CATEGORY_REMINDER);
 
 		Log.d("notificationhandler", "setting up notification for: " + name);
 		NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);

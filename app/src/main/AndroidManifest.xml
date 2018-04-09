@@ -71,6 +71,14 @@
             android:parentActivityName=".activities.MainActivity">
 
         </activity>
+
+        <activity
+            android:name=".activities.SettingsActivity"
+            android:label="@string/activity_settings_label"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".activities.MainActivity">
+
+        </activity>
     </application>
 
 </manifest>

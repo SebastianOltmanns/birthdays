@@ -6,6 +6,7 @@
     <string name="activity_edit_label">Bearbeiten</string>
     <string name="activity_info_label">Information</string>
     <string name="activity_notifications_label">Benachrichtigungen</string>
+    <string name="activity_settings_label">Einstellungen</string>
 
     <string name="first_name">Vorname</string>
     <string name="last_name">Nachname</string>
@@ -82,12 +83,16 @@
     <string name="content_text">%1$s ist %2$s\'s Geburtstag</string>
     <string name="content_text_name_ending_with_s">%1$s ist %2$s\' Geburtstag</string>
 
+    <string name="notification_channel_name">Geburtstagserinnerungen</string>
+
     <!-- - - - - - - - - - - - - - - - - - - MENU - - - - - - - - - - - - - - - - - - - -->
     <string name="menu_title_delete">Löschen</string>
     <string name="menu_title_save">Speichern</string>
     <string name="menu_title_info">Information</string>
     <string name="menu_title_notifications">Benachrichtigungen</string>
     <string name="menu_title_import_export">Import/Export</string>
+    <string name="menu_title_settings">Einstellungen</string>
+    <string name="menu_title_add">Geburtstag hinzufügen</string>
 
     <!-- - - - - - - - - - - - - - - - - - - NOTIFICATION SETTINGS - - - - - - - - - - - - - - - - - - - -->
     <string name="activity_notifications_active">Benachrichtigungen aktiv?</string>
@@ -124,5 +129,8 @@
 
     <string name="info_privacy_error_title">Datenschutzerklärung</string>
     <string name="info_privacy_error_text">Es gab einen Fehler beim Laden der Datenschutzerklärung. Bitte besuche https://github.com/SebastianOltmanns/birthdays/blob/master/app/src/main/res/raw-de/privacy_policy.txt, um die aktuelle Datenschutzerklärung zu lesen.</string>
+
+    <!-- - - - - - - - - - - - - - - - - - - SETTINGS ACTIVITY - - - - - - - - - - - - - - - - - - - - - -->
+    <string name="activity_settings_fab">Button zum Geburtstage hinzufügen anzeigen</string>
 
 </resources>

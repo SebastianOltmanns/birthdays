@@ -14,14 +14,15 @@ import com.woodplantation.geburtstagsverwaltung.R;
 
 public class MyPreferences {
 
-	private static final String FILEPATH = "notification_settings";
+	public static final String FILEPATH_NOTIFICATION = "notification_settings";
+	public static final String FILEPATH_SETTINGS = "settings";
 
 	private Context context;
 	public SharedPreferences preferences;
 
-	public MyPreferences(Context context) {
+	public MyPreferences(Context context, String filepath) {
 		this.context = context;
-		this.preferences = context.getSharedPreferences(FILEPATH, Context.MODE_PRIVATE);
+		this.preferences = context.getSharedPreferences(filepath, Context.MODE_PRIVATE);
 	}
 
 	public boolean getActive() {
@@ -70,6 +71,12 @@ public class MyPreferences {
 		return preferences
 				.getInt(context.getString(R.string.preferences_x_days_before_days),
 						context.getResources().getInteger(R.integer.preferences_x_days_before_days));
+	}
+
+	public boolean getDisplayFAB() {
+		return preferences
+				.getBoolean(context.getString(R.string.preferences_display_fab),
+						context.getResources().getBoolean(R.bool.preferences_display_fab));
 	}
 
 }

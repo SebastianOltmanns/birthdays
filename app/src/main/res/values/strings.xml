@@ -6,6 +6,7 @@
     <string name="activity_edit_label">Edit</string>
     <string name="activity_info_label">Information</string>
     <string name="activity_notifications_label">Notifications</string>
+    <string name="activity_settings_label">Settings</string>
 
     <string name="first_name">First name</string>
     <string name="last_name">Last name</string>
@@ -82,12 +83,17 @@
     <string name="content_text">%1$s, it\'s %2$s\'s birthday</string>
     <string name="content_text_name_ending_with_s">%1$s, it\'s %2$s\' birthday</string>
 
+    <string name="notification_channel_id" tools:ignore="MissingTranslation">BIRTHDAY_NOTIFICATIONS</string>
+    <string name="notification_channel_name">Birthday notifications</string>
+
     <!-- - - - - - - - - - - - - - - - - - - MENU - - - - - - - - - - - - - - - - - - - -->
     <string name="menu_title_delete">Delete</string>
     <string name="menu_title_save">Save</string>
     <string name="menu_title_info">Information</string>
     <string name="menu_title_notifications">Notifications</string>
     <string name="menu_title_import_export">Import/Export</string>
+    <string name="menu_title_settings">Settings</string>
+    <string name="menu_title_add">Add birthday</string>
 
     <!-- - - - - - - - - - - - - - - - - - - NOTIFICATION SETTINGS - - - - - - - - - - - - - - - - - - - -->
     <string name="activity_notifications_active">Activate notifications?</string>
@@ -112,7 +118,7 @@
     </string>
 
     <string name="info_motivation_title">What\'s the purpose of this app?</string>
-    <string name="info_motivation_text">
+    <string name="info_motivation_text" tools:ignore="PluralsCandidate">
         I developed this app to be more independent from other services. I realized that I do not want to forget my roommate\'s birthday just because he deleted his account in a certain social network, which would otherwise have indicated his birthday.
         \nFurthermore I wanted a simple service, no integrated calendar services that for the most part have additional features I do not use. And I wanted a service that by no means passes on data to third parties or transfers data over the Internet.
         \n\nThis app is really simple, limited to %1$d entries and does not have the possibility to access the Internet. Everything is storaged on your smartphone.
@@ -124,5 +130,8 @@
 
     <string name="info_privacy_error_title">Privacy policy</string>
     <string name="info_privacy_error_text">There has been a mistake loading the privacy policy. Please visit https://github.com/SebastianOltmanns/birthdays/blob/master/app/src/main/res/raw/privacy_policy.txt to read the current privacy policy.</string>
+
+    <!-- - - - - - - - - - - - - - - - - - - SETTINGS ACTIVITY - - - - - - - - - - - - - - - - - - - - - -->
+    <string name="activity_settings_fab">Display Button to add birthdays</string>
 
 </resources>

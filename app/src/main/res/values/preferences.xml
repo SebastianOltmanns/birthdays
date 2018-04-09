@@ -17,5 +17,7 @@
     <integer name="preferences_x_days_before_clock">480</integer>
     <string tools:ignore="MissingTranslation" name="preferences_x_days_before_days">X_DAYS_BEFORE_DAYS</string>
     <integer name="preferences_x_days_before_days">7</integer>
+    <string tools:ignore="MissingTranslation" name="preferences_display_fab">DISPLAY_FAB</string>
+    <bool name="preferences_display_fab">true</bool>
 
 </resources>

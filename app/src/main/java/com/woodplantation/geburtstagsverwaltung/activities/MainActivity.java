@@ -2,14 +2,19 @@ package com.woodplantation.geburtstagsverwaltung.activities;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
+import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +30,7 @@ import android.widget.TextView;
 import com.nbsp.materialfilepicker.MaterialFilePicker;
 import com.nbsp.materialfilepicker.ui.FilePickerActivity;
 import com.woodplantation.geburtstagsverwaltung.adapter.DataListViewAdapter;
+import com.woodplantation.geburtstagsverwaltung.notifications.MyPreferences;
 import com.woodplantation.geburtstagsverwaltung.storage.DataSet;
 import com.woodplantation.geburtstagsverwaltung.notifications.IdGenerator;
 import com.woodplantation.geburtstagsverwaltung.notifications.NotificationHandler;
@@ -81,6 +87,8 @@ public class MainActivity extends AppCompatActivity {
 	private AlertDialog.Builder importExportPermissionFailDialog;
 	private AlertDialog.Builder failureLoadingDataDialog;
 
+	private FloatingActionButton fab;
+
 	private void initDialogs() {
 		importExportFailDialog =
 				new AlertDialog.Builder(this).
@@ -104,6 +112,22 @@ public class MainActivity extends AppCompatActivity {
 						setPositiveButton(R.string.ok, null);
 	}
 
+	//Code adapted from https://developer.android.com/training/notify-user/channels.html
+	private void initNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Create the NotificationChannel
+            String channelId = getString(R.string.notification_channel_id);
+            CharSequence name = getString(R.string.notification_channel_name);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel mChannel = new NotificationChannel(channelId, name, importance);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = (NotificationManager) getSystemService(
+                    NOTIFICATION_SERVICE);
+            notificationManager.createNotificationChannel(mChannel);
+        }
+    }
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		//initialize layout and toolbar
@@ -112,6 +136,8 @@ public class MainActivity extends AppCompatActivity {
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		toolbar.setTitle(R.string.activity_main_label);
 		setSupportActionBar(toolbar);
+
+		fab = findViewById(R.id.fab);
 
 		//check about alarm permissions
 		ActivityCompat.requestPermissions(this,
@@ -141,12 +167,17 @@ public class MainActivity extends AppCompatActivity {
 
 		//init dialogs
 		initDialogs();
+
+		//init notification channel
+        initNotificationChannel();
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
 		refresh();
+		MyPreferences preferences = new MyPreferences(this, MyPreferences.FILEPATH_SETTINGS);
+		fab.setVisibility(preferences.getDisplayFAB() ? View.VISIBLE : View.INVISIBLE);
 	}
 
 	@Override
@@ -155,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
 		return true;
 	}
 
-	public void onAddButtonClick(View v) {
+	public void onAddClick(@Nullable View v) {
 		//check for entry limit
 		if (data.size() >= getResources().getInteger(R.integer.MAXIMUM_DATA_SIZE)) {
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -212,6 +243,11 @@ public class MainActivity extends AppCompatActivity {
 			builder.setPositiveButton(R.string.import_export_export, exportClickListener);
 			builder.setNeutralButton(R.string.import_export_import, importClickListener);
 			builder.show();
+		} else if (id == R.id.main_settings) {
+			Intent intent = new Intent(this, SettingsActivity.class);
+			startActivity(intent);
+		} else if (id == R.id.main_add) {
+			onAddClick(null);
 		}
 		return true;
 	}
@@ -227,8 +263,6 @@ public class MainActivity extends AppCompatActivity {
 					DataSet dataSet = (DataSet) data.getSerializableExtra(INTENT_CODE_DATA_SET);
 					this.data.add(dataSet);
 					NotificationHandler.addBirthday(this, dataSet);
-
-					refresh();
 				}
 				break;
 			}
@@ -246,8 +280,6 @@ public class MainActivity extends AppCompatActivity {
 						NotificationHandler.deleteBirthday(this, this.data.get(index));
 					}
 					this.data.remove(index);
-
-					refresh();
 				}
 				break;
 			}
@@ -294,7 +326,6 @@ public class MainActivity extends AppCompatActivity {
 						this.data.add(dataSet);
 						NotificationHandler.addBirthday(this, dataSet);
 					}
-					refresh();
 
 					new AlertDialog.Builder(this).
 							setMessage(R.string.import_export_import_successfull_text).

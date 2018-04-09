@@ -77,7 +77,7 @@ public class NotificationsActivity extends AppCompatActivity {
 
 		//get preferences
 
-		preferences = new MyPreferences(this);
+		preferences = new MyPreferences(this, MyPreferences.FILEPATH_NOTIFICATION);
 
 		//load all preferences and save it once so the preferences are initialized
 
@@ -235,8 +235,7 @@ public class NotificationsActivity extends AppCompatActivity {
 					.setPositiveButton(R.string.ok, new OnButtonClickListener())
 					.setNegativeButton(R.string.cancel, null);
 			dialog = builder.create();
-			LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-			View dialogNumberPicker = inflater.inflate(R.layout.dialog_number_picker, null);
+			View dialogNumberPicker = View.inflate(NotificationsActivity.this, R.layout.dialog_number_picker, null);
 			dialog.setView(dialogNumberPicker);
 
 			dialogTextView = (TextView) dialogNumberPicker.findViewById(R.id.dialog_number_picker_text);

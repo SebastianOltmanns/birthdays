@@ -55,13 +55,10 @@ public class StorageHandler {
 			fis.close();
 			return result;
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
 			return new ArrayList<DataSet>();
 		} catch (IOException e) {
-			e.printStackTrace();
 			return new ArrayList<DataSet>();
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
 			return new ArrayList<DataSet>();
 		}
 	}
