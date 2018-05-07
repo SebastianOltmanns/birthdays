@@ -8,6 +8,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -238,7 +239,13 @@ public class NotificationHandler extends BroadcastReceiver {
 		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, intent, flag);
 
 		AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-		am.set(AlarmManager.RTC, when.getTimeInMillis(), pendingIntent);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+			am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, when.getTimeInMillis(), pendingIntent);
+		} else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+			am.setExact(AlarmManager.RTC_WAKEUP, when.getTimeInMillis(), pendingIntent);
+		} else {
+			am.set(AlarmManager.RTC, when.getTimeInMillis(), pendingIntent);
+		}
 
 		Log.d("NotificationHandler", "alarm for " + name + " got created! time: " + sdf.format(when.getTime()) + " with id: " + id);
 

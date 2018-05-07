@@ -124,6 +124,15 @@
         \n\nThis app is really simple, limited to %1$d entries and does not have the possibility to access the Internet. Everything is storaged on your smartphone.
     </string>
 
+    <string name="info_notification_title">The app does not notify me. Why?</string>
+    <string name="info_notification_text_introduction">In some cases the app does not create a notification for you. There is a range of different possible reasons and solutions for this problem:</string>
+    <string name="info_notification_text_permissions">Make sure that the application has all the needed permissions to create alarms and notifications. To check that, open the Settings, navigate to Applications/Application Manager, open the settings for this particular app and check the permissions.</string>
+    <string name="info_notification_text_settings">For this app to even try to create notifications, notifications must be set to active in the notification settings of this app. To do that, open the notification settings in the menu in the upper right corner in the overview screen of this app.</string>
+    <string name="info_notification_text_energy">It may be that the alarms and notifications do not work while your smartphone is idle, in power-saving mode, or something similar. To review that, check the power saving options and the notification options in the Settings of your smartphone.</string>
+    <string name="info_notification_text_update">Since there are regular updates to this app and to the Android Operating System, you should always make sure to have the newest version of this app and the Android Operating System installed.</string>
+    <string name="info_notification_text_restart">You can restart your smartphone. After that, all the alarms get recreated.</string>
+    <string name="info_notification_text_otherwise">If all these suggestions do not solve the issue, then unfortunately I can not help you. I am trying everything to eliminate other reasons that may be responsible for this issue. Please consider not to rate this app bad just because the notifications do not appear. I am very happy if you provide me with constructive critic.</string>
+
     <string name="info_about_developer_title">Information about the developer</string>
     <string name="info_about_developer_text">This app is being developed by Sebastian Oltmanns. For contact, please use sebastian.oltmanns.developer@gmail.com.</string>
     <string name="info_about_github_text">The code of this app is licensed with <a href="http://choosealicense.com/licenses/mit/">MIT-License</a> and published on <a href="https://github.com/SebastianOltmanns/birthdays">GitHub</a>.</string>

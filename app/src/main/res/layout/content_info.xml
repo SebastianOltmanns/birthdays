@@ -63,6 +63,24 @@
             android:textSize="@dimen/text_size"/>
 
         <TextView
+            android:id="@+id/information_activity_notification_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/info_notification_title"
+            android:layout_marginBottom="@dimen/text_gap"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/text_size"
+            android:textStyle="bold"/>
+
+        <WebView
+            android:id="@+id/information_activity_notification_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autoLink="email"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/text_size"/>
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/text_gap"

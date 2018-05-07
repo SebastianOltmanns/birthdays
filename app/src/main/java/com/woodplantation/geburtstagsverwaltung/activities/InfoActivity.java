@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.method.LinkMovementMethod;
+import android.webkit.WebView;
 import android.widget.TextView;
 
 import com.woodplantation.geburtstagsverwaltung.BuildConfig;
@@ -40,6 +41,20 @@ public class InfoActivity extends AppCompatActivity {
 		infoTextView.setMovementMethod(LinkMovementMethod.getInstance());
 		TextView githubTextView = (TextView) findViewById(R.id.information_activity_github_text);
 		githubTextView.setMovementMethod(LinkMovementMethod.getInstance());
+
+		WebView notificationTextView = (WebView) findViewById(R.id.information_activity_notification_text);
+		String html = "<html><body>"
+				+ getString(R.string.info_notification_text_introduction)
+				+ "<ul>"
+				+ "<li>" + getString(R.string.info_notification_text_permissions) + "</li>"
+				+ "<li>" + getString(R.string.info_notification_text_settings) + "</li>"
+				+ "<li>" + getString(R.string.info_notification_text_energy) + "</li>"
+				+ "<li>" + getString(R.string.info_notification_text_update) + "</li>"
+				+ "<li>" + getString(R.string.info_notification_text_restart) + "</li>"
+				+ "</ul>"
+				+ getString(R.string.info_notification_text_otherwise)
+				+ "</body></html>";
+		notificationTextView.loadData(html, "text/html; charset=UTF-8", null);
 
 		readPrivacyPolicy();
 	}

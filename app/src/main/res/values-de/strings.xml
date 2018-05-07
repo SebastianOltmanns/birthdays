@@ -123,6 +123,15 @@
         \n\nDiese App ist sehr simpel gehalten, hat eine Begrenzung der Einträge auf %1$d und besitzt gar nicht die Möglichkeit, auf das Internet zuzugreifen. Alles wird auf Deinem Smartphone gespeichert.
     </string>
 
+    <string name="info_notification_title">Die App benachrichtigt mich nicht. Warum?</string>
+    <string name="info_notification_text_introduction">In einigen Fällen erstellt die App keine Benachrichtigungen für Dich. Es gibt eine Menge an möglichen Ursachen und Lösungen dafür:</string>
+    <string name="info_notification_text_permissions">Stelle sicher, dass die App alle benötigten Berechtigungen besitzt, um Alarme und Benachrichtigungen zu erstellen. Um das zu überprüfen, öffne die Einstellungen, navigiere zu Anwendungen/Anwendungsmanager, öffne die Einstellungen für diese App und überprüfe die Benachrichtigungen.</string>
+    <string name="info_notification_text_settings">Damit diese App überhaupt versucht, Benachrichtungen zu erstellen, müssen Benachrichtungen in den Benachrichtungseinstellungen dieser App aktiviert sein. Um das zu machen, öffne die Benachrichtungseinstellungen im Menü in der rechten oberen Ecke in der Übersicht dieser App.</string>
+    <string name="info_notification_text_energy">Es kann sein, dass Alarme und Benachrichtigungen nicht funktionieren, während dein Smartphone im Ruhe- oder Energiesparmodus oder ähnlichem ist. Um das zu überprüfen, schaue Dir die Energiespar- und Benachrichtigungsoptionen in den Einstellungen Deines Smartphones an.</string>
+    <string name="info_notification_text_update">Da es regelmäßig Updates für diese App und das Android Betriebssystem gibt, solltest Du immer sichergehen, dass du die aktuellste Version dieser App und des Android Betriebssystems installiert hast.</string>
+    <string name="info_notification_text_restart">Du kannst dein Smartphone neustarten. Danach sollten alle Alarme neu erstellt werden.</string>
+    <string name="info_notification_text_otherwise">Falls all diese Vorschläge das Problem nicht beheben, dann kann ich Dir leider nicht weiterhelfen. Ich versuche alles, um andere eventuelle Ursachen für diesen Fehler zu beheben. Bitte überlege, diese App nicht schlecht zu bewerten, nur weil die Benachrichtigungen nicht angezeigt werden. Ich bin froh über konstruktive Kritik.</string>
+
     <string name="info_about_developer_title">Informationen über den Entwickler</string>
     <string name="info_about_developer_text">Diese App wird von Sebastian Oltmanns entwickelt. Bei Kontaktwunsch bitte sebastian.oltmanns.developer@gmail.com nutzen.</string>
     <string name="info_about_github_text">Der Code dieser App ist unter der <a href="http://choosealicense.com/licenses/mit/">MIT-Lizenz</a> auf <a href="https://github.com/SebastianOltmanns/birthdays">GitHub</a> veröffentlicht.</string>
