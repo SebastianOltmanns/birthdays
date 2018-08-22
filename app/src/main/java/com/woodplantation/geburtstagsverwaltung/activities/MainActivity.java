@@ -82,10 +82,10 @@ public class MainActivity extends AppCompatActivity {
 	private ListView dataListView;
 	private DataListViewAdapter dataListViewAdapter;
 
-	private AlertDialog.Builder importExportFailDialog;
-	private AlertDialog.Builder importExportStorageFailDialog;
-	private AlertDialog.Builder importExportPermissionFailDialog;
-	private AlertDialog.Builder failureLoadingDataDialog;
+	private AlertDialog importExportFailDialog;
+	private AlertDialog importExportStorageFailDialog;
+	private AlertDialog.Builder importExportPermissionFailDialogBuilder;
+	private AlertDialog failureLoadingDataDialog;
 
 	private FloatingActionButton fab;
 
@@ -94,13 +94,15 @@ public class MainActivity extends AppCompatActivity {
 				new AlertDialog.Builder(this).
 						setTitle(R.string.import_export_failed_title).
 						setMessage(R.string.import_export_failed_text).
-						setNeutralButton(R.string.ok, null);
+						setNeutralButton(R.string.ok, null).
+						create();
 		importExportStorageFailDialog =
 				new AlertDialog.Builder(MainActivity.this).
 						setTitle(R.string.import_export_storage_error_title).
 						setMessage(R.string.import_export_storage_error_text).
-						setNeutralButton(R.string.ok, null);
-		importExportPermissionFailDialog =
+						setNeutralButton(R.string.ok, null).
+						create();
+		importExportPermissionFailDialogBuilder =
 				new AlertDialog.Builder(MainActivity.this).
 						setTitle(R.string.import_export_permissions_fail_title).
 						setMessage(R.string.import_export_permissions_fail_text).
@@ -109,7 +111,8 @@ public class MainActivity extends AppCompatActivity {
 				new AlertDialog.Builder(this).
 						setTitle(R.string.failure_loading_data_title).
 						setMessage(R.string.failure_loading_data_text).
-						setPositiveButton(R.string.ok, null);
+						setPositiveButton(R.string.ok, null).
+						create();
 	}
 
 	//Code adapted from https://developer.android.com/training/notify-user/channels.html
@@ -481,12 +484,12 @@ public class MainActivity extends AppCompatActivity {
 				} else {
 					if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
 						//ask again
-						importExportPermissionFailDialog.setPositiveButton(R.string.allow, exportClickListener);
+						importExportPermissionFailDialogBuilder.setPositiveButton(R.string.allow, exportClickListener);
 					} else {
 						//go to settings
-						importExportPermissionFailDialog.setPositiveButton(R.string.allow, exportPermissionSettingsClickListener);
+						importExportPermissionFailDialogBuilder.setPositiveButton(R.string.allow, exportPermissionSettingsClickListener);
 					}
-					importExportPermissionFailDialog.show();
+					importExportPermissionFailDialogBuilder.show();
 				}
 				break;
 			}
@@ -496,12 +499,12 @@ public class MainActivity extends AppCompatActivity {
 				} else {
 					if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE))  {
 						//ask again
-						importExportPermissionFailDialog.setPositiveButton(R.string.allow, importClickListener);
+						importExportPermissionFailDialogBuilder.setPositiveButton(R.string.allow, importClickListener);
 					} else {
 						//go to settings
-						importExportPermissionFailDialog.setPositiveButton(R.string.allow, importPermissionSettingsClickListener);
+						importExportPermissionFailDialogBuilder.setPositiveButton(R.string.allow, importPermissionSettingsClickListener);
 					}
-					importExportPermissionFailDialog.show();
+					importExportPermissionFailDialogBuilder.show();
 				}
 				break;
 			}

@@ -12,14 +12,14 @@ keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '27.0.3'
+    buildToolsVersion '28.0.2'
 
     defaultConfig {
         applicationId "com.woodplantation.geburtstagsverwaltung"
         minSdkVersion 16
         targetSdkVersion 27
         versionCode 11
-        versionName "1.4.0"
+        versionName "1.4.1"
     }
     signingConfigs {
         release {
@@ -43,6 +43,8 @@ repositories {
         url "http://dl.bintray.com/lukaville/maven"
     }
 }
+
+//https://developer.android.com/topic/libraries/support-library/revisions
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])

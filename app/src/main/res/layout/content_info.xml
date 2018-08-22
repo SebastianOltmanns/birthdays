@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/information_activity_scrollview"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -16,7 +17,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:gravity="center_horizontal|top">
 
         <TextView
             android:id="@+id/information_activity_version_text"
@@ -27,103 +29,61 @@
             android:textSize="@dimen/text_size"
             android:textStyle="bold"/>
 
-        <TextView
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/information_activity_about_button"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/text_gap"
             android:text="@string/info_about_title"
             android:textColor="@color/text_color"
             android:textSize="@dimen/text_size"
-            android:textStyle="bold"/>
+            android:onClick="openDialog"
+            />
 
-        <TextView
-            android:id="@+id/information_activity_about_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:text="@string/info_about_text"
-            android:textColor="@color/text_color"
-            android:textSize="@dimen/text_size"/>
 
-        <TextView
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/information_activity_motivation_button"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/text_gap"
             android:text="@string/info_motivation_title"
             android:textColor="@color/text_color"
             android:textSize="@dimen/text_size"
-            android:textStyle="bold"/>
+            android:onClick="openDialog"
+            />
 
-        <TextView
-            android:id="@+id/information_activity_motivation_text"
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/information_activity_notification_button"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:textColor="@color/text_color"
-            android:textSize="@dimen/text_size"/>
-
-        <TextView
-            android:id="@+id/information_activity_notification_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/info_notification_title"
             android:layout_marginBottom="@dimen/text_gap"
+            android:text="@string/info_notification_title"
             android:textColor="@color/text_color"
             android:textSize="@dimen/text_size"
-            android:textStyle="bold"/>
+            android:onClick="openDialog"
+            />
 
-        <WebView
-            android:id="@+id/information_activity_notification_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autoLink="email"
-            android:textColor="@color/text_color"
-            android:textSize="@dimen/text_size"/>
-
-        <TextView
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/information_activity_developer_button"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/text_gap"
             android:text="@string/info_about_developer_title"
             android:textColor="@color/text_color"
             android:textSize="@dimen/text_size"
-            android:textStyle="bold"/>
+            android:onClick="openDialog"
+            />
 
-        <TextView
-            android:id="@+id/information_activity_developer_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:autoLink="email"
-            android:text="@string/info_about_developer_text"
-            android:textColor="@color/text_color"
-            android:textSize="@dimen/text_size"/>
-
-        <TextView
-            android:id="@+id/information_activity_github_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:text="@string/info_about_github_text"
-            android:textColor="@color/text_color"
-            android:textSize="@dimen/text_size"/>
-
-        <TextView
-            android:id="@+id/information_activity_privacy_title"
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/information_activity_privacy_button"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/text_gap"
+            android:text="@string/info_privacy_short_title"
             android:textColor="@color/text_color"
             android:textSize="@dimen/text_size"
-            android:textStyle="bold"/>
-
-        <TextView
-            android:id="@+id/information_activity_privacy_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autoLink="email"
-            android:textColor="@color/text_color"
-            android:textSize="@dimen/text_size"/>
+            android:onClick="openDialog"
+            />
 
     </LinearLayout>
 </ScrollView>

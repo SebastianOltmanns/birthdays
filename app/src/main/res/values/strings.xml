@@ -115,6 +115,7 @@
         \n\nThe app needs the permission \"change or delete external storage\" and \"read external storage\" to import or export data when you want it. The app will never do this automatically.
         \n\nNo responsibility will be accepted if the app displays notifications incorrectly or not.
         \n\nThe module for choosing a file to import is available by <a href="http://choosealicense.com/licenses/apache-2.0/">Apache 2.0 License</a> and published at <a href="https://github.com/nbsp-team/MaterialFilePicker">Github</a>. Copyright for this module: <a href="https://github.com/nbsp-team">nbsp-team</a>.
+        \n\nThe code of this app is licensed with <a href="http://choosealicense.com/licenses/mit/">MIT-License</a> and published on <a href="https://github.com/SebastianOltmanns/birthdays">GitHub</a>.
     </string>
 
     <string name="info_motivation_title">What\'s the purpose of this app?</string>
@@ -131,14 +132,13 @@
     <string name="info_notification_text_energy">It may be that the alarms and notifications do not work while your smartphone is idle, in power-saving mode, or something similar. To review that, check the power saving options and the notification options in the Settings of your smartphone.</string>
     <string name="info_notification_text_update">Since there are regular updates to this app and to the Android Operating System, you should always make sure to have the newest version of this app and the Android Operating System installed.</string>
     <string name="info_notification_text_restart">You can restart your smartphone. After that, all the alarms get recreated.</string>
-    <string name="info_notification_text_otherwise">If all these suggestions do not solve the issue, then unfortunately I can not help you. I am trying everything to eliminate other reasons that may be responsible for this issue. Please consider not to rate this app bad just because the notifications do not appear. I am very happy if you provide me with constructive critic.</string>
+    <string name="info_notification_text_otherwise">If all these suggestions do not solve the issue, then unfortunately I can not help you. I am trying everything to eliminate other reasons that may be responsible for this issue. Please consider not to rate this app bad just because the notifications do not appear. However, I am very happy if you provide me with constructive critic.</string>
 
     <string name="info_about_developer_title">Information about the developer</string>
     <string name="info_about_developer_text">This app is being developed by Sebastian Oltmanns. For contact, please use sebastian.oltmanns.developer@gmail.com.</string>
-    <string name="info_about_github_text">The code of this app is licensed with <a href="http://choosealicense.com/licenses/mit/">MIT-License</a> and published on <a href="https://github.com/SebastianOltmanns/birthdays">GitHub</a>.</string>
 
-    <string name="info_privacy_error_title">Privacy policy</string>
-    <string name="info_privacy_error_text">There has been a mistake loading the privacy policy. Please visit https://github.com/SebastianOltmanns/birthdays/blob/master/app/src/main/res/raw/privacy_policy.txt to read the current privacy policy.</string>
+    <string name="info_privacy_short_title">Privacy policy</string>
+    <string name="info_privacy_error_text">There has been a mistake loading the privacy policy. Please visit <a href="https://github.com/SebastianOltmanns/birthdays/blob/master/app/src/main/res/raw-de/privacy_policy.txt">https://github.com/SebastianOltmanns/birthdays/blob/master/app/src/main/res/raw/privacy_policy.txt</a> to read the current privacy policy.</string>
 
     <!-- - - - - - - - - - - - - - - - - - - SETTINGS ACTIVITY - - - - - - - - - - - - - - - - - - - - - -->
     <string name="activity_settings_fab">Display Button to add birthdays</string>
