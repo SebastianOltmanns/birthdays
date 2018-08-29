@@ -1,7 +1,9 @@
 package com.woodplantation.geburtstagsverwaltung.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -45,12 +47,19 @@ public class DataListViewAdapter extends ArrayAdapter<DataSet> {
 		others = others.replaceAll(System.getProperty("line.separator"), " ");
 		Calendar birthday = dataSet.birthday;
 
-		TextView nameTextView = (TextView) convertView.findViewById(R.id.data_list_view_text_name);
-		TextView othersTextView = (TextView) convertView.findViewById(R.id.data_list_view_text_others);
-		TextView birthdayTextView = (TextView) convertView.findViewById(R.id.data_list_view_text_birthday);
-		TextView remainingTextView = (TextView) convertView.findViewById(R.id.data_list_view_text_remaining);
+		TextView nameTextView = convertView.findViewById(R.id.data_list_view_text_name);
+		TextView othersTextView = convertView.findViewById(R.id.data_list_view_text_others);
+		TextView birthdayTextView = convertView.findViewById(R.id.data_list_view_text_birthday);
+		TextView remainingTextView = convertView.findViewById(R.id.data_list_view_text_remaining);
 
-		String name = firstname + " " + lastname;
+		String name;
+		if (TextUtils.isEmpty(firstname)) {
+			name = lastname;
+		} else if (TextUtils.isEmpty(lastname)) {
+			name = firstname;
+		} else {
+			name = firstname + " " + lastname;
+		}
 		nameTextView.setText(name);
 		othersTextView.setText(others);
 		birthdayTextView.setText(DateFormat.getDateInstance(DateFormat.MEDIUM).format(birthday.getTime()));

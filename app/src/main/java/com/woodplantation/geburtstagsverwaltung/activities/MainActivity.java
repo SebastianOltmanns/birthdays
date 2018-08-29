@@ -48,6 +48,7 @@ import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
@@ -81,6 +82,8 @@ public class MainActivity extends AppCompatActivity {
 	private StorageHandler storageHandler;
 	private ListView dataListView;
 	private DataListViewAdapter dataListViewAdapter;
+
+	private Comparator<DataSet> comparator = new DataSet.NextBirthdayComaparator();
 
 	private AlertDialog importExportFailDialog;
 	private AlertDialog importExportStorageFailDialog;
@@ -215,44 +218,83 @@ public class MainActivity extends AppCompatActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		int id = item.getItemId();
-		if (id == R.id.main_info) {
-			Intent intent = new Intent(this, InfoActivity.class);
-			startActivity(intent);
-		} else if (id == R.id.main_rate) {
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setTitle(R.string.rating_title);
-			builder.setMessage(R.string.rating_text);
-			builder.setPositiveButton(R.string.rate_app, new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					String packageName = getPackageName();
-					try {
-						startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName)));
-					} catch (ActivityNotFoundException e) {
-						startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + packageName)));
+		switch(item.getItemId()) {
+
+			case R.id.main_info: {
+				Intent intent = new Intent(this, InfoActivity.class);
+				startActivity(intent);
+				return true;
+			}
+			case R.id.main_rate: {
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setTitle(R.string.rating_title);
+				builder.setMessage(R.string.rating_text);
+				builder.setPositiveButton(R.string.rate_app, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						String packageName = getPackageName();
+						try {
+							startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName)));
+						} catch (ActivityNotFoundException e) {
+							startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + packageName)));
+						}
 					}
-				}
-			});
-			builder.setNegativeButton(R.string.cancel, null);
-			builder.show();
-		} else if (id == R.id.main_notifications) {
-			Intent intent = new Intent(this, NotificationsActivity.class);
-			startActivityForResult(intent, REQUEST_INTENT_NOTIFICATIONS);
-		} else if (id == R.id.main_import_export) {
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setTitle(R.string.import_export_dialog_title);
-			builder.setMessage(getString(R.string.import_export_dialog_text, getResources().getInteger(R.integer.MAXIMUM_DATA_SIZE)));
-			builder.setPositiveButton(R.string.import_export_export, exportClickListener);
-			builder.setNeutralButton(R.string.import_export_import, importClickListener);
-			builder.show();
-		} else if (id == R.id.main_settings) {
-			Intent intent = new Intent(this, SettingsActivity.class);
-			startActivity(intent);
-		} else if (id == R.id.main_add) {
-			onAddClick(null);
+				});
+				builder.setNegativeButton(R.string.cancel, null);
+				builder.show();
+				return true;
+			}
+			case R.id.main_notifications: {
+				Intent intent = new Intent(this, NotificationsActivity.class);
+				startActivityForResult(intent, REQUEST_INTENT_NOTIFICATIONS);
+				return true;
+			}
+			case R.id.main_import_export: {
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setTitle(R.string.import_export_dialog_title);
+				builder.setMessage(getString(R.string.import_export_dialog_text, getResources().getInteger(R.integer.MAXIMUM_DATA_SIZE)));
+				builder.setPositiveButton(R.string.import_export_export, exportClickListener);
+				builder.setNeutralButton(R.string.import_export_import, importClickListener);
+				builder.show();
+				return true;
+			}
+			case R.id.main_settings: {
+				Intent intent = new Intent(this, SettingsActivity.class);
+				startActivity(intent);
+				return true;
+			}
+			case R.id.main_add: {
+				onAddClick(null);
+				return true;
+			}
+			case R.id.main_sort_next: {
+				comparator = new DataSet.NextBirthdayComaparator();
+				item.setChecked(true);
+				refresh();
+				return true;
+			}
+			case R.id.main_sort_calendric: {
+				comparator = new DataSet.CalendarComparator();
+				item.setChecked(true);
+				refresh();
+				return true;
+			}
+			case R.id.main_sort_lexicographic: {
+				comparator = new DataSet.NameComparator();
+				item.setChecked(true);
+				refresh();
+				return true;
+			}
+			case R.id.main_sort_age: {
+				comparator = new DataSet.AgeComparator();
+				item.setChecked(true);
+				refresh();
+				return true;
+			}
+			default: {
+				return super.onOptionsItemSelected(item);
+			}
 		}
-		return true;
 	}
 
 	@Override
@@ -357,13 +399,17 @@ public class MainActivity extends AppCompatActivity {
 		if (data == null) {
 			data = new ArrayList<>();
 		}
-		Collections.sort(data);
+		try {
+			Collections.sort(data, comparator);
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		}
 		storageHandler.saveData(data);
 		dataListViewAdapter.clear();
 		dataListViewAdapter.addAll(data);
 		dataListViewAdapter.notifyDataSetChanged();
 
-		TextView tv = (TextView) findViewById(R.id.activity_main_textview_nothing_to_show);
+		TextView tv = findViewById(R.id.activity_main_textview_nothing_to_show);
 		if (data.size() == 0) {
 			tv.setVisibility(View.VISIBLE);
 		} else {

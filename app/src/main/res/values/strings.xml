@@ -94,6 +94,11 @@
     <string name="menu_title_import_export">Import/Export</string>
     <string name="menu_title_settings">Settings</string>
     <string name="menu_title_add">Add birthday</string>
+    <string name="menu_title_sort">Sort</string>
+    <string name="menu_title_sort_next">Next birthday</string>
+    <string name="menu_title_sort_calendric">Calendric</string>
+    <string name="menu_title_sort_lexicographic">Lexicographic</string>
+    <string name="menu_title_sort_age">Age</string>
 
     <!-- - - - - - - - - - - - - - - - - - - NOTIFICATION SETTINGS - - - - - - - - - - - - - - - - - - - -->
     <string name="activity_notifications_active">Activate notifications?</string>

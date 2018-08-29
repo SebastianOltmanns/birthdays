@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.MenuItem;
+import android.view.TextureView;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -108,9 +110,9 @@ public abstract class InputActivity extends AppCompatActivity {
         int messageResource = 0;
 
         //check for valid birthday: first, check if all fields are set
-        if (birthdayDay.equals("") || birthdayDay.length() == 0
-                || birthdayMonth.equals("") || birthdayMonth.length() == 0
-                || birthdayYear.equals("") || birthdayYear.length() == 0) {
+		if (TextUtils.isEmpty(birthdayDay)
+				|| TextUtils.isEmpty(birthdayMonth)
+				|| TextUtils.isEmpty(birthdayYear)) {
             messageResource = R.string.wrong_input_birthday;
             flag = false;
         } else {
@@ -126,7 +128,7 @@ public abstract class InputActivity extends AppCompatActivity {
                     || inputBirthday.get(Calendar.DAY_OF_MONTH) != birthdayD) {
                 messageResource = R.string.wrong_input_birthday;
                 flag = false;
-            } else if ((firstName.equals("") ||  firstName.length() == 0) && (lastName.equals("") ||  lastName.length() == 0)) {
+            } else if (TextUtils.isEmpty(firstName) && TextUtils.isEmpty(lastName)) {
                 messageResource = R.string.wrong_input_no_name;
                 flag = false;
             }

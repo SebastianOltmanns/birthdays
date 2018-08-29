@@ -1,15 +1,18 @@
 package com.woodplantation.geburtstagsverwaltung.storage;
 
+import android.service.autofill.Dataset;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.Comparator;
 
 /**
  * Created by Sebu on 10.03.2016.
  * Contact: sebastian.oltmanns.developer@googlemail.com
  */
-public class DataSet implements Serializable, Comparable<DataSet> {
+public class DataSet implements Serializable {
 
 	static final long serialVersionUID =-2227872867228907805L;
 
@@ -65,24 +68,97 @@ public class DataSet implements Serializable, Comparable<DataSet> {
 		return (now.get(Calendar.DAY_OF_YEAR) <= tempBirthday.get(Calendar.DAY_OF_YEAR)) ? nextAge : nextAge + 1;
 	}
 
-	@Override
-	public int compareTo(@NonNull DataSet another) {
-		try {
+	/**
+	 * compares two datasets. the dataset with the next birthday to come will be returned as smaller.
+	 */
+	public static class NextBirthdayComaparator implements Comparator<DataSet> {
+		@Override
+		public int compare(DataSet t0, DataSet t1) {
 			Calendar now = Calendar.getInstance();
-			int tRemains = getRemaining(now);
-			int oRemains = another.getRemaining(now);
+			int t0Remains = t0.getRemaining(now);
+			int t1Remains = t1.getRemaining(now);
 
-			if (tRemains > oRemains) return 1;
-			if (tRemains < oRemains) return -1;
+			if (t0Remains > t1Remains) return 1;
+			if (t0Remains < t1Remains) return -1;
 
-			int tYear = birthday.get(Calendar.YEAR);
-			int oYear = another.birthday.get(Calendar.YEAR);
+			int t0Year = t0.birthday.get(Calendar.YEAR);
+			int t1Year = t1.birthday.get(Calendar.YEAR);
 
-			if (tYear > oYear) return 1;
-			else return -1;
-		} catch (NullPointerException e) {
-			//if we catch nullpointerexception, we dont know what to do and return -1. whatever.
-			return -1;
+			if (t0Year > t1Year) return 1;
+			if (t0Year < t1Year) return -1;
+
+			return 0;
 		}
 	}
+
+	/**
+	 * compares two datasets. the dataset with the birthday earlier in year will be returned as smaller.
+	 */
+	public static class CalendarComparator implements Comparator<DataSet> {
+		@Override
+		public int compare(DataSet t0, DataSet t1) {
+			Calendar now = Calendar.getInstance();
+			Calendar t0Calendar = Calendar.getInstance();
+			Calendar t1Calendar = Calendar.getInstance();
+
+			t0Calendar.setTimeInMillis(t0.birthday.getTimeInMillis());
+			t1Calendar.setTimeInMillis(t1.birthday.getTimeInMillis());
+
+			t0Calendar.set(Calendar.YEAR, now.get(Calendar.YEAR));
+			t1Calendar.set(Calendar.YEAR, now.get(Calendar.YEAR));
+
+			int t0Days = t0Calendar.get(Calendar.DAY_OF_YEAR);
+			int t1Days = t1Calendar.get(Calendar.DAY_OF_YEAR);
+
+			if (t0Days > t1Days) return 1;
+			if (t0Days < t1Days) return -1;
+
+			int t0Year = t0.birthday.get(Calendar.YEAR);
+			int t1Year = t1.birthday.get(Calendar.YEAR);
+
+			if (t0Year > t1Year) return 1;
+			if (t0Year < t1Year) return -1;
+
+			return 0;
+		}
+	}
+
+	/**
+	 * compares two datasets using String.compareToIgnoreCase, with respect to the name of the dataset.
+	 */
+	public static class NameComparator implements Comparator<DataSet> {
+		@Override
+		public int compare(DataSet t0, DataSet t1) {
+			String t0Name, t1Name;
+
+			if (TextUtils.isEmpty(t0.firstName)) {
+				t0Name = t0.lastName;
+			} else if (TextUtils.isEmpty(t0.lastName)) {
+				t0Name = t0.firstName;
+			} else {
+				t0Name = t0.firstName + " " + t0.lastName;
+			}
+
+			if (TextUtils.isEmpty(t1.firstName)) {
+				t1Name = t1.lastName;
+			} else if (TextUtils.isEmpty(t1.lastName)) {
+				t1Name = t1.firstName;
+			} else {
+				t1Name = t1.firstName + " " + t1.lastName;
+			}
+
+			return t0Name.compareToIgnoreCase(t1Name);
+		}
+	}
+
+	/**
+	 * compares two datasets. the dataset with the younger age will be returned as smaller
+	 */
+	public static class AgeComparator implements Comparator<DataSet> {
+		@Override
+		public int compare(DataSet t0, DataSet t1) {
+			return t1.birthday.compareTo(t0.birthday);
+		}
+	}
+
 }

@@ -93,6 +93,11 @@
     <string name="menu_title_import_export">Import/Export</string>
     <string name="menu_title_settings">Einstellungen</string>
     <string name="menu_title_add">Geburtstag hinzufügen</string>
+    <string name="menu_title_sort">Sortieren</string>
+    <string name="menu_title_sort_next">Nächster Geburtstag</string>
+    <string name="menu_title_sort_calendric">Kalendarisch</string>
+    <string name="menu_title_sort_lexicographic">Lexikographisch</string>
+    <string name="menu_title_sort_age">Alter</string>
 
     <!-- - - - - - - - - - - - - - - - - - - NOTIFICATION SETTINGS - - - - - - - - - - - - - - - - - - - -->
     <string name="activity_notifications_active">Benachrichtigungen aktiv?</string>
@@ -131,7 +136,7 @@
     <string name="info_notification_text_energy">Es kann sein, dass Alarme und Benachrichtigungen nicht funktionieren, während dein Smartphone im Ruhe- oder Energiesparmodus oder ähnlichem ist. Um das zu überprüfen, schaue Dir die Energiespar- und Benachrichtigungsoptionen in den Einstellungen Deines Smartphones an.</string>
     <string name="info_notification_text_update">Da es regelmäßig Updates für diese App und das Android Betriebssystem gibt, solltest Du immer sichergehen, dass du die aktuellste Version dieser App und des Android Betriebssystems installiert hast.</string>
     <string name="info_notification_text_restart">Du kannst dein Smartphone neustarten. Danach sollten alle Alarme neu erstellt werden.</string>
-    <string name="info_notification_text_otherwise">Falls all diese Vorschläge das Problem nicht beheben, dann kann ich Dir leider nicht weiterhelfen. Ich versuche alles, um andere eventuelle Ursachen für diesen Fehler zu beheben. Bitte überlege, diese App nicht schlecht zu bewerten, nur weil die Benachrichtigungen nicht angezeigt werden. Ich bin froh über konstruktive Kritik.</string>
+    <string name="info_notification_text_otherwise">Falls all diese Vorschläge das Problem nicht beheben, dann kann ich Dir leider nicht weiterhelfen. Ich versuche alles, um andere eventuelle Ursachen für diesen Fehler zu beheben. Bitte ziehe in Betracht, diese App nicht schlecht zu bewerten, nur weil die Benachrichtigungen nicht angezeigt werden. Ich bin froh über konstruktive Kritik.</string>
 
     <string name="info_about_developer_title">Informationen über den Entwickler</string>
     <string name="info_about_developer_text">Diese App wird von Sebastian Oltmanns entwickelt. Bei Kontaktwunsch bitte sebastian.oltmanns.developer@gmail.com nutzen.</string>
