@@ -13,6 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -80,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
 
 	private ArrayList<DataSet> data;
 	private StorageHandler storageHandler;
-	private ListView dataListView;
 	private DataListViewAdapter dataListViewAdapter;
 
 	private Comparator<DataSet> comparator = new DataSet.NextBirthdayComaparator();
@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
 		//initialize layout and toolbar
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		Toolbar toolbar = findViewById(R.id.toolbar);
 		toolbar.setTitle(R.string.activity_main_label);
 		setSupportActionBar(toolbar);
 
@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
 
 		//bind the list layout to data adapter
 		dataListViewAdapter = new DataListViewAdapter(this, R.layout.data_list_view_item);
-		dataListView = (ListView) findViewById(R.id.data_list_view);
+		ListView dataListView = findViewById(R.id.data_list_view);
 		dataListView.setAdapter(dataListViewAdapter);
 		dataListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
@@ -183,7 +183,11 @@ public class MainActivity extends AppCompatActivity {
 		super.onResume();
 		refresh();
 		MyPreferences preferences = new MyPreferences(this, MyPreferences.FILEPATH_SETTINGS);
-		fab.setVisibility(preferences.getDisplayFAB() ? View.VISIBLE : View.INVISIBLE);
+		if (preferences.getDisplayFAB()) {
+			fab.show();
+		} else {
+			fab.hide();
+		}
 	}
 
 	@Override
@@ -504,7 +508,7 @@ public class MainActivity extends AppCompatActivity {
 
 	private class PermissionSettingsClickListener implements DialogInterface.OnClickListener {
 		private int requestCode;
-		public PermissionSettingsClickListener(int requestCode) {
+		PermissionSettingsClickListener(int requestCode) {
 			this.requestCode = requestCode;
 		}
 
@@ -522,7 +526,7 @@ public class MainActivity extends AppCompatActivity {
 	private DialogInterface.OnClickListener importPermissionSettingsClickListener = new PermissionSettingsClickListener(REQUEST_PERMISSION_READ_EXTERNAL_STORAGE);
 
 	@Override
-	public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 		switch (requestCode) {
 			case REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE: {
 				if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
