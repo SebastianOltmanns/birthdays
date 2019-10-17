@@ -1,8 +1,9 @@
 package com.woodplantation.geburtstagsverwaltung.storage;
 
-import android.service.autofill.Dataset;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.Calendar;
@@ -28,6 +29,31 @@ public class DataSet implements Serializable {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.others = others;
+	}
+
+	public DataSet(JSONObject json) throws JSONException {
+		this.id = (int) json.get("id");
+		this.birthday = Calendar.getInstance();
+		this.birthday.setTimeInMillis((long) json.get("birthday"));
+		this.firstName = (String) json.get("firstName");
+		this.lastName = (String) json.get("lastName");
+		this.others = (String) json.get("others");
+	}
+
+	public JSONObject toJSON() {
+		JSONObject json = new JSONObject();
+
+		try {
+			json.put("id", id);
+			json.put("birthday", birthday.getTimeInMillis());
+			json.put("firstName", firstName);
+			json.put("lastName", lastName);
+			json.put("others", others);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return json;
 	}
 
 	public int getRemaining(Calendar now) {

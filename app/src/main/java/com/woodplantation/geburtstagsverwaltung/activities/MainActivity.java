@@ -38,14 +38,19 @@ import com.woodplantation.geburtstagsverwaltung.notifications.NotificationHandle
 import com.woodplantation.geburtstagsverwaltung.R;
 import com.woodplantation.geburtstagsverwaltung.storage.StorageHandler;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -351,15 +356,32 @@ public class MainActivity extends AppCompatActivity {
 					importExportFailDialog.show();
 				}
 				try {
-					FileInputStream fis = new FileInputStream(file);
-					BufferedInputStream bis = new BufferedInputStream(fis);
-					ObjectInputStream ois = new ObjectInputStream(bis);
+					ArrayList<DataSet> importedData = new ArrayList<>();
+					try {
+						//first try block: for json reading
+						FileReader fr = new FileReader(file);
+						BufferedReader br = new BufferedReader(fr);
 
-					ArrayList<DataSet> importedData = (ArrayList<DataSet>) ois.readObject();
+						JSONArray jsonArray = new JSONArray(br.readLine());
+						for (int i = 0; i < jsonArray.length(); i++) {
+							importedData.add(new DataSet((JSONObject) jsonArray.get(i)));
+						}
 
-					ois.close();
-					bis.close();
-					fis.close();
+						br.close();
+						fr.close();
+					} catch (JSONException e) {
+						e.printStackTrace();
+						//if json fails: try old reading method (using serializable interface)
+						FileInputStream fis = new FileInputStream(file);
+						BufferedInputStream bis = new BufferedInputStream(fis);
+						ObjectInputStream ois = new ObjectInputStream(bis);
+
+						importedData = (ArrayList<DataSet>) ois.readObject();
+
+						ois.close();
+						bis.close();
+						fis.close();
+					}
 
 					if (importedData.size() + this.data.size() >= getResources().getInteger(R.integer.MAXIMUM_DATA_SIZE)) {
 						new AlertDialog.Builder(this).
@@ -446,16 +468,18 @@ public class MainActivity extends AppCompatActivity {
 			if (data == null) {
 				importExportFailDialog.show();
 			}
+			JSONArray jsonArray = new JSONArray();
+			for (DataSet dataSet : data) {
+				jsonArray.put(dataSet.toJSON());
+			}
 			try {
-				FileOutputStream fos = new FileOutputStream(output);
-				BufferedOutputStream bos = new BufferedOutputStream(fos);
-				ObjectOutputStream oos = new ObjectOutputStream(bos);
+				FileWriter fw = new FileWriter(output);
+				BufferedWriter bw = new BufferedWriter(fw);
 
-				oos.writeObject(data);
+				bw.write(jsonArray.toString());
 
-				oos.close();
-				bos.close();
-				fos.close();
+				bw.close();
+				fw.close();
 
 				new AlertDialog.Builder(MainActivity.this).
 						setTitle(R.string.import_export_export_successfull_title).
