@@ -97,7 +97,7 @@ public class DataSet implements Serializable {
 	/**
 	 * compares two datasets. the dataset with the next birthday to come will be returned as smaller.
 	 */
-	public static class NextBirthdayComaparator implements Comparator<DataSet> {
+	public static class NextBirthdayComparator implements Comparator<DataSet> {
 		@Override
 		public int compare(DataSet t0, DataSet t1) {
 			Calendar now = Calendar.getInstance();

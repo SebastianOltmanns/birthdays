@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
 	private StorageHandler storageHandler;
 	private DataListViewAdapter dataListViewAdapter;
 
-	private Comparator<DataSet> comparator = new DataSet.NextBirthdayComaparator();
+	private Comparator<DataSet> comparator = new DataSet.NextBirthdayComparator();
 
 	private AlertDialog importExportFailDialog;
 	private AlertDialog importExportStorageFailDialog;
@@ -277,7 +277,7 @@ public class MainActivity extends AppCompatActivity {
 				return true;
 			}
 			case R.id.main_sort_next: {
-				comparator = new DataSet.NextBirthdayComaparator();
+				comparator = new DataSet.NextBirthdayComparator();
 				item.setChecked(true);
 				refresh();
 				return true;
