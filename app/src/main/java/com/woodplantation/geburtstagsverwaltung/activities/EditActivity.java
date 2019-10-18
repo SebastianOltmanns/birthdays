@@ -9,6 +9,7 @@ import android.view.MenuItem;
 
 import com.woodplantation.geburtstagsverwaltung.storage.DataSet;
 import com.woodplantation.geburtstagsverwaltung.R;
+import com.woodplantation.geburtstagsverwaltung.util.IntentCodes;
 
 import java.util.Calendar;
 
@@ -27,8 +28,8 @@ public class EditActivity extends InputActivity {
 		super.onCreate(savedInstanceState, R.layout.activity_edit);
 
 		Intent intent = getIntent();
-		index = intent.getIntExtra(MainActivity.INTENT_CODE_EDIT_INDEX, -1);
-		oldDataSet = (DataSet) intent.getSerializableExtra(MainActivity.INTENT_CODE_DATA_SET);
+		index = intent.getIntExtra(IntentCodes.getInstance().INDEX, -1);
+		oldDataSet = (DataSet) intent.getSerializableExtra(IntentCodes.getInstance().DATASET);
 		if (index == -1) {
 			setResult(RESULT_CANCELED);
 			finish();
@@ -63,14 +64,14 @@ public class EditActivity extends InputActivity {
 			}
 			setBirthdayFromEditTexts();
 			Intent resultIntent = new Intent();
-			resultIntent.putExtra(MainActivity.INTENT_CODE_EDIT_INDEX, index);
+			resultIntent.putExtra(IntentCodes.getInstance().INDEX, index);
 			DataSet newDataSet = new DataSet(
 					oldDataSet.id,
 					birthday,
 					firstNameEdit.getText().toString(),
 					lastNameEdit.getText().toString(),
 					othersEdit.getText().toString());
-			resultIntent.putExtra(MainActivity.INTENT_CODE_DATA_SET, newDataSet);
+			resultIntent.putExtra(IntentCodes.getInstance().DATASET, newDataSet);
 			setResult(RESULT_OK, resultIntent);
 			finish();
 			return true;
@@ -82,7 +83,7 @@ public class EditActivity extends InputActivity {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					Intent resultIntent = new Intent();
-					resultIntent.putExtra(MainActivity.INTENT_CODE_EDIT_INDEX, index);
+					resultIntent.putExtra(IntentCodes.getInstance().INDEX, index);
 					setResult(RESULT_OK, resultIntent);
 					dialog.dismiss();
 					finish();

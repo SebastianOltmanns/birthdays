@@ -37,6 +37,7 @@ import com.woodplantation.geburtstagsverwaltung.notifications.IdGenerator;
 import com.woodplantation.geburtstagsverwaltung.notifications.NotificationHandler;
 import com.woodplantation.geburtstagsverwaltung.R;
 import com.woodplantation.geburtstagsverwaltung.storage.StorageHandler;
+import com.woodplantation.geburtstagsverwaltung.util.IntentCodes;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -66,6 +67,8 @@ import java.util.regex.Pattern;
  */
 public class MainActivity extends AppCompatActivity {
 
+	public static String PACKAGE_NAME;
+
 	public static final int REQUEST_INTENT_CREATE_DATA_SET = 1;
 	public static final int REQUEST_INTENT_EDIT_DATA_SET = 2;
 	public static final int REQUEST_INTENT_NOTIFICATIONS = 3;
@@ -73,11 +76,6 @@ public class MainActivity extends AppCompatActivity {
 	public static final int REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE = 5;
 	public static final int REQUEST_PERMISSION_READ_EXTERNAL_STORAGE = 6;
 	public static final int REQUEST_PERMISSION_SET_ALARM = 7;
-
-	public static final String INTENT_CODE_DATA_SET = "DATASET";
-	public static final String INTENT_CODE_EDIT_INDEX = "DATASET_INDEX";
-	public static final String INTENT_CODE_NEW_ID = "DATASET_NEW_ID";
-	public static final String INTENT_CODE_OLD_PREFERENCES = "OLD_PREFERENCES";
 
 	private static final String FILE_EXPORT_DIRECTORY = "birthdays";
 	private static final String FILE_EXPORT_NAME = "export_";
@@ -150,6 +148,8 @@ public class MainActivity extends AppCompatActivity {
 
 		fab = findViewById(R.id.fab);
 
+		PACKAGE_NAME = getApplicationContext().getPackageName();
+
 		//check about alarm permissions
 		ActivityCompat.requestPermissions(this,
 				new String[]{Manifest.permission.SET_ALARM},
@@ -164,8 +164,8 @@ public class MainActivity extends AppCompatActivity {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				DataSet dataSet = dataListViewAdapter.getItem(position);
 				Intent editIntent = new Intent(MainActivity.this, EditActivity.class);
-				editIntent.putExtra(INTENT_CODE_EDIT_INDEX, data.indexOf(dataSet));
-				editIntent.putExtra(INTENT_CODE_DATA_SET, dataSet);
+				editIntent.putExtra(IntentCodes.getInstance().INDEX, data.indexOf(dataSet));
+				editIntent.putExtra(IntentCodes.getInstance().DATASET, dataSet);
 				startActivityForResult(editIntent, REQUEST_INTENT_EDIT_DATA_SET);
 			}
 		});
@@ -221,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
 
 		//open the create activity and pass the new id
 		Intent intent = new Intent(MainActivity.this, AddActivity.class);
-		intent.putExtra(INTENT_CODE_NEW_ID, id);
+		intent.putExtra(IntentCodes.getInstance().NEW_ID, id);
 		startActivityForResult(intent, REQUEST_INTENT_CREATE_DATA_SET);
 	}
 
@@ -314,7 +314,7 @@ public class MainActivity extends AppCompatActivity {
 
 			case REQUEST_INTENT_CREATE_DATA_SET: {
 				if (resultCode == RESULT_OK) {
-					DataSet dataSet = (DataSet) data.getSerializableExtra(INTENT_CODE_DATA_SET);
+					DataSet dataSet = (DataSet) data.getSerializableExtra(IntentCodes.getInstance().DATASET);
 					this.data.add(dataSet);
 					NotificationHandler.addBirthday(this, dataSet);
 				}
@@ -322,8 +322,8 @@ public class MainActivity extends AppCompatActivity {
 			}
 			case REQUEST_INTENT_EDIT_DATA_SET: {
 				if (resultCode == RESULT_OK) {
-					DataSet newDataSet = (DataSet) data.getSerializableExtra(INTENT_CODE_DATA_SET);
-					int index = data.getIntExtra(INTENT_CODE_EDIT_INDEX, -1);
+					DataSet newDataSet = (DataSet) data.getSerializableExtra(IntentCodes.getInstance().DATASET);
+					int index = data.getIntExtra(IntentCodes.getInstance().INDEX, -1);
 					if (index == -1) {
 						return;
 					}
@@ -339,7 +339,7 @@ public class MainActivity extends AppCompatActivity {
 			}
 			case REQUEST_INTENT_NOTIFICATIONS: {
 				if (resultCode == RESULT_OK) {
-					Map<String, ?> map = (Map<String, ?>) data.getSerializableExtra(INTENT_CODE_OLD_PREFERENCES);
+					Map<String, ?> map = (Map<String, ?>) data.getSerializableExtra(IntentCodes.getInstance().OLD_PREFERENCES);
 					NotificationHandler.handlePreferences(this, map, this.data);
 				}
 				break;

@@ -26,6 +26,7 @@ import android.widget.TimePicker;
 
 import com.woodplantation.geburtstagsverwaltung.notifications.MyPreferences;
 import com.woodplantation.geburtstagsverwaltung.R;
+import com.woodplantation.geburtstagsverwaltung.util.IntentCodes;
 
 import java.io.Serializable;
 import java.util.Calendar;
@@ -121,7 +122,7 @@ public class NotificationsActivity extends AppCompatActivity {
 			case R.id.menu_ok:
 				Map<String, ?> map = preferences.preferences.getAll();
 				Intent resultIntent = new Intent();
-				resultIntent.putExtra(MainActivity.INTENT_CODE_OLD_PREFERENCES, (Serializable) map);
+				resultIntent.putExtra(IntentCodes.getInstance().OLD_PREFERENCES, (Serializable) map);
 
 				saveThePreferences();
 

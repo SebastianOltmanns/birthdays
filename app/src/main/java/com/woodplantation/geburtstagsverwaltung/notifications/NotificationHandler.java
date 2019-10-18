@@ -8,13 +8,16 @@ import android.content.Intent;
 import android.os.Build;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-import androidx.core.content.ContextCompat;
 import android.util.Log;
 
 import com.woodplantation.geburtstagsverwaltung.storage.DataSet;
 import com.woodplantation.geburtstagsverwaltung.R;
 import com.woodplantation.geburtstagsverwaltung.storage.StorageHandler;
 import com.woodplantation.geburtstagsverwaltung.activities.MainActivity;
+import com.woodplantation.geburtstagsverwaltung.util.IntentCodes;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -38,11 +41,6 @@ import java.util.Map;
  */
 @SuppressWarnings("UseSparseArrays") //tried SparseArrays. Didnt work for serializing.
 public class NotificationHandler extends BroadcastReceiver {
-
-	public static final String INTENT_NOTIFICATION_DATASET = "NOTIFICATION_DATASET";
-	public static final String INTENT_NOTIFICATION_ID = "NOTIFICATION_ID";
-	public static final String INTENT_NOTIFICATION_WHICH = "NOTIFICATION_WHICH";
-	public static final String INTENT_NOTIFICATION_WHEN = "NOTIFICATION_WHEN";
 
 	private static SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy hh:mm a", Locale.GERMAN);
 
@@ -229,10 +227,10 @@ public class NotificationHandler extends BroadcastReceiver {
 	private static void create(Context context, int id, Calendar when, DataSet dataSet, int which, boolean update) {
 		String name = dataSet.firstName + " " + dataSet.lastName;
 		Intent intent = new Intent(context, NotificationHandler.class);
-		intent.putExtra(INTENT_NOTIFICATION_DATASET, dataSet);
-		intent.putExtra(INTENT_NOTIFICATION_ID, id);
-		intent.putExtra(INTENT_NOTIFICATION_WHICH, which);
-		intent.putExtra(INTENT_NOTIFICATION_WHEN, when);
+		intent.putExtra(IntentCodes.getInstance().DATASET, dataSet.toJSON().toString());
+		intent.putExtra(IntentCodes.getInstance().ID, id);
+		intent.putExtra(IntentCodes.getInstance().WHICH, which);
+		intent.putExtra(IntentCodes.getInstance().WHEN, when);
 		int flag = update ? PendingIntent.FLAG_CANCEL_CURRENT : 0;
 		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, intent, flag);
 
@@ -414,22 +412,30 @@ public class NotificationHandler extends BroadcastReceiver {
 		Log.d("notificationhandler", "onreceive");
 
 		//get id and check it
-		int id = intent.getIntExtra(INTENT_NOTIFICATION_ID, -1);
+		int id = intent.getIntExtra(IntentCodes.getInstance().ID, -1);
 		if (id == -1){
 			return;
 		}
 
-		int which = intent.getIntExtra(INTENT_NOTIFICATION_WHICH, -1);
+		int which = intent.getIntExtra(IntentCodes.getInstance().WHICH, -1);
 		if (which == -1) {
 			return;
 		}
 
-		DataSet dataSet = (DataSet) intent.getSerializableExtra(INTENT_NOTIFICATION_DATASET);
+		String dataSetString = intent.getStringExtra(IntentCodes.getInstance().DATASET);
+		DataSet dataSet = null;
+		if (dataSetString != null) {
+			try {
+				dataSet = new DataSet(new JSONObject(dataSetString));
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
 		if (dataSet == null) {
 			return;
 		}
 
-		Calendar when = (Calendar) intent.getSerializableExtra(INTENT_NOTIFICATION_WHEN);
+		Calendar when = (Calendar) intent.getSerializableExtra(IntentCodes.getInstance().WHEN);
 		if (when == null) {
 			return;
 		}
