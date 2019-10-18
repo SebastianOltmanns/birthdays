@@ -1,16 +1,14 @@
 package com.woodplantation.geburtstagsverwaltung.notifications;
 
-import android.Manifest;
 import android.app.AlarmManager;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Build;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.ContextCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 import android.util.Log;
 
 import com.woodplantation.geburtstagsverwaltung.storage.DataSet;
@@ -505,9 +503,10 @@ public class NotificationHandler extends BroadcastReceiver {
 		builder.setContentIntent(pi);
 		builder.setAutoCancel(true);
 		builder.setCategory(NotificationCompat.CATEGORY_REMINDER);
+		builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
 		Log.d("notificationhandler", "setting up notification for: " + name);
-		NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+		NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
 		notificationManager.notify(id, builder.build());
 	}
 }

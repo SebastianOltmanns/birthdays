@@ -1,9 +1,8 @@
 package com.woodplantation.geburtstagsverwaltung.notifications;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.woodplantation.geburtstagsverwaltung.R;
 
