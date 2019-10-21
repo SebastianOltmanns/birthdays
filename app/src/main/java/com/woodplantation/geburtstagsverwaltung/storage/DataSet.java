@@ -1,6 +1,9 @@
 package com.woodplantation.geburtstagsverwaltung.storage;
 
+import android.content.Context;
 import android.text.TextUtils;
+
+import com.woodplantation.geburtstagsverwaltung.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -56,7 +59,30 @@ public class DataSet implements Serializable {
 		return json;
 	}
 
-	public int getRemaining(Calendar now) {
+	public String getRemainingWithAge(Context context) {
+		Calendar now = Calendar.getInstance();
+		int daysRemaining = getRemaining(now);
+
+		String textRemaining;
+
+		switch (daysRemaining) {
+			case 0:
+				textRemaining = context.getString(R.string.today);
+				break;
+			case 1:
+				textRemaining = context.getString(R.string.tomorrow);
+				break;
+			default:
+				textRemaining = context.getString(R.string.in_x_days, daysRemaining);
+				break;
+		}
+
+		int age = getNextAge(now);
+
+		return context.getString(R.string.xth_birthday, textRemaining, age);
+	}
+
+	private int getRemaining(Calendar now) {
 		//make copy from birthday since we dont want to change original
 		Calendar tempBirthday = Calendar.getInstance();
 		tempBirthday.setTimeInMillis(birthday.getTimeInMillis());

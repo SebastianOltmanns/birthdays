@@ -23,6 +23,7 @@
             android:layout_marginRight="5dp"
             android:layout_gravity="center_vertical"
             android:text="@string/birthday"
+            android:textColor="@color/text_color"
             />
 
         <LinearLayout
@@ -48,7 +49,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="."/>
+                android:text="."
+                android:textColor="@color/text_color"/>
             <EditText
                 android:id="@+id/text_input_birthday_month"
                 android:ems="2"
@@ -67,7 +69,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="."/>
+                android:text="."
+                android:textColor="@color/text_color"/>
             <EditText
                 android:id="@+id/text_input_birthday_year"
                 android:ems="4"
@@ -97,7 +100,8 @@
 
         <TextView
             android:layout_gravity="center_vertical"
-            android:text="@string/first_name"/>
+            android:text="@string/first_name"
+            android:textColor="@color/text_color"/>
 
         <EditText
             android:id="@+id/text_input_firstname"
@@ -115,7 +119,8 @@
             android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/last_name"/>
+            android:text="@string/last_name"
+            android:textColor="@color/text_color"/>
 
         <EditText
             android:id="@+id/text_input_lastname"
@@ -133,7 +138,8 @@
             android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/others"/>
+            android:text="@string/others"
+            android:textColor="@color/text_color"/>
 
 
         <EditText

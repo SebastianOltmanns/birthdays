@@ -18,7 +18,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.6"
             android:ellipsize="end"
-            android:lines="1"/>
+            android:lines="1"
+            android:textColor="@color/text_color"/>
 
 
         <TextView
@@ -28,7 +29,8 @@
             android:layout_weight="0.4"
             android:ellipsize="end"
             android:lines="1"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:textColor="@color/text_color"/>
 
 
     </LinearLayout>
@@ -45,7 +47,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.6"
             android:ellipsize="end"
-            android:lines="1"/>
+            android:lines="1"
+            android:textColor="@color/text_color"/>
 
         <TextView
             android:id="@+id/data_list_view_text_birthday"
@@ -53,7 +56,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.4"
             android:ellipsize="end"
-            android:lines="1"/>
+            android:lines="1"
+            android:textColor="@color/text_color"/>
     </LinearLayout>
 
 </LinearLayout>

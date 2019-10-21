@@ -18,8 +18,14 @@
         android:visibility="gone"
         android:text="@string/activity_main_nothing_to_show"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:textColor="@color/text_color"/>
 
-    <include layout="@layout/data_list_view"/>
+    <ListView android:id="@+id/data_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:dividerHeight="@dimen/list_view_divider_height"
+        android:divider="@color/transparent"
+        android:orientation="horizontal"/>
 
 </RelativeLayout>
