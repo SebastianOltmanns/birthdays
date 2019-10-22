@@ -1,5 +1,7 @@
 package com.woodplantation.geburtstagsverwaltung.widget;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
@@ -8,12 +10,14 @@ import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.woodplantation.geburtstagsverwaltung.R;
+import com.woodplantation.geburtstagsverwaltung.activities.MainActivity;
 import com.woodplantation.geburtstagsverwaltung.storage.DataSet;
 import com.woodplantation.geburtstagsverwaltung.storage.StorageHandler;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 
 /**
  * Created by Sebu on 21.10.2019.
@@ -24,6 +28,13 @@ public class WidgetService extends RemoteViewsService {
 	@Override
 	public RemoteViewsFactory onGetViewFactory(Intent intent) {
 		return new WidgetFactory(this.getApplicationContext());
+	}
+
+	public static void notifyDataChanged(Context context) {
+		AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+		ComponentName componentName = new ComponentName(context, WidgetProvider.class);
+		int[] appWidgetIds = appWidgetManager.getAppWidgetIds(componentName);
+		appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.data_list_view);
 	}
 
 	class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
@@ -41,7 +52,9 @@ public class WidgetService extends RemoteViewsService {
 
 		@Override
 		public void onDataSetChanged() {
-			dataList = new StorageHandler(context).loadData();
+			StorageHandler storageHandler = new StorageHandler(context);
+			dataList = MainActivity.sortAndStoreData(storageHandler, storageHandler.loadData(),
+					new DataSet.NextBirthdayComparator());
 		}
 
 		@Override
@@ -56,7 +69,6 @@ public class WidgetService extends RemoteViewsService {
 
 		@Override
 		public RemoteViews getViewAt(int i) {
-			Log.d("widgetservice", "getviewat " + i);
 			RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.data_list_view_item);
 			DataSet dataSet = dataList.get(i);
 
@@ -76,12 +88,10 @@ public class WidgetService extends RemoteViewsService {
 				name = firstname + " " + lastname;
 			}
 
-			Log.d("widgetservice", "data... " + remaining + name);
 			views.setTextViewText(R.id.data_list_view_text_name, name);
 			views.setTextViewText(R.id.data_list_view_text_others, others);
 			views.setTextViewText(R.id.data_list_view_text_birthday, DateFormat.getDateInstance(DateFormat.MEDIUM).format(birthday.getTime()));
 			views.setTextViewText(R.id.data_list_view_text_remaining, remaining);
-			Log.d("widgetservice", "views: " + views);
 			return views;
 		}
 

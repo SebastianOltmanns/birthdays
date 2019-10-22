@@ -38,6 +38,7 @@ import com.woodplantation.geburtstagsverwaltung.notifications.NotificationHandle
 import com.woodplantation.geburtstagsverwaltung.R;
 import com.woodplantation.geburtstagsverwaltung.storage.StorageHandler;
 import com.woodplantation.geburtstagsverwaltung.util.IntentCodes;
+import com.woodplantation.geburtstagsverwaltung.widget.WidgetService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -317,6 +318,7 @@ public class MainActivity extends AppCompatActivity {
 					DataSet dataSet = (DataSet) data.getSerializableExtra(IntentCodes.getInstance().DATASET);
 					this.data.add(dataSet);
 					NotificationHandler.addBirthday(this, dataSet);
+					WidgetService.notifyDataChanged(this);
 				}
 				break;
 			}
@@ -334,6 +336,7 @@ public class MainActivity extends AppCompatActivity {
 						NotificationHandler.deleteBirthday(this, this.data.get(index));
 					}
 					this.data.remove(index);
+					WidgetService.notifyDataChanged(this);
 				}
 				break;
 			}
@@ -397,6 +400,7 @@ public class MainActivity extends AppCompatActivity {
 						this.data.add(dataSet);
 						NotificationHandler.addBirthday(this, dataSet);
 					}
+					WidgetService.notifyDataChanged(this);
 
 					new AlertDialog.Builder(this).
 							setMessage(R.string.import_export_import_successfull_text).
@@ -421,16 +425,23 @@ public class MainActivity extends AppCompatActivity {
 		}
 	}
 
-	private void refresh() {
-		if (data == null) {
-			data = new ArrayList<>();
+	public static ArrayList<DataSet> sortAndStoreData(StorageHandler storageHandler,
+												 ArrayList<DataSet> dataList,
+												 Comparator<DataSet> comparator) {
+		if (dataList == null) {
+			dataList = new ArrayList<>();
 		}
 		try {
-			Collections.sort(data, comparator);
+			Collections.sort(dataList, comparator);
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 		}
-		storageHandler.saveData(data);
+		storageHandler.saveData(dataList);
+		return dataList;
+	}
+
+	private void refresh() {
+		data = sortAndStoreData(storageHandler, data, comparator);
 		dataListViewAdapter.clear();
 		dataListViewAdapter.addAll(data);
 		dataListViewAdapter.notifyDataSetChanged();
