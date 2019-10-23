@@ -4,6 +4,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import com.woodplantation.geburtstagsverwaltung.widget.WidgetAlarmReceiver;
+import com.woodplantation.geburtstagsverwaltung.widget.WidgetService;
+
 /**
  * Created by Sebu on 27.03.2016.
  * Contact: sebastian.oltmanns.developer@googlemail.com
@@ -13,6 +16,8 @@ public class BootReceiver extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 		if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
 			NotificationHandler.createAllNotifications(context);
+			WidgetAlarmReceiver.createNextAlarm(context);
+			WidgetService.notifyDataChanged(context);
 		}
 	}
 }

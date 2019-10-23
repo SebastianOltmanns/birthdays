@@ -16,14 +16,12 @@
         android:theme="@style/AppTheme">
 
         <receiver android:name=".notifications.NotificationHandler"/>
-        <receiver android:name=".notifications.BootReceiver"
-                  android:enabled="true">
+        <receiver android:name=".notifications.BootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".notifications.UpdateReceiver"
-                  android:enabled="true">
+        <receiver android:name=".notifications.UpdateReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
             </intent-filter>

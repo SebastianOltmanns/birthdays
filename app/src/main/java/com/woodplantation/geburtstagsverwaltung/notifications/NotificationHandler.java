@@ -240,7 +240,7 @@ public class NotificationHandler extends BroadcastReceiver {
 		} else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 			am.setExact(AlarmManager.RTC_WAKEUP, when.getTimeInMillis(), pendingIntent);
 		} else {
-			am.set(AlarmManager.RTC, when.getTimeInMillis(), pendingIntent);
+			am.set(AlarmManager.RTC_WAKEUP, when.getTimeInMillis(), pendingIntent);
 		}
 
 		Log.d("NotificationHandler", "alarm for " + name + " got created! time: " + sdf.format(when.getTime()) + " with id: " + id);
