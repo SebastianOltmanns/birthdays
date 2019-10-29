@@ -120,6 +120,17 @@ public class DataSet implements Serializable {
 		return (now.get(Calendar.DAY_OF_YEAR) <= tempBirthday.get(Calendar.DAY_OF_YEAR)) ? nextAge : nextAge + 1;
 	}
 
+	public Calendar getNextBirthday() {
+		Calendar birthday = Calendar.getInstance();
+		birthday.setTimeInMillis(this.birthday.getTimeInMillis());
+		Calendar now = Calendar.getInstance();
+		birthday.set(Calendar.YEAR, now.get(Calendar.YEAR));
+		if (birthday.get(Calendar.DAY_OF_YEAR) < now.get(Calendar.DAY_OF_YEAR)) {
+			birthday.add(Calendar.YEAR, 1);
+		}
+		return birthday;
+	}
+
 	/**
 	 * compares two datasets. the dataset with the next birthday to come will be returned as smaller.
 	 */

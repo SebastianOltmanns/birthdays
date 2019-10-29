@@ -19,5 +19,9 @@
     <integer name="preferences_x_days_before_days">7</integer>
     <string tools:ignore="MissingTranslation" name="preferences_display_fab">DISPLAY_FAB</string>
     <bool name="preferences_display_fab">true</bool>
+    <string tools:ignore="MissingTranslation" name="preferences_notification_id">NOTIFICATION_ID</string>
+    <integer name="preferences_notification_id">0</integer>
+    <string tools:ignore="MissingTranslation" name="preferences_first_time">FIRST_TIME</string>
+    <bool name="preferences_first_time">true</bool>
 
 </resources>

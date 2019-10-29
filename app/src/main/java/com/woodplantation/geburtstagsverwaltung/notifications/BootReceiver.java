@@ -14,10 +14,8 @@ import com.woodplantation.geburtstagsverwaltung.widget.WidgetService;
 public class BootReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
-			NotificationHandler.createAllNotifications(context);
-			WidgetAlarmReceiver.createNextAlarm(context);
-			WidgetService.notifyDataChanged(context);
-		}
+		AlarmCreator.createFromScratch(context);
+		WidgetAlarmReceiver.createNextAlarm(context);
+		WidgetService.notifyDataChanged(context);
 	}
 }

@@ -9,7 +9,7 @@ import android.view.MenuItem;
 import android.widget.Switch;
 
 import com.woodplantation.geburtstagsverwaltung.R;
-import com.woodplantation.geburtstagsverwaltung.notifications.MyPreferences;
+import com.woodplantation.geburtstagsverwaltung.util.MyPreferences;
 
 public class SettingsActivity extends AppCompatActivity {
 

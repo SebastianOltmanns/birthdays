@@ -31,10 +31,10 @@ import android.widget.TextView;
 import com.nbsp.materialfilepicker.MaterialFilePicker;
 import com.nbsp.materialfilepicker.ui.FilePickerActivity;
 import com.woodplantation.geburtstagsverwaltung.adapter.DataListViewAdapter;
-import com.woodplantation.geburtstagsverwaltung.notifications.MyPreferences;
+import com.woodplantation.geburtstagsverwaltung.notifications.AlarmCreator;
+import com.woodplantation.geburtstagsverwaltung.util.MyPreferences;
 import com.woodplantation.geburtstagsverwaltung.storage.DataSet;
 import com.woodplantation.geburtstagsverwaltung.notifications.IdGenerator;
-import com.woodplantation.geburtstagsverwaltung.notifications.NotificationHandler;
 import com.woodplantation.geburtstagsverwaltung.R;
 import com.woodplantation.geburtstagsverwaltung.storage.StorageHandler;
 import com.woodplantation.geburtstagsverwaltung.util.IntentCodes;
@@ -150,6 +150,11 @@ public class MainActivity extends AppCompatActivity {
 		fab = findViewById(R.id.fab);
 
 		PACKAGE_NAME = getApplicationContext().getPackageName();
+
+		//execute code one time to create alarms
+		if (new MyPreferences(this, MyPreferences.FILEPATH_SETTINGS).getFirstTimeCall()) {
+			AlarmCreator.createFromScratch(this);
+		}
 
 		//check about alarm permissions
 		ActivityCompat.requestPermissions(this,
@@ -317,7 +322,6 @@ public class MainActivity extends AppCompatActivity {
 				if (resultCode == RESULT_OK) {
 					DataSet dataSet = (DataSet) data.getSerializableExtra(IntentCodes.getInstance().DATASET);
 					this.data.add(dataSet);
-					NotificationHandler.addBirthday(this, dataSet);
 					WidgetService.notifyDataChanged(this);
 				}
 				break;
@@ -331,9 +335,6 @@ public class MainActivity extends AppCompatActivity {
 					}
 					if (newDataSet != null) {
 						this.data.add(newDataSet);
-						NotificationHandler.updateBirthday(this, newDataSet);
-					} else {
-						NotificationHandler.deleteBirthday(this, this.data.get(index));
 					}
 					this.data.remove(index);
 					WidgetService.notifyDataChanged(this);
@@ -343,7 +344,7 @@ public class MainActivity extends AppCompatActivity {
 			case REQUEST_INTENT_NOTIFICATIONS: {
 				if (resultCode == RESULT_OK) {
 					Map<String, ?> map = (Map<String, ?>) data.getSerializableExtra(IntentCodes.getInstance().OLD_PREFERENCES);
-					NotificationHandler.handlePreferences(this, map, this.data);
+					AlarmCreator.preferencesChanged(this, map);
 				}
 				break;
 			}
@@ -398,7 +399,6 @@ public class MainActivity extends AppCompatActivity {
 					for (DataSet dataSet : importedData) {
 						dataSet.id = IdGenerator.getNewId(this);
 						this.data.add(dataSet);
-						NotificationHandler.addBirthday(this, dataSet);
 					}
 					WidgetService.notifyDataChanged(this);
 
