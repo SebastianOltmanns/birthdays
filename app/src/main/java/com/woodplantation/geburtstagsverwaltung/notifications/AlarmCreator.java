@@ -49,8 +49,8 @@ public class AlarmCreator {
 				continue;
 			} else {
 				Intent intent = new Intent(context, AlarmReceiver.class);
-				intent.putExtra(IntentCodes.getInstance().WHICH, i);
-				Log.d("alamcreator","putting intent extra. which code:" + IntentCodes.getInstance().WHICH);
+				intent.putExtra(IntentCodes.WHICH, i);
+				Log.d("alamcreator","putting intent extra" + i + " which code:" + IntentCodes.WHICH);
 				if (changeType == ChangeType.CANCEL) {
 					PendingIntent pi = PendingIntent.getBroadcast(context, i, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 					am.cancel(pi);
@@ -82,6 +82,8 @@ public class AlarmCreator {
 
 	public static void createFromScratch(Context context) {
 		Log.d("alarmcreator","create from scratch");
+		// whatever we will create in the following, at first we delete all existing alarms
+		changeAlarms(context, new ChangeType[]{ChangeType.CANCEL, ChangeType.CANCEL, ChangeType.CANCEL});
 		MyPreferences notificationPreferences = new MyPreferences(context, MyPreferences.FILEPATH_NOTIFICATION);
 		if (!notificationPreferences.getActive()) {
 			return;

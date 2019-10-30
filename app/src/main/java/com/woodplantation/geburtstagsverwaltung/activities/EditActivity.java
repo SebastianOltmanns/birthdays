@@ -28,8 +28,8 @@ public class EditActivity extends InputActivity {
 		super.onCreate(savedInstanceState, R.layout.activity_edit);
 
 		Intent intent = getIntent();
-		index = intent.getIntExtra(IntentCodes.getInstance().INDEX, -1);
-		oldDataSet = (DataSet) intent.getSerializableExtra(IntentCodes.getInstance().DATASET);
+		index = intent.getIntExtra(IntentCodes.INDEX, -1);
+		oldDataSet = (DataSet) intent.getSerializableExtra(IntentCodes.DATASET);
 		if (index == -1) {
 			setResult(RESULT_CANCELED);
 			finish();
@@ -64,14 +64,14 @@ public class EditActivity extends InputActivity {
 			}
 			setBirthdayFromEditTexts();
 			Intent resultIntent = new Intent();
-			resultIntent.putExtra(IntentCodes.getInstance().INDEX, index);
+			resultIntent.putExtra(IntentCodes.INDEX, index);
 			DataSet newDataSet = new DataSet(
 					oldDataSet.id,
 					birthday,
 					firstNameEdit.getText().toString(),
 					lastNameEdit.getText().toString(),
 					othersEdit.getText().toString());
-			resultIntent.putExtra(IntentCodes.getInstance().DATASET, newDataSet);
+			resultIntent.putExtra(IntentCodes.DATASET, newDataSet);
 			setResult(RESULT_OK, resultIntent);
 			finish();
 			return true;
@@ -83,7 +83,7 @@ public class EditActivity extends InputActivity {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					Intent resultIntent = new Intent();
-					resultIntent.putExtra(IntentCodes.getInstance().INDEX, index);
+					resultIntent.putExtra(IntentCodes.INDEX, index);
 					setResult(RESULT_OK, resultIntent);
 					dialog.dismiss();
 					finish();

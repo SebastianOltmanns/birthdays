@@ -30,7 +30,7 @@ public class AddActivity extends InputActivity {
 		birthday.set(Calendar.HOUR_OF_DAY, 8);
 
 		Intent intent = getIntent();
-		newId = intent.getIntExtra(IntentCodes.getInstance().NEW_ID, -1);
+		newId = intent.getIntExtra(IntentCodes.NEW_ID, -1);
 		if (newId == -1) {
 			setResult(RESULT_CANCELED);
 			finish();
@@ -71,7 +71,7 @@ public class AddActivity extends InputActivity {
 				firstNameEdit.getText().toString(),
 				lastNameEdit.getText().toString(),
 				othersEdit.getText().toString());
-		resultIntent.putExtra(IntentCodes.getInstance().DATASET, dataSet);
+		resultIntent.putExtra(IntentCodes.DATASET, dataSet);
 		setResult(RESULT_OK, resultIntent);
 		finish();
 	}

@@ -18,8 +18,8 @@ android {
         applicationId "com.woodplantation.geburtstagsverwaltung"
         minSdkVersion 16
         targetSdkVersion 29
-        versionCode 14
-        versionName "1.5.1"
+        versionCode 15
+        versionName "1.6.0"
     }
     signingConfigs {
         release {

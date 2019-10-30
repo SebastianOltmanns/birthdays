@@ -4,7 +4,6 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.util.Log;
 
 import com.woodplantation.geburtstagsverwaltung.R;
@@ -29,8 +28,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 		Log.d("alarmreceiver","onreceive!");
 		// get which alarm this is
-		int which = intent.getIntExtra(IntentCodes.getInstance().WHICH, -1);
-		Log.d("alarmreceiver","which code:" + IntentCodes.getInstance().WHICH);
+		int which = intent.getIntExtra(IntentCodes.WHICH, -1);
 		// get preferences
 		MyPreferences notificationPreferences = new MyPreferences(context, MyPreferences.FILEPATH_NOTIFICATION);
 		int xDaysBeforeDays = notificationPreferences.getXDaysBeforeDays();
@@ -55,19 +53,47 @@ public class AlarmReceiver extends BroadcastReceiver {
 			}
 		}
 
-		// recreate the alarm in 24 hours
-		AlarmCreator.ChangeType[] changeTypes = {
-				AlarmCreator.ChangeType.NOTHING,
-				AlarmCreator.ChangeType.NOTHING,
-				AlarmCreator.ChangeType.NOTHING
-		};
-		changeTypes[which] = AlarmCreator.ChangeType.CREATE;
-		AlarmCreator.changeAlarms(context, changeTypes);
+		if (which < 0 || which > 2) {
+			AlarmCreator.createFromScratch(context);
+		} else {
+			// recreate the alarm in 24 hours
+			AlarmCreator.ChangeType[] changeTypes = {
+					AlarmCreator.ChangeType.NOTHING,
+					AlarmCreator.ChangeType.NOTHING,
+					AlarmCreator.ChangeType.NOTHING
+			};
+			changeTypes[which] = AlarmCreator.ChangeType.UPDATE;
+			AlarmCreator.changeAlarms(context, changeTypes);
+		}
+
 	}
 
 	private void createNotification(Context context, DataSet dataSet, int which, int xDaysBeforeDays, MyPreferences notificationPreferences) {
 		Log.d("alarmreceiver","creating notification for" + dataSet.firstName + dataSet.lastName);
 		String dayText;
+		if ((which < 0) || (which > 2)) {
+			// if which is something weird, we find out how many days are left on our own
+			Calendar now = Calendar.getInstance();
+			Calendar nextBirthday = dataSet.getNextBirthday();
+			int diffDays = nextBirthday.get(Calendar.DAY_OF_YEAR) - now.get(Calendar.DAY_OF_YEAR);
+			if (nextBirthday.get(Calendar.YEAR) > now.get(Calendar.YEAR)) {
+				diffDays += now.getActualMaximum(Calendar.YEAR);
+			}
+			switch (diffDays) {
+				case 0: {
+					which = 0;
+					break;
+				}
+				case 1: {
+					which = 1;
+					break;
+				}
+				default: {
+					which = 2;
+					break;
+				}
+			}
+		}
 		switch (which) {
 			case 0: {
 				dayText = context.getString(R.string.today);

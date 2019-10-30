@@ -68,8 +68,6 @@ import java.util.regex.Pattern;
  */
 public class MainActivity extends AppCompatActivity {
 
-	public static String PACKAGE_NAME;
-
 	public static final int REQUEST_INTENT_CREATE_DATA_SET = 1;
 	public static final int REQUEST_INTENT_EDIT_DATA_SET = 2;
 	public static final int REQUEST_INTENT_NOTIFICATIONS = 3;
@@ -149,8 +147,6 @@ public class MainActivity extends AppCompatActivity {
 
 		fab = findViewById(R.id.fab);
 
-		PACKAGE_NAME = getApplicationContext().getPackageName();
-
 		//execute code one time to create alarms
 		if (new MyPreferences(this, MyPreferences.FILEPATH_SETTINGS).getFirstTimeCall()) {
 			AlarmCreator.createFromScratch(this);
@@ -170,8 +166,8 @@ public class MainActivity extends AppCompatActivity {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				DataSet dataSet = dataListViewAdapter.getItem(position);
 				Intent editIntent = new Intent(MainActivity.this, EditActivity.class);
-				editIntent.putExtra(IntentCodes.getInstance().INDEX, data.indexOf(dataSet));
-				editIntent.putExtra(IntentCodes.getInstance().DATASET, dataSet);
+				editIntent.putExtra(IntentCodes.INDEX, data.indexOf(dataSet));
+				editIntent.putExtra(IntentCodes.DATASET, dataSet);
 				startActivityForResult(editIntent, REQUEST_INTENT_EDIT_DATA_SET);
 			}
 		});
@@ -227,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
 
 		//open the create activity and pass the new id
 		Intent intent = new Intent(MainActivity.this, AddActivity.class);
-		intent.putExtra(IntentCodes.getInstance().NEW_ID, id);
+		intent.putExtra(IntentCodes.NEW_ID, id);
 		startActivityForResult(intent, REQUEST_INTENT_CREATE_DATA_SET);
 	}
 
@@ -320,7 +316,7 @@ public class MainActivity extends AppCompatActivity {
 
 			case REQUEST_INTENT_CREATE_DATA_SET: {
 				if (resultCode == RESULT_OK) {
-					DataSet dataSet = (DataSet) data.getSerializableExtra(IntentCodes.getInstance().DATASET);
+					DataSet dataSet = (DataSet) data.getSerializableExtra(IntentCodes.DATASET);
 					this.data.add(dataSet);
 					WidgetService.notifyDataChanged(this);
 				}
@@ -328,8 +324,8 @@ public class MainActivity extends AppCompatActivity {
 			}
 			case REQUEST_INTENT_EDIT_DATA_SET: {
 				if (resultCode == RESULT_OK) {
-					DataSet newDataSet = (DataSet) data.getSerializableExtra(IntentCodes.getInstance().DATASET);
-					int index = data.getIntExtra(IntentCodes.getInstance().INDEX, -1);
+					DataSet newDataSet = (DataSet) data.getSerializableExtra(IntentCodes.DATASET);
+					int index = data.getIntExtra(IntentCodes.INDEX, -1);
 					if (index == -1) {
 						return;
 					}
@@ -343,7 +339,7 @@ public class MainActivity extends AppCompatActivity {
 			}
 			case REQUEST_INTENT_NOTIFICATIONS: {
 				if (resultCode == RESULT_OK) {
-					Map<String, ?> map = (Map<String, ?>) data.getSerializableExtra(IntentCodes.getInstance().OLD_PREFERENCES);
+					Map<String, ?> map = (Map<String, ?>) data.getSerializableExtra(IntentCodes.OLD_PREFERENCES);
 					AlarmCreator.preferencesChanged(this, map);
 				}
 				break;

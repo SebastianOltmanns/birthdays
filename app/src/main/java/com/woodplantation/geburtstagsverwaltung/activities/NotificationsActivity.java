@@ -122,7 +122,7 @@ public class NotificationsActivity extends AppCompatActivity {
 			case R.id.menu_ok:
 				Map<String, ?> map = preferences.preferences.getAll();
 				Intent resultIntent = new Intent();
-				resultIntent.putExtra(IntentCodes.getInstance().OLD_PREFERENCES, (Serializable) map);
+				resultIntent.putExtra(IntentCodes.OLD_PREFERENCES, (Serializable) map);
 
 				saveThePreferences();
 
