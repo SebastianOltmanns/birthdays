@@ -1,7 +1,5 @@
 package com.woodplantation.geburtstagsverwaltung.activities;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +8,7 @@ import android.view.MenuItem;
 
 import com.woodplantation.geburtstagsverwaltung.storage.DataSet;
 import com.woodplantation.geburtstagsverwaltung.R;
+import com.woodplantation.geburtstagsverwaltung.util.IntentCodes;
 
 import java.util.Calendar;
 
@@ -31,7 +30,7 @@ public class AddActivity extends InputActivity {
 		birthday.set(Calendar.HOUR_OF_DAY, 8);
 
 		Intent intent = getIntent();
-		newId = intent.getIntExtra(MainActivity.INTENT_CODE_NEW_ID, -1);
+		newId = intent.getIntExtra(IntentCodes.NEW_ID, -1);
 		if (newId == -1) {
 			setResult(RESULT_CANCELED);
 			finish();
@@ -72,7 +71,7 @@ public class AddActivity extends InputActivity {
 				firstNameEdit.getText().toString(),
 				lastNameEdit.getText().toString(),
 				othersEdit.getText().toString());
-		resultIntent.putExtra(MainActivity.INTENT_CODE_DATA_SET, dataSet);
+		resultIntent.putExtra(IntentCodes.DATASET, dataSet);
 		setResult(RESULT_OK, resultIntent);
 		finish();
 	}

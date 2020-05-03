@@ -13,12 +13,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,21 +31,28 @@ import android.widget.TextView;
 import com.nbsp.materialfilepicker.MaterialFilePicker;
 import com.nbsp.materialfilepicker.ui.FilePickerActivity;
 import com.woodplantation.geburtstagsverwaltung.adapter.DataListViewAdapter;
-import com.woodplantation.geburtstagsverwaltung.notifications.MyPreferences;
+import com.woodplantation.geburtstagsverwaltung.notifications.AlarmCreator;
+import com.woodplantation.geburtstagsverwaltung.util.MyPreferences;
 import com.woodplantation.geburtstagsverwaltung.storage.DataSet;
 import com.woodplantation.geburtstagsverwaltung.notifications.IdGenerator;
-import com.woodplantation.geburtstagsverwaltung.notifications.NotificationHandler;
 import com.woodplantation.geburtstagsverwaltung.R;
 import com.woodplantation.geburtstagsverwaltung.storage.StorageHandler;
+import com.woodplantation.geburtstagsverwaltung.util.IntentCodes;
+import com.woodplantation.geburtstagsverwaltung.widget.WidgetService;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -68,11 +76,6 @@ public class MainActivity extends AppCompatActivity {
 	public static final int REQUEST_PERMISSION_READ_EXTERNAL_STORAGE = 6;
 	public static final int REQUEST_PERMISSION_SET_ALARM = 7;
 
-	public static final String INTENT_CODE_DATA_SET = "DATASET";
-	public static final String INTENT_CODE_EDIT_INDEX = "DATASET_INDEX";
-	public static final String INTENT_CODE_NEW_ID = "DATASET_NEW_ID";
-	public static final String INTENT_CODE_OLD_PREFERENCES = "OLD_PREFERENCES";
-
 	private static final String FILE_EXPORT_DIRECTORY = "birthdays";
 	private static final String FILE_EXPORT_NAME = "export_";
 	private static final String FILE_EXPORT_EXTENSION = ".birthdays";
@@ -80,10 +83,9 @@ public class MainActivity extends AppCompatActivity {
 
 	private ArrayList<DataSet> data;
 	private StorageHandler storageHandler;
-	private ListView dataListView;
 	private DataListViewAdapter dataListViewAdapter;
 
-	private Comparator<DataSet> comparator = new DataSet.NextBirthdayComaparator();
+	private Comparator<DataSet> comparator = new DataSet.NextBirthdayComparator();
 
 	private AlertDialog importExportFailDialog;
 	private AlertDialog importExportStorageFailDialog;
@@ -128,8 +130,8 @@ public class MainActivity extends AppCompatActivity {
             NotificationChannel mChannel = new NotificationChannel(channelId, name, importance);
             // Register the channel with the system; you can't change the importance
             // or other notification behaviors after this
-            NotificationManager notificationManager = (NotificationManager) getSystemService(
-                    NOTIFICATION_SERVICE);
+            NotificationManager notificationManager = getSystemService(
+                    NotificationManager.class);
             notificationManager.createNotificationChannel(mChannel);
         }
     }
@@ -139,11 +141,16 @@ public class MainActivity extends AppCompatActivity {
 		//initialize layout and toolbar
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		Toolbar toolbar = findViewById(R.id.toolbar);
 		toolbar.setTitle(R.string.activity_main_label);
 		setSupportActionBar(toolbar);
 
 		fab = findViewById(R.id.fab);
+
+		//execute code one time to create alarms
+		if (new MyPreferences(this, MyPreferences.FILEPATH_SETTINGS).getFirstTimeCall()) {
+			AlarmCreator.createFromScratch(this);
+		}
 
 		//check about alarm permissions
 		ActivityCompat.requestPermissions(this,
@@ -152,15 +159,15 @@ public class MainActivity extends AppCompatActivity {
 
 		//bind the list layout to data adapter
 		dataListViewAdapter = new DataListViewAdapter(this, R.layout.data_list_view_item);
-		dataListView = (ListView) findViewById(R.id.data_list_view);
+		ListView dataListView = findViewById(R.id.data_list_view);
 		dataListView.setAdapter(dataListViewAdapter);
 		dataListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				DataSet dataSet = dataListViewAdapter.getItem(position);
 				Intent editIntent = new Intent(MainActivity.this, EditActivity.class);
-				editIntent.putExtra(INTENT_CODE_EDIT_INDEX, data.indexOf(dataSet));
-				editIntent.putExtra(INTENT_CODE_DATA_SET, dataSet);
+				editIntent.putExtra(IntentCodes.INDEX, data.indexOf(dataSet));
+				editIntent.putExtra(IntentCodes.DATASET, dataSet);
 				startActivityForResult(editIntent, REQUEST_INTENT_EDIT_DATA_SET);
 			}
 		});
@@ -183,7 +190,11 @@ public class MainActivity extends AppCompatActivity {
 		super.onResume();
 		refresh();
 		MyPreferences preferences = new MyPreferences(this, MyPreferences.FILEPATH_SETTINGS);
-		fab.setVisibility(preferences.getDisplayFAB() ? View.VISIBLE : View.INVISIBLE);
+		if (preferences.getDisplayFAB()) {
+			fab.show();
+		} else {
+			fab.hide();
+		}
 	}
 
 	@Override
@@ -212,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
 
 		//open the create activity and pass the new id
 		Intent intent = new Intent(MainActivity.this, AddActivity.class);
-		intent.putExtra(INTENT_CODE_NEW_ID, id);
+		intent.putExtra(IntentCodes.NEW_ID, id);
 		startActivityForResult(intent, REQUEST_INTENT_CREATE_DATA_SET);
 	}
 
@@ -268,7 +279,7 @@ public class MainActivity extends AppCompatActivity {
 				return true;
 			}
 			case R.id.main_sort_next: {
-				comparator = new DataSet.NextBirthdayComaparator();
+				comparator = new DataSet.NextBirthdayComparator();
 				item.setChecked(true);
 				refresh();
 				return true;
@@ -305,33 +316,31 @@ public class MainActivity extends AppCompatActivity {
 
 			case REQUEST_INTENT_CREATE_DATA_SET: {
 				if (resultCode == RESULT_OK) {
-					DataSet dataSet = (DataSet) data.getSerializableExtra(INTENT_CODE_DATA_SET);
+					DataSet dataSet = (DataSet) data.getSerializableExtra(IntentCodes.DATASET);
 					this.data.add(dataSet);
-					NotificationHandler.addBirthday(this, dataSet);
+					WidgetService.notifyDataChanged(this);
 				}
 				break;
 			}
 			case REQUEST_INTENT_EDIT_DATA_SET: {
 				if (resultCode == RESULT_OK) {
-					DataSet newDataSet = (DataSet) data.getSerializableExtra(INTENT_CODE_DATA_SET);
-					int index = data.getIntExtra(INTENT_CODE_EDIT_INDEX, -1);
+					DataSet newDataSet = (DataSet) data.getSerializableExtra(IntentCodes.DATASET);
+					int index = data.getIntExtra(IntentCodes.INDEX, -1);
 					if (index == -1) {
 						return;
 					}
 					if (newDataSet != null) {
 						this.data.add(newDataSet);
-						NotificationHandler.updateBirthday(this, newDataSet);
-					} else {
-						NotificationHandler.deleteBirthday(this, this.data.get(index));
 					}
 					this.data.remove(index);
+					WidgetService.notifyDataChanged(this);
 				}
 				break;
 			}
 			case REQUEST_INTENT_NOTIFICATIONS: {
 				if (resultCode == RESULT_OK) {
-					Map<String, ?> map = (Map<String, ?>) data.getSerializableExtra(INTENT_CODE_OLD_PREFERENCES);
-					NotificationHandler.handlePreferences(this, map, this.data);
+					Map<String, ?> map = (Map<String, ?>) data.getSerializableExtra(IntentCodes.OLD_PREFERENCES);
+					AlarmCreator.preferencesChanged(this, map);
 				}
 				break;
 			}
@@ -347,15 +356,32 @@ public class MainActivity extends AppCompatActivity {
 					importExportFailDialog.show();
 				}
 				try {
-					FileInputStream fis = new FileInputStream(file);
-					BufferedInputStream bis = new BufferedInputStream(fis);
-					ObjectInputStream ois = new ObjectInputStream(bis);
+					ArrayList<DataSet> importedData = new ArrayList<>();
+					try {
+						//first try block: for json reading
+						FileReader fr = new FileReader(file);
+						BufferedReader br = new BufferedReader(fr);
 
-					ArrayList<DataSet> importedData = (ArrayList<DataSet>) ois.readObject();
+						JSONArray jsonArray = new JSONArray(br.readLine());
+						for (int i = 0; i < jsonArray.length(); i++) {
+							importedData.add(new DataSet((JSONObject) jsonArray.get(i)));
+						}
 
-					ois.close();
-					bis.close();
-					fis.close();
+						br.close();
+						fr.close();
+					} catch (JSONException e) {
+						e.printStackTrace();
+						//if json fails: try old reading method (using serializable interface)
+						FileInputStream fis = new FileInputStream(file);
+						BufferedInputStream bis = new BufferedInputStream(fis);
+						ObjectInputStream ois = new ObjectInputStream(bis);
+
+						importedData = (ArrayList<DataSet>) ois.readObject();
+
+						ois.close();
+						bis.close();
+						fis.close();
+					}
 
 					if (importedData.size() + this.data.size() >= getResources().getInteger(R.integer.MAXIMUM_DATA_SIZE)) {
 						new AlertDialog.Builder(this).
@@ -369,8 +395,8 @@ public class MainActivity extends AppCompatActivity {
 					for (DataSet dataSet : importedData) {
 						dataSet.id = IdGenerator.getNewId(this);
 						this.data.add(dataSet);
-						NotificationHandler.addBirthday(this, dataSet);
 					}
+					WidgetService.notifyDataChanged(this);
 
 					new AlertDialog.Builder(this).
 							setMessage(R.string.import_export_import_successfull_text).
@@ -395,16 +421,23 @@ public class MainActivity extends AppCompatActivity {
 		}
 	}
 
-	private void refresh() {
-		if (data == null) {
-			data = new ArrayList<>();
+	public static ArrayList<DataSet> sortAndStoreData(StorageHandler storageHandler,
+												 ArrayList<DataSet> dataList,
+												 Comparator<DataSet> comparator) {
+		if (dataList == null) {
+			dataList = new ArrayList<>();
 		}
 		try {
-			Collections.sort(data, comparator);
+			Collections.sort(dataList, comparator);
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 		}
-		storageHandler.saveData(data);
+		storageHandler.saveData(dataList);
+		return dataList;
+	}
+
+	private void refresh() {
+		data = sortAndStoreData(storageHandler, data, comparator);
 		dataListViewAdapter.clear();
 		dataListViewAdapter.addAll(data);
 		dataListViewAdapter.notifyDataSetChanged();
@@ -442,16 +475,18 @@ public class MainActivity extends AppCompatActivity {
 			if (data == null) {
 				importExportFailDialog.show();
 			}
+			JSONArray jsonArray = new JSONArray();
+			for (DataSet dataSet : data) {
+				jsonArray.put(dataSet.toJSON());
+			}
 			try {
-				FileOutputStream fos = new FileOutputStream(output);
-				BufferedOutputStream bos = new BufferedOutputStream(fos);
-				ObjectOutputStream oos = new ObjectOutputStream(bos);
+				FileWriter fw = new FileWriter(output);
+				BufferedWriter bw = new BufferedWriter(fw);
 
-				oos.writeObject(data);
+				bw.write(jsonArray.toString());
 
-				oos.close();
-				bos.close();
-				fos.close();
+				bw.close();
+				fw.close();
 
 				new AlertDialog.Builder(MainActivity.this).
 						setTitle(R.string.import_export_export_successfull_title).
@@ -504,7 +539,7 @@ public class MainActivity extends AppCompatActivity {
 
 	private class PermissionSettingsClickListener implements DialogInterface.OnClickListener {
 		private int requestCode;
-		public PermissionSettingsClickListener(int requestCode) {
+		PermissionSettingsClickListener(int requestCode) {
 			this.requestCode = requestCode;
 		}
 
@@ -522,7 +557,7 @@ public class MainActivity extends AppCompatActivity {
 	private DialogInterface.OnClickListener importPermissionSettingsClickListener = new PermissionSettingsClickListener(REQUEST_PERMISSION_READ_EXTERNAL_STORAGE);
 
 	@Override
-	public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 		switch (requestCode) {
 			case REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE: {
 				if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {

@@ -9,25 +9,34 @@
 
 
     <application
+        android:requestLegacyExternalStorage="true"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <receiver android:name=".notifications.NotificationHandler"/>
-        <receiver android:name=".notifications.BootReceiver"
-                  android:enabled="true">
+        <receiver android:name=".notifications.AlarmReceiver"/>
+        <receiver android:name=".notifications.BootReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".notifications.UpdateReceiver"
-                  android:enabled="true">
+        <receiver android:name=".notifications.UpdateReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.MY_PACKAGE_REPLACED"></action>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
             </intent-filter>
         </receiver>
+        <receiver android:name=".widget.WidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider"
+                       android:resource="@xml/widget_info" />
+        </receiver>
+        <service android:name=".widget.WidgetService"
+                 android:permission="android.permission.BIND_REMOTEVIEWS" />
+        <receiver android:name=".widget.WidgetAlarmReceiver" />
 
         <activity
             android:name=".activities.MainActivity"

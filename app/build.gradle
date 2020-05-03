@@ -11,15 +11,15 @@ def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion '28.0.2'
+    compileSdkVersion 29
+    buildToolsVersion '29.0.2'
 
     defaultConfig {
         applicationId "com.woodplantation.geburtstagsverwaltung"
         minSdkVersion 16
-        targetSdkVersion 27
-        versionCode 12
-        versionName "1.4.1"
+        targetSdkVersion 29
+        versionCode 16
+        versionName "1.6.1"
     }
     signingConfigs {
         release {
@@ -49,8 +49,8 @@ repositories {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     testImplementation 'junit:junit:4.12'
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support:design:27.1.1'
-    implementation 'com.android.support:gridlayout-v7:27.1.1'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.gridlayout:gridlayout:1.0.0'
     implementation 'com.nbsp:library:1.8'
 }

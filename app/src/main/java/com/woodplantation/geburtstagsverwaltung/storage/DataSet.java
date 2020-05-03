@@ -1,8 +1,12 @@
 package com.woodplantation.geburtstagsverwaltung.storage;
 
-import android.service.autofill.Dataset;
-import android.support.annotation.NonNull;
+import android.content.Context;
 import android.text.TextUtils;
+
+import com.woodplantation.geburtstagsverwaltung.R;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.Calendar;
@@ -30,7 +34,55 @@ public class DataSet implements Serializable {
 		this.others = others;
 	}
 
-	public int getRemaining(Calendar now) {
+	public DataSet(JSONObject json) throws JSONException {
+		this.id = (int) json.get("id");
+		this.birthday = Calendar.getInstance();
+		this.birthday.setTimeInMillis((long) json.get("birthday"));
+		this.firstName = (String) json.get("firstName");
+		this.lastName = (String) json.get("lastName");
+		this.others = (String) json.get("others");
+	}
+
+	public JSONObject toJSON() {
+		JSONObject json = new JSONObject();
+
+		try {
+			json.put("id", id);
+			json.put("birthday", birthday.getTimeInMillis());
+			json.put("firstName", firstName);
+			json.put("lastName", lastName);
+			json.put("others", others);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return json;
+	}
+
+	public String getRemainingWithAge(Context context) {
+		Calendar now = Calendar.getInstance();
+		int daysRemaining = getRemaining(now);
+
+		String textRemaining;
+
+		switch (daysRemaining) {
+			case 0:
+				textRemaining = context.getString(R.string.today);
+				break;
+			case 1:
+				textRemaining = context.getString(R.string.tomorrow);
+				break;
+			default:
+				textRemaining = context.getString(R.string.in_x_days, daysRemaining);
+				break;
+		}
+
+		int age = getNextAge(now);
+
+		return context.getString(R.string.xth_birthday, textRemaining, age);
+	}
+
+	private int getRemaining(Calendar now) {
 		//make copy from birthday since we dont want to change original
 		Calendar tempBirthday = Calendar.getInstance();
 		tempBirthday.setTimeInMillis(birthday.getTimeInMillis());
@@ -68,10 +120,21 @@ public class DataSet implements Serializable {
 		return (now.get(Calendar.DAY_OF_YEAR) <= tempBirthday.get(Calendar.DAY_OF_YEAR)) ? nextAge : nextAge + 1;
 	}
 
+	public Calendar getNextBirthday() {
+		Calendar birthday = Calendar.getInstance();
+		birthday.setTimeInMillis(this.birthday.getTimeInMillis());
+		Calendar now = Calendar.getInstance();
+		birthday.set(Calendar.YEAR, now.get(Calendar.YEAR));
+		if (birthday.get(Calendar.DAY_OF_YEAR) < now.get(Calendar.DAY_OF_YEAR)) {
+			birthday.add(Calendar.YEAR, 1);
+		}
+		return birthday;
+	}
+
 	/**
 	 * compares two datasets. the dataset with the next birthday to come will be returned as smaller.
 	 */
-	public static class NextBirthdayComaparator implements Comparator<DataSet> {
+	public static class NextBirthdayComparator implements Comparator<DataSet> {
 		@Override
 		public int compare(DataSet t0, DataSet t1) {
 			Calendar now = Calendar.getInstance();

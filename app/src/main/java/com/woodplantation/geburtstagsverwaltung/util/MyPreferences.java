@@ -1,9 +1,8 @@
-package com.woodplantation.geburtstagsverwaltung.notifications;
+package com.woodplantation.geburtstagsverwaltung.util;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.woodplantation.geburtstagsverwaltung.R;
 
@@ -77,6 +76,41 @@ public class MyPreferences {
 		return preferences
 				.getBoolean(context.getString(R.string.preferences_display_fab),
 						context.getResources().getBoolean(R.bool.preferences_display_fab));
+	}
+
+	public int getNextNotificationId() {
+		int id = preferences
+				.getInt(context.getString(R.string.preferences_notification_id),
+						context.getResources().getInteger(R.integer.preferences_notification_id));
+		preferences.edit().putInt(context.getString(R.string.preferences_notification_id),
+				(id + 1) % Integer.MAX_VALUE).apply();
+		return id;
+	}
+
+	public boolean getFirstTimeCall() {
+		boolean firstTime = preferences
+				.getBoolean(context.getString(R.string.preferences_first_time),
+						context.getResources().getBoolean(R.bool.preferences_first_time));
+		if (firstTime) {
+			preferences.edit().putBoolean(context.getString(R.string.preferences_first_time), false).apply();
+		}
+		return firstTime;
+	}
+
+	public boolean[] getWhich() {
+		return new boolean[]{
+				getOnBirthdayActive(),
+				getOneDayBeforeActive(),
+				getXDaysBeforeActive()
+		};
+	}
+
+	public int[] getClocks() {
+		return new int[]{
+				getOnBirthdayClock(),
+				getOneDayBeforeClock(),
+				getXDaysBeforeClock()
+		};
 	}
 
 }

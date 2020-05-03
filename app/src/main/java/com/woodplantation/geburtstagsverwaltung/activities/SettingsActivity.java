@@ -2,14 +2,14 @@ package com.woodplantation.geburtstagsverwaltung.activities;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Switch;
 
 import com.woodplantation.geburtstagsverwaltung.R;
-import com.woodplantation.geburtstagsverwaltung.notifications.MyPreferences;
+import com.woodplantation.geburtstagsverwaltung.util.MyPreferences;
 
 public class SettingsActivity extends AppCompatActivity {
 

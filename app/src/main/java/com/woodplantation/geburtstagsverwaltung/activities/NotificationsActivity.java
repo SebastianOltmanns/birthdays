@@ -6,15 +6,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.text.SpannableStringBuilder;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,8 +24,9 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.woodplantation.geburtstagsverwaltung.notifications.MyPreferences;
+import com.woodplantation.geburtstagsverwaltung.util.MyPreferences;
 import com.woodplantation.geburtstagsverwaltung.R;
+import com.woodplantation.geburtstagsverwaltung.util.IntentCodes;
 
 import java.io.Serializable;
 import java.util.Calendar;
@@ -122,7 +122,7 @@ public class NotificationsActivity extends AppCompatActivity {
 			case R.id.menu_ok:
 				Map<String, ?> map = preferences.preferences.getAll();
 				Intent resultIntent = new Intent();
-				resultIntent.putExtra(MainActivity.INTENT_CODE_OLD_PREFERENCES, (Serializable) map);
+				resultIntent.putExtra(IntentCodes.OLD_PREFERENCES, (Serializable) map);
 
 				saveThePreferences();
 
