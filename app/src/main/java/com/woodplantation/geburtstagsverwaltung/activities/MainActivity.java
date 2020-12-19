@@ -38,6 +38,7 @@ import com.woodplantation.geburtstagsverwaltung.notifications.IdGenerator;
 import com.woodplantation.geburtstagsverwaltung.R;
 import com.woodplantation.geburtstagsverwaltung.storage.StorageHandler;
 import com.woodplantation.geburtstagsverwaltung.util.IntentCodes;
+import com.woodplantation.geburtstagsverwaltung.viewmodel.MainViewModel;
 import com.woodplantation.geburtstagsverwaltung.widget.WidgetService;
 
 import org.json.JSONArray;
@@ -62,11 +63,15 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-/**
- * Created by Sebu on 09.03.2016.
- * Contact: sebastian.oltmanns.developer@googlemail.com
- */
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class MainActivity extends AppCompatActivity {
+
+	@Inject
+	MainViewModel mainViewModel;
 
 	public static final int REQUEST_INTENT_CREATE_DATA_SET = 1;
 	public static final int REQUEST_INTENT_EDIT_DATA_SET = 2;
