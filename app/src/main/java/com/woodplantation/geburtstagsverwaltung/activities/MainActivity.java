@@ -20,6 +20,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.hilt.lifecycle.HiltViewModelFactory;
+import androidx.lifecycle.ViewModelProvider;
+
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -70,8 +73,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class MainActivity extends AppCompatActivity {
 
-	@Inject
-	MainViewModel mainViewModel;
+	private MainViewModel mainViewModel;
 
 	public static final int REQUEST_INTENT_CREATE_DATA_SET = 1;
 	public static final int REQUEST_INTENT_EDIT_DATA_SET = 2;
@@ -151,6 +153,8 @@ public class MainActivity extends AppCompatActivity {
 		setSupportActionBar(toolbar);
 
 		fab = findViewById(R.id.fab);
+
+		mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
 		//execute code one time to create alarms
 		if (new MyPreferences(this, MyPreferences.FILEPATH_SETTINGS).getFirstTimeCall()) {
