@@ -1,12 +1,10 @@
-package com.woodplantation.geburtstagsverwaltung.repository;
+package com.woodplantation.geburtstagsverwaltung.storage;
 
 import android.content.Context;
 
 import com.woodplantation.geburtstagsverwaltung.R;
 import com.woodplantation.geburtstagsverwaltung.database.EntryDao;
 import com.woodplantation.geburtstagsverwaltung.model.Entry;
-import com.woodplantation.geburtstagsverwaltung.storage.DataSet;
-import com.woodplantation.geburtstagsverwaltung.storage.StorageHandler;
 import com.woodplantation.geburtstagsverwaltung.util.MyPreferences;
 
 import java.time.LocalDate;
@@ -16,27 +14,22 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import dagger.hilt.android.qualifiers.ApplicationContext;
+public class MigrateToDatabase {
 
-public class Repository {
-
-    private final EntryDao entryDao;
     private final StorageHandler storageHandler;
     private final MyPreferences myPreferences;
     private final Context context;
+    private final EntryDao entryDao;
 
     @Inject
-    public Repository(EntryDao entryDao, StorageHandler storageHandler, MyPreferences myPreferences, @ApplicationContext Context context) {
-        this.entryDao = entryDao;
+    public MigrateToDatabase(StorageHandler storageHandler, MyPreferences myPreferences, Context context, EntryDao entryDao) {
         this.storageHandler = storageHandler;
         this.myPreferences = myPreferences;
         this.context = context;
-
-        migrateTwoPreferencesToOne();
-        migrateStorageToDb();
+        this.entryDao = entryDao;
     }
 
-    private void migrateStorageToDb() {
+    public void migrate() {
         if (!myPreferences.isStorageMigrated()) {
             // load current data
             ArrayList<DataSet> data = storageHandler.loadData();
@@ -67,12 +60,6 @@ public class Repository {
                 context.deleteFile(StorageHandler.filePath);
             } catch (Exception ignored) {
             }
-        }
-    }
-
-    private void migrateTwoPreferencesToOne() {
-        if (!myPreferences.arePreferencesMigrated()) {
-
         }
     }
 

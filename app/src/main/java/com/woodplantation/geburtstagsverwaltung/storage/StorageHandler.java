@@ -13,6 +13,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.qualifiers.ApplicationContext;
+
 /**
  * Created by Sebu on 10.03.2016.
  * Contact: sebastian.oltmanns.developer@googlemail.com
@@ -20,9 +24,10 @@ import java.util.ArrayList;
 public class StorageHandler {
 
 	private Context context;
-	private static final String filePath = "data";
+	public static final String filePath = "data";
 
-	public StorageHandler(Context context) {
+	@Inject
+	public StorageHandler(@ApplicationContext Context context) {
 		this.context = context;
 	}
 

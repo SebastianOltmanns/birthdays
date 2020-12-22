@@ -2,9 +2,12 @@ package com.woodplantation.geburtstagsverwaltung.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.woodplantation.geburtstagsverwaltung.R;
+
+import javax.inject.Inject;
+
+import dagger.hilt.android.qualifiers.ApplicationContext;
 
 /**
  * Created by Sebu on 19.10.2016.
@@ -13,11 +16,20 @@ import com.woodplantation.geburtstagsverwaltung.R;
 
 public class MyPreferences {
 
+	//TODO
+	//TODO migrate two sharedpreferences into one
+	//TODO
 	public static final String FILEPATH_NOTIFICATION = "notification_settings";
 	public static final String FILEPATH_SETTINGS = "settings";
 
 	private Context context;
 	public SharedPreferences preferences;
+
+	@Inject
+	public MyPreferences(@ApplicationContext Context context) {
+		this.context = context;
+		this.preferences = context.getSharedPreferences(FILEPATH_SETTINGS, Context.MODE_PRIVATE);
+	}
 
 	public MyPreferences(Context context, String filepath) {
 		this.context = context;
@@ -111,6 +123,18 @@ public class MyPreferences {
 				getOneDayBeforeClock(),
 				getXDaysBeforeClock()
 		};
+	}
+
+	public boolean isStorageMigrated() {
+		return preferences
+				.getBoolean(context.getString(R.string.preferences_storage_migrated),
+						context.getResources().getBoolean(R.bool.preferences_storage_migrated));
+	}
+
+	public boolean arePreferencesMigrated() {
+		return preferences
+				.getBoolean(context.getString(R.string.preferences_preferences_migrated),
+						context.getResources().getBoolean(R.bool.preferences_preferences_migrated));
 	}
 
 }

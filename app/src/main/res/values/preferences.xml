@@ -23,5 +23,9 @@
     <integer name="preferences_notification_id">0</integer>
     <string tools:ignore="MissingTranslation" name="preferences_first_time">FIRST_TIME</string>
     <bool name="preferences_first_time">true</bool>
+    <string tools:ignore="MissingTranslation" name="preferences_storage_migrated">STORAGE_MIGRATED</string>
+    <bool name="preferences_storage_migrated">false</bool>
+    <string tools:ignore="MissingTranslation" name="preferences_preferences_migrated">PREFERENCES_MIGRATED</string>
+    <bool name="preferences_preferences_migrated">false</bool>
 
 </resources>
