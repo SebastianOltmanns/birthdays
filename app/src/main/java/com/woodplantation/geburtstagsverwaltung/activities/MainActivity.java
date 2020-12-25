@@ -74,6 +74,8 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class MainActivity extends AppCompatActivity {
 
 	private MainViewModel mainViewModel;
+	@Inject
+	MyPreferences myPreferences;
 
 	public static final int REQUEST_INTENT_CREATE_DATA_SET = 1;
 	public static final int REQUEST_INTENT_EDIT_DATA_SET = 2;
@@ -157,8 +159,8 @@ public class MainActivity extends AppCompatActivity {
 		mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
 		//execute code one time to create alarms
-		if (new MyPreferences(this, MyPreferences.FILEPATH_SETTINGS).getFirstTimeCall()) {
-			AlarmCreator.createFromScratch(this);
+		if (myPreferences.getFirstTimeCall()) {
+			AlarmCreator.createFromScratch(this, myPreferences);
 		}
 
 		//check about alarm permissions
@@ -198,8 +200,7 @@ public class MainActivity extends AppCompatActivity {
 	public void onResume() {
 		super.onResume();
 		refresh();
-		MyPreferences preferences = new MyPreferences(this, MyPreferences.FILEPATH_SETTINGS);
-		if (preferences.getDisplayFAB()) {
+		if (myPreferences.getDisplayFAB()) {
 			fab.show();
 		} else {
 			fab.hide();
@@ -349,7 +350,7 @@ public class MainActivity extends AppCompatActivity {
 			case REQUEST_INTENT_NOTIFICATIONS: {
 				if (resultCode == RESULT_OK) {
 					Map<String, ?> map = (Map<String, ?>) data.getSerializableExtra(IntentCodes.OLD_PREFERENCES);
-					AlarmCreator.preferencesChanged(this, map);
+					AlarmCreator.preferencesChanged(this, map, myPreferences);
 				}
 				break;
 			}

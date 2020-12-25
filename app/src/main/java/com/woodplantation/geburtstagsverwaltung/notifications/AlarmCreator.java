@@ -36,12 +36,12 @@ public class AlarmCreator {
 		return allNothing;
 	}
 
-	public static void changeAlarms(Context context, ChangeType[] changeTypes) {
+	public static void changeAlarms(Context context, ChangeType[] changeTypes, MyPreferences preferences) {
 		Log.d("alarmcreator","change alarms!" + Arrays.toString(changeTypes));
 		if (allNothing(changeTypes)) {
 			return;
 		}
-		int[] clocks = new MyPreferences(context, MyPreferences.FILEPATH_NOTIFICATION).getClocks();
+		int[] clocks = preferences.getClocks();
 		AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		for (int i = 0; i < changeTypes.length; i++) {
 			ChangeType changeType = changeTypes[i];
@@ -80,15 +80,14 @@ public class AlarmCreator {
 		}
 	}
 
-	public static void createFromScratch(Context context) {
+	public static void createFromScratch(Context context, MyPreferences preferences) {
 		Log.d("alarmcreator","create from scratch");
 		// whatever we will create in the following, at first we delete all existing alarms
-		changeAlarms(context, new ChangeType[]{ChangeType.CANCEL, ChangeType.CANCEL, ChangeType.CANCEL});
-		MyPreferences notificationPreferences = new MyPreferences(context, MyPreferences.FILEPATH_NOTIFICATION);
-		if (!notificationPreferences.getActive()) {
+		changeAlarms(context, new ChangeType[]{ChangeType.CANCEL, ChangeType.CANCEL, ChangeType.CANCEL}, preferences);
+		if (!preferences.getActive()) {
 			return;
 		}
-		boolean[] which = notificationPreferences.getWhich();
+		boolean[] which = preferences.getWhich();
 		ChangeType[] changeTypes = {
 				ChangeType.NOTHING,
 				ChangeType.NOTHING,
@@ -99,10 +98,10 @@ public class AlarmCreator {
 				changeTypes[i] = ChangeType.CREATE;
 			}
 		}
-		changeAlarms(context, changeTypes);
+		changeAlarms(context, changeTypes, preferences);
 	}
 
-	public static void preferencesChanged(Context context, Map<String, ?> oldPref) {
+	public static void preferencesChanged(Context context, Map<String, ?> oldPref, MyPreferences preferences) {
 		Log.d("alarmcreator","preferences changed");
 
 		// old settings
@@ -118,11 +117,10 @@ public class AlarmCreator {
 		boolean oldActive = (Boolean) oldPref.get(context.getString(R.string.preferences_active));
 
 		// new settings
-		MyPreferences pref = new MyPreferences(context, MyPreferences.FILEPATH_NOTIFICATION);
-		boolean[] newWhich = pref.getWhich();
-		int[] newClocks = pref.getClocks();
-		int newXDaysBeforeDays = pref.getXDaysBeforeDays();
-		boolean newActive = pref.getActive();
+		boolean[] newWhich = preferences.getWhich();
+		int[] newClocks = preferences.getClocks();
+		int newXDaysBeforeDays = preferences.getXDaysBeforeDays();
+		boolean newActive = preferences.getActive();
 
 		ChangeType[] changeTypes = {
 				ChangeType.NOTHING, ChangeType.NOTHING, ChangeType.NOTHING
@@ -156,7 +154,7 @@ public class AlarmCreator {
 				}
 			}
 		}
-		changeAlarms(context, changeTypes);
+		changeAlarms(context, changeTypes, preferences);
 	}
 
 }

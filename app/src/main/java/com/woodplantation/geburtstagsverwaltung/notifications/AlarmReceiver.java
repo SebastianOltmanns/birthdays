@@ -19,19 +19,27 @@ import java.util.Calendar;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
+
 /**
  * Created by Sebu on 29.10.2019.
  * Contact: sebastian.oltmanns.developer@gmail.com
  */
+@AndroidEntryPoint
 public class AlarmReceiver extends BroadcastReceiver {
+
+	@Inject
+	MyPreferences preferences;
+
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		Log.d("alarmreceiver","onreceive!");
 		// get which alarm this is
 		int which = intent.getIntExtra(IntentCodes.WHICH, -1);
 		// get preferences
-		MyPreferences notificationPreferences = new MyPreferences(context, MyPreferences.FILEPATH_NOTIFICATION);
-		int xDaysBeforeDays = notificationPreferences.getXDaysBeforeDays();
+		int xDaysBeforeDays = preferences.getXDaysBeforeDays();
 		// iterate all data
 		ArrayList<DataSet> dataList = new StorageHandler(context).loadData();
 		Calendar now = Calendar.getInstance();
@@ -49,12 +57,12 @@ public class AlarmReceiver extends BroadcastReceiver {
 			if ((now.get(Calendar.YEAR) == birthdayAlarm.get(Calendar.YEAR))
 					&& (now.get(Calendar.DAY_OF_YEAR) == birthdayAlarm.get(Calendar.DAY_OF_YEAR))) {
 				// show notification
-				createNotification(context, data, which, xDaysBeforeDays, notificationPreferences);
+				createNotification(context, data, which, xDaysBeforeDays, preferences);
 			}
 		}
 
 		if (which < 0 || which > 2) {
-			AlarmCreator.createFromScratch(context);
+			AlarmCreator.createFromScratch(context, preferences);
 		} else {
 			// recreate the alarm in 24 hours
 			AlarmCreator.ChangeType[] changeTypes = {
@@ -63,7 +71,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 					AlarmCreator.ChangeType.NOTHING
 			};
 			changeTypes[which] = AlarmCreator.ChangeType.UPDATE;
-			AlarmCreator.changeAlarms(context, changeTypes);
+			AlarmCreator.changeAlarms(context, changeTypes, preferences);
 		}
 
 	}

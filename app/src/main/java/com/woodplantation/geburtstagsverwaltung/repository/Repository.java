@@ -74,7 +74,8 @@ public class Repository {
     private void migrateTwoPreferencesToOne() {
         if (!myPreferences.arePreferencesMigrated()) {
             // get notifications preferences
-            MyPreferences notificationPreferences = new MyPreferences(context, MyPreferences.FILEPATH_NOTIFICATION);
+            @SuppressWarnings("deprecation")
+            MyPreferences notificationPreferences = MyPreferences.getNotificationPreferences(context);
 
             myPreferences.preferences
                     .edit()
@@ -100,7 +101,7 @@ public class Repository {
 
             // delete notification preferences if sdk is new enough
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                context.deleteSharedPreferences(MyPreferences.FILEPATH_NOTIFICATION);
+                MyPreferences.removeNotificationsPreferences(context);
             }
 
         }

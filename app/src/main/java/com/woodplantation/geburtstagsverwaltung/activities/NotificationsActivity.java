@@ -32,14 +32,19 @@ import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Map;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
+
 /**
  * Created by Sebu on 19.10.2016.
  * Contact: sebastian.oltmanns.developer@gmail.com
  */
-
+@AndroidEntryPoint
 public class NotificationsActivity extends AppCompatActivity {
 
-	private MyPreferences preferences;
+	@Inject
+	MyPreferences preferences;
 
 	private boolean is24h;
 
@@ -74,10 +79,6 @@ public class NotificationsActivity extends AppCompatActivity {
 		textViews[1] = (TextView) findViewById(R.id.activity_notifications_textview_one_day_before);
 		checkBoxes[2] = (CheckBox) findViewById(R.id.activity_notifications_checkbox_x_days_before);
 		textViews[2] = (TextView) findViewById(R.id.activity_notifications_textview_x_days_before);
-
-		//get preferences
-
-		preferences = new MyPreferences(this, MyPreferences.FILEPATH_NOTIFICATION);
 
 		//load all preferences and save it once so the preferences are initialized
 

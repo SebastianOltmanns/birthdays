@@ -11,9 +11,15 @@ import android.widget.Switch;
 import com.woodplantation.geburtstagsverwaltung.R;
 import com.woodplantation.geburtstagsverwaltung.util.MyPreferences;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class SettingsActivity extends AppCompatActivity {
 
-    private MyPreferences preferences;
+    @Inject
+    MyPreferences preferences;
 
     private Switch switchDisplayFAB;
 
@@ -27,9 +33,6 @@ public class SettingsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         switchDisplayFAB = findViewById(R.id.activity_settings_display_fab);
-
-        preferences = new MyPreferences(this, MyPreferences.FILEPATH_SETTINGS);
-
         switchDisplayFAB.setChecked(preferences.getDisplayFAB());
     }
 

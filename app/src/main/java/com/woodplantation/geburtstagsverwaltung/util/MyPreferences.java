@@ -2,6 +2,9 @@ package com.woodplantation.geburtstagsverwaltung.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
 
 import com.woodplantation.geburtstagsverwaltung.R;
 
@@ -16,21 +19,34 @@ import dagger.hilt.android.qualifiers.ApplicationContext;
 
 public class MyPreferences {
 
-	public static final String FILEPATH_NOTIFICATION = "notification_settings";
-	public static final String FILEPATH_SETTINGS = "settings";
+	private static final String FILEPATH_NOTIFICATION = "notification_settings";
+	private static final String FILEPATH_SETTINGS = "settings";
 
 	private final Context context;
 	public final SharedPreferences preferences;
 
 	@Inject
 	public MyPreferences(@ApplicationContext Context context) {
-		this.context = context;
-		this.preferences = context.getSharedPreferences(FILEPATH_SETTINGS, Context.MODE_PRIVATE);
+		this(context, FILEPATH_SETTINGS);
 	}
 
-	public MyPreferences(Context context, String filepath) {
+	private MyPreferences(Context context, String filepath) {
 		this.context = context;
 		this.preferences = context.getSharedPreferences(filepath, Context.MODE_PRIVATE);
+	}
+
+	/**
+	 * should not be used anymore.
+	 */
+	@SuppressWarnings("DeprecatedIsStillUsed")
+	@Deprecated
+	public static MyPreferences getNotificationPreferences(Context context) {
+		return new MyPreferences(context, FILEPATH_NOTIFICATION);
+	}
+
+	@RequiresApi(api = Build.VERSION_CODES.N)
+	public static void removeNotificationsPreferences(Context context) {
+		context.deleteSharedPreferences(MyPreferences.FILEPATH_NOTIFICATION);
 	}
 
 	public boolean getActive() {
