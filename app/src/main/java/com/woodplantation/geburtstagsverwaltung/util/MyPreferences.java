@@ -16,14 +16,11 @@ import dagger.hilt.android.qualifiers.ApplicationContext;
 
 public class MyPreferences {
 
-	//TODO
-	//TODO migrate two sharedpreferences into one
-	//TODO
 	public static final String FILEPATH_NOTIFICATION = "notification_settings";
 	public static final String FILEPATH_SETTINGS = "settings";
 
-	private Context context;
-	public SharedPreferences preferences;
+	private final Context context;
+	public final SharedPreferences preferences;
 
 	@Inject
 	public MyPreferences(@ApplicationContext Context context) {

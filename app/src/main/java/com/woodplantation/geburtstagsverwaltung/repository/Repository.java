@@ -1,6 +1,7 @@
 package com.woodplantation.geburtstagsverwaltung.repository;
 
 import android.content.Context;
+import android.os.Build;
 
 import com.woodplantation.geburtstagsverwaltung.R;
 import com.woodplantation.geburtstagsverwaltung.database.EntryDao;
@@ -72,6 +73,35 @@ public class Repository {
 
     private void migrateTwoPreferencesToOne() {
         if (!myPreferences.arePreferencesMigrated()) {
+            // get notifications preferences
+            MyPreferences notificationPreferences = new MyPreferences(context, MyPreferences.FILEPATH_NOTIFICATION);
+
+            myPreferences.preferences
+                    .edit()
+                    // migrate all notification preferences to default preferences
+                    .putBoolean(context.getString(R.string.preferences_active), notificationPreferences.getActive())
+                    .putBoolean(context.getString(R.string.preferences_on_birthday_active), notificationPreferences.getOnBirthdayActive())
+                    .putBoolean(context.getString(R.string.preferences_one_day_before_active), notificationPreferences.getOneDayBeforeActive())
+                    .putBoolean(context.getString(R.string.preferences_x_days_before_active), notificationPreferences.getXDaysBeforeActive())
+                    .putInt(context.getString(R.string.preferences_on_birthday_clock), notificationPreferences.getOnBirthdayClock())
+                    .putInt(context.getString(R.string.preferences_one_day_before_clock), notificationPreferences.getOneDayBeforeClock())
+                    .putInt(context.getString(R.string.preferences_x_days_before_clock), notificationPreferences.getXDaysBeforeClock())
+                    .putInt(context.getString(R.string.preferences_x_days_before_days), notificationPreferences.getXDaysBeforeDays())
+                    .putInt(
+                            context.getString(R.string.preferences_notification_id),
+                            notificationPreferences.preferences.getInt(
+                                    context.getString(R.string.preferences_notification_id),
+                                    context.getResources().getInteger(R.integer.preferences_notification_id)
+                            )
+                    )
+                    // store that we did migration
+                    .putBoolean(context.getString(R.string.preferences_preferences_migrated), true)
+                    .apply();
+
+            // delete notification preferences if sdk is new enough
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                context.deleteSharedPreferences(MyPreferences.FILEPATH_NOTIFICATION);
+            }
 
         }
     }
