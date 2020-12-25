@@ -3,6 +3,8 @@ package com.woodplantation.geburtstagsverwaltung.repository;
 import android.content.Context;
 import android.os.Build;
 
+import androidx.lifecycle.LiveData;
+
 import com.woodplantation.geburtstagsverwaltung.R;
 import com.woodplantation.geburtstagsverwaltung.database.EntryDao;
 import com.woodplantation.geburtstagsverwaltung.model.Entry;
@@ -13,6 +15,8 @@ import com.woodplantation.geburtstagsverwaltung.util.MyPreferences;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -103,8 +107,11 @@ public class Repository {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 MyPreferences.removeNotificationsPreferences(context);
             }
-
         }
+    }
+
+    public LiveData<List<Entry>> getData() {
+        return entryDao.getAll();
     }
 
 }
