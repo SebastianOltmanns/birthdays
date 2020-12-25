@@ -20,20 +20,18 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.hilt.lifecycle.HiltViewModelFactory;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.nbsp.materialfilepicker.MaterialFilePicker;
 import com.nbsp.materialfilepicker.ui.FilePickerActivity;
-import com.woodplantation.geburtstagsverwaltung.adapter.DataListViewAdapter;
 import com.woodplantation.geburtstagsverwaltung.notifications.AlarmCreator;
 import com.woodplantation.geburtstagsverwaltung.util.MyPreferences;
 import com.woodplantation.geburtstagsverwaltung.storage.DataSet;
@@ -41,6 +39,7 @@ import com.woodplantation.geburtstagsverwaltung.notifications.IdGenerator;
 import com.woodplantation.geburtstagsverwaltung.R;
 import com.woodplantation.geburtstagsverwaltung.storage.StorageHandler;
 import com.woodplantation.geburtstagsverwaltung.util.IntentCodes;
+import com.woodplantation.geburtstagsverwaltung.view.DataAdapter;
 import com.woodplantation.geburtstagsverwaltung.viewmodel.MainViewModel;
 import com.woodplantation.geburtstagsverwaltung.widget.WidgetService;
 
@@ -92,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
 
 	private ArrayList<DataSet> data;
 	private StorageHandler storageHandler;
-	private DataListViewAdapter dataListViewAdapter;
 
 	private Comparator<DataSet> comparator = new DataSet.NextBirthdayComparator();
 
@@ -158,6 +156,12 @@ public class MainActivity extends AppCompatActivity {
 
 		mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
+		RecyclerView dataView = findViewById(R.id.data_view);
+		dataView.setLayoutManager(new LinearLayoutManager(this));
+		DataAdapter adapter = new DataAdapter(this);
+		dataView.setAdapter(adapter);
+		mainViewModel.getData().observe(this, adapter::submitList);
+
 		//execute code one time to create alarms
 		if (myPreferences.getFirstTimeCall()) {
 			AlarmCreator.createFromScratch(this, myPreferences);
@@ -169,8 +173,8 @@ public class MainActivity extends AppCompatActivity {
 				REQUEST_PERMISSION_SET_ALARM);
 
 		//bind the list layout to data adapter
-		dataListViewAdapter = new DataListViewAdapter(this, R.layout.data_list_view_item);
-		ListView dataListView = findViewById(R.id.data_list_view);
+		//dataListViewAdapter = new DataListViewAdapter(this, R.layout.viewholder_data);
+		/*ListView dataListView = findViewById(R.id.data_list_view);
 		dataListView.setAdapter(dataListViewAdapter);
 		dataListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
@@ -181,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
 				editIntent.putExtra(IntentCodes.DATASET, dataSet);
 				startActivityForResult(editIntent, REQUEST_INTENT_EDIT_DATA_SET);
 			}
-		});
+		});*/
 
 		//initialize storage handler
 		storageHandler = new StorageHandler(this);
@@ -447,7 +451,7 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	private void refresh() {
-		data = sortAndStoreData(storageHandler, data, comparator);
+		/*data = sortAndStoreData(storageHandler, data, comparator);
 		dataListViewAdapter.clear();
 		dataListViewAdapter.addAll(data);
 		dataListViewAdapter.notifyDataSetChanged();
@@ -457,7 +461,7 @@ public class MainActivity extends AppCompatActivity {
 			tv.setVisibility(View.VISIBLE);
 		} else {
 			tv.setVisibility(View.GONE);
-		}
+		}*/
 	}
 
 	private void exportWithPermissionCheck() {

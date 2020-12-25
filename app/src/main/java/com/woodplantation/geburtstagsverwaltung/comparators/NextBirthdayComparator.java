@@ -1,6 +1,7 @@
-package com.woodplantation.geburtstagsverwaltung.util;
+package com.woodplantation.geburtstagsverwaltung.comparators;
 
 import com.woodplantation.geburtstagsverwaltung.model.Entry;
+import com.woodplantation.geburtstagsverwaltung.util.DateUtil;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -16,17 +17,9 @@ import java.util.Comparator;
 public class NextBirthdayComparator implements Comparator<Entry> {
     @Override
     public int compare(Entry a, Entry b) {
-        LocalDate _a = getNextBirthday(a.birthday);
-        LocalDate _b = getNextBirthday(b.birthday);
-        return _a.compareTo(_b);
-    }
-
-    public static LocalDate getNextBirthday(LocalDate date) {
-        LocalDate now = LocalDate.now();
-        LocalDate _date = date.with(ChronoField.YEAR, now.getYear());
-        if (_date.isBefore(now)) {
-            _date = _date.plus(1, ChronoUnit.YEARS);
-        }
-        return _date;
+        return Long.compare(
+                DateUtil.getRemainingDaysUntilNextBirthday(DateUtil.getNextBirthday(a.birthday)),
+                DateUtil.getRemainingDaysUntilNextBirthday(DateUtil.getNextBirthday(b.birthday))
+        );
     }
 }

@@ -6,9 +6,12 @@ import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.woodplantation.geburtstagsverwaltung.comparators.AgeComparator;
+import com.woodplantation.geburtstagsverwaltung.comparators.LexicographicComparator;
 import com.woodplantation.geburtstagsverwaltung.model.Entry;
 import com.woodplantation.geburtstagsverwaltung.repository.Repository;
-import com.woodplantation.geburtstagsverwaltung.util.NextBirthdayComparator;
+import com.woodplantation.geburtstagsverwaltung.comparators.CalendricComparator;
+import com.woodplantation.geburtstagsverwaltung.comparators.NextBirthdayComparator;
 import com.woodplantation.geburtstagsverwaltung.util.SortingCategory;
 import com.woodplantation.geburtstagsverwaltung.util.SortingOrder;
 
@@ -44,11 +47,31 @@ public class MainViewModel extends ViewModel {
         if (_data != null) {
             Comparator<Entry> comparator;
             SortingCategory _sortingCategory = sortingCategory.getValue();
-            if (_sortingCategory == SortingCategory.NEXT_BIRTHDAY) {
-                comparator = new NextBirthdayComparator();
+            switch (_sortingCategory) {
+                case NEXT_BIRTHDAY: {
+                    comparator = new NextBirthdayComparator();
+                    break;
+                }
+                case CALENDRIC: {
+                    comparator = new CalendricComparator();
+                    break;
+                }
+                case LEXICOGRAPHIC: {
+                    comparator = new LexicographicComparator();
+                    break;
+                }
+                case AGE: {
+                    comparator = new AgeComparator();
+                    break;
+                }
+                default: {
+                    comparator = null;
+                }
             }
-            Collections.sort(_data, comparator);
-            data.setValue(_data);
+            if (comparator != null) {
+                Collections.sort(_data, comparator);
+                data.setValue(_data);
+            }
         }
     }
 

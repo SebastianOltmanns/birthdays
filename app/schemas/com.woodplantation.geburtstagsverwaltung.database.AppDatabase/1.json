@@ -2,35 +2,35 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "cfb7f0f5d0e4ae80087746f80992a3c6",
+    "identityHash": "4691feca0893a34b3c13e3dca90d884a",
     "entities": [
       {
         "tableName": "Entry",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER, `firstName` TEXT, `lastName` TEXT, `birthday` INTEGER, `ignoreYear` INTEGER NOT NULL, `notes` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `firstName` TEXT NOT NULL, `lastName` TEXT NOT NULL, `birthday` INTEGER NOT NULL, `ignoreYear` INTEGER NOT NULL, `notes` TEXT NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "firstName",
             "columnName": "firstName",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "lastName",
             "columnName": "lastName",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "birthday",
             "columnName": "birthday",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "ignoreYear",
@@ -42,7 +42,7 @@
             "fieldPath": "notes",
             "columnName": "notes",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -58,7 +58,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'cfb7f0f5d0e4ae80087746f80992a3c6')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4691feca0893a34b3c13e3dca90d884a')"
     ]
   }
 }

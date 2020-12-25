@@ -5,7 +5,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -17,7 +16,6 @@ import com.woodplantation.geburtstagsverwaltung.storage.StorageHandler;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 
 /**
  * Created by Sebu on 21.10.2019.
@@ -69,7 +67,7 @@ public class WidgetService extends RemoteViewsService {
 
 		@Override
 		public RemoteViews getViewAt(int i) {
-			RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.data_list_view_item);
+			RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.viewholder);
 			DataSet dataSet = dataList.get(i);
 
 			String remaining = dataSet.getRemainingWithAge(context);
@@ -88,10 +86,10 @@ public class WidgetService extends RemoteViewsService {
 				name = firstname + " " + lastname;
 			}
 
-			views.setTextViewText(R.id.data_list_view_text_name, name);
-			views.setTextViewText(R.id.data_list_view_text_others, others);
-			views.setTextViewText(R.id.data_list_view_text_birthday, DateFormat.getDateInstance(DateFormat.MEDIUM).format(birthday.getTime()));
-			views.setTextViewText(R.id.data_list_view_text_remaining, remaining);
+			views.setTextViewText(R.id.viewholder_name, name);
+			views.setTextViewText(R.id.viewholder_notes, others);
+			views.setTextViewText(R.id.viewholder_birthday, DateFormat.getDateInstance(DateFormat.MEDIUM).format(birthday.getTime()));
+			views.setTextViewText(R.id.viewholder_remaining, remaining);
 			return views;
 		}
 
