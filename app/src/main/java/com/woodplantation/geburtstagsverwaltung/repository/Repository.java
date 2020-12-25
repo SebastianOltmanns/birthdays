@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 
 import dagger.hilt.android.qualifiers.ApplicationContext;
+import io.reactivex.disposables.CompositeDisposable;
 
 public class Repository {
 
@@ -29,6 +30,8 @@ public class Repository {
     private final StorageHandler storageHandler;
     private final MyPreferences myPreferences;
     private final Context context;
+    //TODO cancel compositedisposable when application closes
+    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Inject
     public Repository(EntryDao entryDao, StorageHandler storageHandler, MyPreferences myPreferences, @ApplicationContext Context context) {
@@ -47,7 +50,7 @@ public class Repository {
             ArrayList<DataSet> data = storageHandler.loadData();
 
             // iterate list and insert into db
-            entryDao.insertMany(data
+            compositeDisposable.add(entryDao.insertMany(data
                     .stream()
                     .map(dataSet -> {
                         Entry entry = new Entry();
@@ -59,19 +62,19 @@ public class Repository {
                         return entry;
                     })
                     .collect(Collectors.toSet())
-            );
+            ).subscribe(() -> {
+                // store in preferences that we did migration
+                myPreferences.preferences
+                        .edit()
+                        .putBoolean(context.getString(R.string.preferences_storage_migrated), true)
+                        .apply();
 
-            // store in preferences that we did migration
-            myPreferences.preferences
-                    .edit()
-                    .putBoolean(context.getString(R.string.preferences_storage_migrated), true)
-                    .apply();
-
-            // remove previous storage file
-            try {
-                context.deleteFile(StorageHandler.filePath);
-            } catch (Exception ignored) {
-            }
+                // remove previous storage file
+                try {
+                    context.deleteFile(StorageHandler.filePath);
+                } catch (Exception ignored) {
+                }
+            }));
         }
     }
 
