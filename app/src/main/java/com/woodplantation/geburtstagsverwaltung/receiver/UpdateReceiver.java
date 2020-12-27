@@ -39,22 +39,17 @@ public class UpdateReceiver extends BroadcastReceiver {
     @Inject
     MyPreferences myPreferences;
     @Inject
-    Context context;
-    @Inject
     Repository repository;
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        AlarmCreator.createFromScratch(context, preferences);
-        WidgetAlarmReceiver.createNextAlarm(context);
-        WidgetService.notifyDataChanged(context);
-
-        migrateTwoPreferencesToOne();
-        migrateStorageToDb();
+        Log.d("updatereceiver", "on receive!");
+        migrateTwoPreferencesToOne(context);
+        migrateStorageToDbAndContinueWithAlarmsAndWidget(context);
     }
 
 
-    private void migrateStorageToDb() {
+    private void migrateStorageToDbAndContinueWithAlarmsAndWidget(Context context) {
         if (!myPreferences.isStorageMigrated()) {
             // load current data
             ArrayList<DataSet> data = storageHandler.loadData();
@@ -84,12 +79,20 @@ public class UpdateReceiver extends BroadcastReceiver {
                             context.deleteFile(StorageHandler.filePath);
                         } catch (Exception ignored) {
                         }
+
+                        AlarmCreator.createFromScratch(context, preferences);
+                        WidgetAlarmReceiver.createNextAlarm(context);
+                        WidgetService.notifyDataChanged(context);
                     }
             );
+        } else {
+            AlarmCreator.createFromScratch(context, preferences);
+            WidgetAlarmReceiver.createNextAlarm(context);
+            WidgetService.notifyDataChanged(context);
         }
     }
 
-    private void migrateTwoPreferencesToOne() {
+    private void migrateTwoPreferencesToOne(Context context) {
         if (!myPreferences.arePreferencesMigrated()) {
             // get notifications preferences
             @SuppressWarnings("deprecation")

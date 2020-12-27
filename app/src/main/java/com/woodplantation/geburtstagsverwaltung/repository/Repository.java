@@ -10,8 +10,10 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Action;
+import io.reactivex.schedulers.Schedulers;
 
 public class Repository {
 
@@ -30,7 +32,10 @@ public class Repository {
 
     public void insertData(Set<Entry> data, Action onComplete) {
         compositeDisposable.add(
-                entryDao.insertMany(data).subscribe(onComplete)
+                entryDao.insertMany(data)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(onComplete)
         );
     }
 
