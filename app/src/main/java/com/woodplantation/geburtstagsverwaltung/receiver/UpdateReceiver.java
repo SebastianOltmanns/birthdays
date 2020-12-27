@@ -79,6 +79,11 @@ public class UpdateReceiver extends BroadcastReceiver {
                             context.deleteFile(StorageHandler.filePath);
                         } catch (Exception ignored) {
                         }
+                        // also remove file that was used to store last id
+                        try {
+                            context.deleteFile("id");
+                        } catch (Exception ignored) {
+                        }
 
                         AlarmCreator.createFromScratch(context, preferences);
                         WidgetAlarmReceiver.createNextAlarm(context);

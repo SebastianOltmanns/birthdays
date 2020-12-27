@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 import io.reactivex.Completable;
+import io.reactivex.Single;
 
 @Dao
 public interface EntryDao {
@@ -31,5 +32,8 @@ public interface EntryDao {
 
     @Query("SELECT * FROM Entry")
     LiveData<List<Entry>> getAll();
+
+    @Query("SELECT * FROM Entry")
+    Single<List<Entry>> getAllRx();
 
 }

@@ -82,4 +82,26 @@ public class MainViewModel extends ViewModel {
             data.setValue(_data);
         }
     }
+
+    /**
+     * if the category changed, the new category will be chosen. if the category stayed the
+     * same, the order will be changed.
+     */
+    public void sortingCategoryClicked(SortingCategory newSortingCategory) {
+        SortingCategory oldSortingCategory = sortingCategory.getValue();
+        if (oldSortingCategory == newSortingCategory) {
+            sortingOrder.setValue(sortingOrder.getValue() == SortingOrder.ASC ? SortingOrder.DESC : SortingOrder.ASC);
+        } else {
+            sortingCategory.setValue(newSortingCategory);
+        }
+    }
+
+    public LiveData<SortingCategory> getSortingCategory() {
+        return sortingCategory;
+    }
+
+    public LiveData<SortingOrder> getSortingOrder() {
+        return sortingOrder;
+    }
+
 }

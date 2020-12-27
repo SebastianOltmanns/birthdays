@@ -1,11 +1,11 @@
-package com.woodplantation.geburtstagsverwaltung.database;
+package com.woodplantation.geburtstagsverwaltung.modules;
 
 import android.app.Application;
-import android.content.Context;
 
 import androidx.room.Room;
 
-import com.woodplantation.geburtstagsverwaltung.repository.Repository;
+import com.woodplantation.geburtstagsverwaltung.database.AppDatabase;
+import com.woodplantation.geburtstagsverwaltung.database.EntryDao;
 
 import javax.inject.Singleton;
 
