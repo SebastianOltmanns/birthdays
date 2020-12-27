@@ -57,15 +57,7 @@ public class UpdateReceiver extends BroadcastReceiver {
             // iterate list and insert into db
             repository.insertData(
                     data.stream()
-                            .map(dataSet -> {
-                                Entry entry = new Entry();
-                                entry.firstName = dataSet.firstName;
-                                entry.lastName = dataSet.lastName;
-                                entry.ignoreYear = false;
-                                entry.birthday = LocalDate.of(dataSet.birthday.get(Calendar.YEAR), dataSet.birthday.get(Calendar.MONTH), dataSet.birthday.get(Calendar.DAY_OF_MONTH));
-                                entry.notes = dataSet.others;
-                                return entry;
-                            })
+                            .map(Entry::new)
                             .collect(Collectors.toSet()),
                     () -> {
                         // store in preferences that we did migration

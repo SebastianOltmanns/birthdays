@@ -30,6 +30,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.nbsp.materialfilepicker.MaterialFilePicker;
 import com.nbsp.materialfilepicker.ui.FilePickerActivity;
 import com.woodplantation.geburtstagsverwaltung.R;
+import com.woodplantation.geburtstagsverwaltung.exceptions.NoDataToExportException;
+import com.woodplantation.geburtstagsverwaltung.exceptions.NoStorageAvailableException;
+import com.woodplantation.geburtstagsverwaltung.exceptions.UnableToCreateDirectoryException;
 import com.woodplantation.geburtstagsverwaltung.notifications.AlarmCreator;
 import com.woodplantation.geburtstagsverwaltung.repository.Repository;
 import com.woodplantation.geburtstagsverwaltung.storage.DataSet;
@@ -70,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
 	private static final SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy_HH-mm-ss", Locale.US);
 
 	private AlertDialog importExportFailDialog;
-	private AlertDialog importExportStorageFailDialog;
 	private AlertDialog.Builder importExportPermissionFailDialogBuilder;
 
 	private FloatingActionButton fab;
@@ -80,12 +82,6 @@ public class MainActivity extends AppCompatActivity {
 				new AlertDialog.Builder(this).
 						setTitle(R.string.import_export_failed_title).
 						setMessage(R.string.import_export_failed_text).
-						setNeutralButton(R.string.ok, null).
-						create();
-		importExportStorageFailDialog =
-				new AlertDialog.Builder(MainActivity.this).
-						setTitle(R.string.import_export_storage_error_title).
-						setMessage(R.string.import_export_storage_error_text).
 						setNeutralButton(R.string.ok, null).
 						create();
 		importExportPermissionFailDialogBuilder =
@@ -340,43 +336,29 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	private void exportWithoutPermissionCheck() {
-		repository.exportData();
-		/*String state = Environment.getExternalStorageState();
-		if (state.equals(Environment.MEDIA_MOUNTED) || state.equals(Environment.MEDIA_MOUNTED_READ_ONLY)) {
-			File dir = new File(Environment.getExternalStorageDirectory(), FILE_EXPORT_DIRECTORY);
-			if (!dir.exists() && !dir.mkdir()) {
-				importExportStorageFailDialog.show();
+		repository.exportData(path -> {
+			new AlertDialog.Builder(MainActivity.this).
+					setTitle(R.string.import_export_export_successful_title).
+					setMessage(getString(R.string.import_export_export_successful_text, path)).
+					setNeutralButton(R.string.ok, null).
+					show();
+		}, error -> {
+			String reason;
+			if (error instanceof NoDataToExportException) {
+				reason = getString(R.string.no_data_to_export);
+			} else if (error instanceof NoStorageAvailableException) {
+				reason = getString(R.string.no_storage_available);
+			} else if (error instanceof UnableToCreateDirectoryException) {
+				reason = getString(R.string.unable_to_create_directory);
+			} else {
+				reason = error.getLocalizedMessage();
 			}
-			String filename = FILE_EXPORT_NAME + sdf.format(new Date()) + FILE_EXPORT_EXTENSION;
-			File output = new File(dir + File.separator + filename);
-			if (data == null) {
-				importExportFailDialog.show();
-			}
-			JSONArray jsonArray = new JSONArray();
-			for (DataSet dataSet : data) {
-				jsonArray.put(dataSet.toJSON());
-			}
-			try {
-				FileWriter fw = new FileWriter(output);
-				BufferedWriter bw = new BufferedWriter(fw);
-
-				bw.write(jsonArray.toString());
-
-				bw.close();
-				fw.close();
-
-				new AlertDialog.Builder(MainActivity.this).
-						setTitle(R.string.import_export_export_successfull_title).
-						setMessage(getString(R.string.import_export_export_successfull_text, output.getAbsolutePath())).
-						setNeutralButton(R.string.ok, null).
-						show();
-			} catch (IOException e) {
-				e.printStackTrace();
-				importExportStorageFailDialog.show();
-			}
-		} else {
-			importExportStorageFailDialog.show();
-		}*/
+			new AlertDialog.Builder(MainActivity.this).
+					setTitle(R.string.export_failed_title).
+					setMessage(getString(R.string.export_failed_text, reason)).
+					setNeutralButton(R.string.ok, null).
+					show();
+		});
 	}
 
 	private void importWithPermissionCheck() {

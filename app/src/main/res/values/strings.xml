@@ -66,11 +66,17 @@
     <string name="import_export_permissions_fail_title">Missing permissions</string>
     <string name="import_export_permissions_fail_text">Without the missing permission, the app can not access the external storage. For a successful import or export, please allow the app access.</string>
 
-    <string name="import_export_export_successfull_title">Export successful</string>
-    <string name="import_export_export_successfull_text">The saved data was exported successfully. The file is located at: %1$s</string>
+    <string name="import_export_export_successful_title">Export successful</string>
+    <string name="import_export_export_successful_text">The saved data was exported successfully. The file is located at: %1$s</string>
 
     <string name="import_export_import_successfull_title">Import successful</string>
     <string name="import_export_import_successfull_text">The file was imported successfully and the birthdays were added to the app.</string>
+
+    <string name="export_failed_title">Export failed</string>
+    <string name="export_failed_text">The export failed due to the following reason:\n\n%s</string>
+    <string name="no_data_to_export">No data to export</string>
+    <string name="no_storage_available">No storage available</string>
+    <string name="unable_to_create_directory">Unable to create directory</string>
 
     <string name="import_export_maximum_data_size_title">Maximum amount exceeded</string>
     <string name="import_export_maximum_data_size_text">The amount of saved and imported birthdays exceed the maximum amount of %1$d. To import the file successfully, remove one or more saved birthdays.</string>

@@ -66,8 +66,8 @@
     <string name="import_export_permissions_fail_title">Berechtigungen fehlen</string>
     <string name="import_export_permissions_fail_text">Die App kann ohne fehlende Berechtigung nicht auf den externen Speicher zugreifen. Bitte erlaube der App den Zugriff, damit der Import/Export durchgeführt werden kann.</string>
 
-    <string name="import_export_export_successfull_title">Erfolgreich exportiert</string>
-    <string name="import_export_export_successfull_text">Die gespeicherten Daten wurden erfolgreich exportiert. Die Datei befindet sich hier: %1$s</string>
+    <string name="import_export_export_successful_title">Erfolgreich exportiert</string>
+    <string name="import_export_export_successful_text">Die gespeicherten Daten wurden erfolgreich exportiert. Die Datei befindet sich hier: %1$s</string>
 
     <string name="import_export_import_successfull_title">Erfolgreich importiert</string>
     <string name="import_export_import_successfull_text">Die Datei wurde erfolgreich importiert und die Geburtstage zur App hinzugefügt.</string>
