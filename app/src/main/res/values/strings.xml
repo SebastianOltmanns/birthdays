@@ -11,6 +11,7 @@
     <string name="first_name">First name</string>
     <string name="last_name">Last name</string>
     <string name="birthday">Birthday</string>
+    <string name="ignore_year">Ignore Year</string>
     <string name="others">Others</string>
 
     <string name="today">Today</string>
@@ -58,10 +59,10 @@
     <string name="import_export_export">Export</string>
 
     <string name="import_export_failed_title">Problem with import/export</string>
-    <string name="import_export_failed_text">There has been a problem importing or exporting.</string>
+    <string name="import_export_failed_text">There was a problem importing or exporting.</string>
 
     <string name="import_export_storage_error_title">Storage problem</string>
-    <string name="import_export_storage_error_text">There has been a problem with the availability of the storage.</string>
+    <string name="import_export_storage_error_text">There was a problem with the availability of the storage.</string>
 
     <string name="import_export_permissions_fail_title">Missing permissions</string>
     <string name="import_export_permissions_fail_text">Without the missing permission, the app can not access the external storage. For a successful import or export, please allow the app access.</string>

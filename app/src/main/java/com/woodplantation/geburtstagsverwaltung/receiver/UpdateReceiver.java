@@ -80,6 +80,10 @@ public class UpdateReceiver extends BroadcastReceiver {
                         AlarmCreator.createFromScratch(context, preferences);
                         WidgetAlarmReceiver.createNextAlarm(context);
                         WidgetService.notifyDataChanged(context);
+                    }, error -> {
+                        AlarmCreator.createFromScratch(context, preferences);
+                        WidgetAlarmReceiver.createNextAlarm(context);
+                        WidgetService.notifyDataChanged(context);
                     }
             );
         } else {

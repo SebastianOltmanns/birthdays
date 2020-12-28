@@ -2,7 +2,6 @@ package com.woodplantation.geburtstagsverwaltung.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -68,9 +67,9 @@ public class AddActivity extends InputActivity {
 		DataSet dataSet = new DataSet(
 				newId,
 				birthday,
-				firstNameEdit.getText().toString(),
-				lastNameEdit.getText().toString(),
-				othersEdit.getText().toString());
+				firstName.getText().toString(),
+				lastName.getText().toString(),
+				notes.getText().toString());
 		resultIntent.putExtra(IntentCodes.DATASET, dataSet);
 		setResult(RESULT_OK, resultIntent);
 		finish();

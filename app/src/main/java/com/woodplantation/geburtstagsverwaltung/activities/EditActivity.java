@@ -36,12 +36,12 @@ public class EditActivity extends InputActivity {
 		}
 		birthday = oldDataSet.birthday;
 
-		firstNameEdit.setText(oldDataSet.firstName);
-		lastNameEdit.setText(oldDataSet.lastName);
-		birthdayDayEdit.setText(String.valueOf(birthday.get(Calendar.DAY_OF_MONTH)));
-		birthdayMonthEdit.setText(String.valueOf(birthday.get(Calendar.MONTH)+1));
-		birthdayYearEdit.setText(String.valueOf(birthday.get(Calendar.YEAR)));
-		othersEdit.setText(oldDataSet.others);
+		firstName.setText(oldDataSet.firstName);
+		lastName.setText(oldDataSet.lastName);
+		birthdayDay.setText(String.valueOf(birthday.get(Calendar.DAY_OF_MONTH)));
+		birthdayMonth.setText(String.valueOf(birthday.get(Calendar.MONTH)+1));
+		birthdayYear.setText(String.valueOf(birthday.get(Calendar.YEAR)));
+		notes.setText(oldDataSet.others);
 	}
 
 	@Override
@@ -68,9 +68,9 @@ public class EditActivity extends InputActivity {
 			DataSet newDataSet = new DataSet(
 					oldDataSet.id,
 					birthday,
-					firstNameEdit.getText().toString(),
-					lastNameEdit.getText().toString(),
-					othersEdit.getText().toString());
+					firstName.getText().toString(),
+					lastName.getText().toString(),
+					notes.getText().toString());
 			resultIntent.putExtra(IntentCodes.DATASET, newDataSet);
 			setResult(RESULT_OK, resultIntent);
 			finish();

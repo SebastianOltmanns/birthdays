@@ -36,7 +36,15 @@ public class Entry {
         firstName = dataSet.firstName;
         lastName = dataSet.lastName;
         ignoreYear = false;
-        birthday = LocalDate.of(dataSet.birthday.get(Calendar.YEAR), dataSet.birthday.get(Calendar.MONTH), dataSet.birthday.get(Calendar.DAY_OF_MONTH));
+        birthday = LocalDate.of(dataSet.birthday.get(Calendar.YEAR), dataSet.birthday.get(Calendar.MONTH)+1, dataSet.birthday.get(Calendar.DAY_OF_MONTH));
         notes = dataSet.others;
+    }
+
+    public Entry(@NotNull String firstName, @NotNull String lastName, @NotNull LocalDate birthday, boolean ignoreYear, @NotNull String notes) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.birthday = birthday;
+        this.ignoreYear = ignoreYear;
+        this.notes = notes;
     }
 }

@@ -4,7 +4,10 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProvider;
+
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -12,26 +15,36 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Switch;
 
 import com.woodplantation.geburtstagsverwaltung.R;
+import com.woodplantation.geburtstagsverwaltung.viewmodel.InputViewModel;
+import com.woodplantation.geburtstagsverwaltung.viewmodel.MainViewModel;
 
 import java.util.Calendar;
+
+import dagger.hilt.android.AndroidEntryPoint;
 
 /**
  * Created by Sebu on 10.03.2016.
  * Contact: sebastian.oltmanns.developer@googlemail.com
  */
+@AndroidEntryPoint
 public abstract class InputActivity extends AppCompatActivity {
 
+	private EditText firstName;
+	private EditText lastName;
+	private EditText birthdayDay, birthdayMonth, birthdayYear;
+	private SwitchCompat ignoreYear;
+	private EditText notes;
 
-	protected EditText firstNameEdit;
-	protected EditText lastNameEdit;
-	protected EditText birthdayDayEdit, birthdayMonthEdit, birthdayYearEdit;
-	protected EditText othersEdit;
+	private InputViewModel inputViewModel;
 
-	protected Calendar birthday;
-
-	private class FocusNextViewTextWatcher implements TextWatcher {
+	/**
+	 * text watcher that automatically requests focus for the next
+	 * textview once the given text length is reached
+	 */
+	private static class FocusNextViewTextWatcher implements TextWatcher {
 		int count;
 		View view;
 		FocusNextViewTextWatcher(int count, View view) {
@@ -56,15 +69,28 @@ public abstract class InputActivity extends AppCompatActivity {
 
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-		firstNameEdit = findViewById(R.id.text_input_firstname);
-		lastNameEdit = findViewById(R.id.text_input_lastname);
-		birthdayDayEdit = findViewById(R.id.text_input_birthday_day);
-		birthdayMonthEdit = findViewById(R.id.text_input_birthday_month);
-		birthdayYearEdit = findViewById(R.id.text_input_birthday_year);
-		othersEdit = findViewById(R.id.text_input_others);
+		firstName = findViewById(R.id.text_input_firstname);
+		lastName = findViewById(R.id.text_input_lastname);
+		birthdayDay = findViewById(R.id.text_input_birthday_day);
+		birthdayMonth = findViewById(R.id.text_input_birthday_month);
+		birthdayYear = findViewById(R.id.text_input_birthday_year);
+		ignoreYear = findViewById(R.id.ignore_year);
+		notes = findViewById(R.id.text_input_others);
 
-        birthdayDayEdit.addTextChangedListener(new FocusNextViewTextWatcher(2, birthdayMonthEdit));
-		birthdayMonthEdit.addTextChangedListener(new FocusNextViewTextWatcher(2, birthdayYearEdit));
+        birthdayDay.addTextChangedListener(new FocusNextViewTextWatcher(2, birthdayMonth));
+		birthdayMonth.addTextChangedListener(new FocusNextViewTextWatcher(2, birthdayYear));
+
+		inputViewModel = new ViewModelProvider(this).get(InputViewModel.class);
+
+		inputViewModel.getFirstName().observe(this, firstName::setText);
+		inputViewModel.getLastName().observe(this, lastName::setText);
+		inputViewModel.getBirthday().observe(this, birthday -> {
+			birthdayDay.setText(String.valueOf(birthday.getDayOfMonth()));
+			birthdayMonth.setText(String.valueOf(birthday.getMonth()));
+			birthdayYear.setText(String.valueOf(birthday.getYear()));
+		});
+		inputViewModel.getIgnoreYear()
+
 	}
 
 	@Override
@@ -84,9 +110,9 @@ public abstract class InputActivity extends AppCompatActivity {
 			@Override
 			public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 				birthday.set(year, monthOfYear, dayOfMonth);
-				birthdayDayEdit.setText(String.valueOf(dayOfMonth));
-				birthdayMonthEdit.setText(String.valueOf(monthOfYear+1));
-				birthdayYearEdit.setText(String.valueOf(year));
+				birthdayDay.setText(String.valueOf(dayOfMonth));
+				birthdayMonth.setText(String.valueOf(monthOfYear+1));
+				birthdayYear.setText(String.valueOf(year));
 			}
 		};
 
@@ -99,11 +125,11 @@ public abstract class InputActivity extends AppCompatActivity {
 	}
 
 	protected boolean checkInput() {
-        String birthdayDay = birthdayDayEdit.getText().toString();
-        String birthdayMonth = birthdayMonthEdit.getText().toString();
-        String birthdayYear = birthdayYearEdit.getText().toString();
-        String firstName = firstNameEdit.getText().toString();
-        String lastName = lastNameEdit.getText().toString();
+        String birthdayDay = this.birthdayDay.getText().toString();
+        String birthdayMonth = this.birthdayMonth.getText().toString();
+        String birthdayYear = this.birthdayYear.getText().toString();
+        String firstName = this.firstName.getText().toString();
+        String lastName = this.lastName.getText().toString();
 
         boolean flag = true;
         int messageResource = 0;
@@ -149,9 +175,9 @@ public abstract class InputActivity extends AppCompatActivity {
 	 * only call this function when checkInput() was called before AND returned true !
 	 */
 	protected void setBirthdayFromEditTexts() {
-		String birthdayDay = birthdayDayEdit.getText().toString();
-		String birthdayMonth = birthdayMonthEdit.getText().toString();
-		String birthdayYear = birthdayYearEdit.getText().toString();
+		String birthdayDay = this.birthdayDay.getText().toString();
+		String birthdayMonth = this.birthdayMonth.getText().toString();
+		String birthdayYear = this.birthdayYear.getText().toString();
 		int birthdayD = Integer.parseInt(birthdayDay);
 		int birthdayM = Integer.parseInt(birthdayMonth);
 		int birthdayY = Integer.parseInt(birthdayYear);

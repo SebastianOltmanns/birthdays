@@ -244,56 +244,19 @@ public class MainActivity extends AppCompatActivity {
 					break;
 				}
 				String filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
-				repository.importData(filePath);
-				/*Log.d("MainActivity", "import: " + filePath);
-				File file = new File(filePath);
-				if (!file.exists()) {
-					importExportFailDialog.show();
-				}
-				try {
-					ArrayList<DataSet> importedData = new ArrayList<>();
-					try {
-						//first try block: for json reading
-						FileReader fr = new FileReader(file);
-						BufferedReader br = new BufferedReader(fr);
-
-						JSONArray jsonArray = new JSONArray(br.readLine());
-						for (int i = 0; i < jsonArray.length(); i++) {
-							importedData.add(new DataSet((JSONObject) jsonArray.get(i)));
-						}
-
-						br.close();
-						fr.close();
-					} catch (JSONException e) {
-						e.printStackTrace();
-						//if json fails: try old reading method (using serializable interface)
-						FileInputStream fis = new FileInputStream(file);
-						BufferedInputStream bis = new BufferedInputStream(fis);
-						ObjectInputStream ois = new ObjectInputStream(bis);
-
-						importedData = (ArrayList<DataSet>) ois.readObject();
-
-						ois.close();
-						bis.close();
-						fis.close();
-					}
-
-					for (DataSet dataSet : importedData) {
-						dataSet.id = IdGenerator.getNewId(this);
-						this.data.add(dataSet);
-					}
-					WidgetService.notifyDataChanged(this);
-
+				repository.importData(filePath, () -> {
 					new AlertDialog.Builder(this).
-							setMessage(R.string.import_export_import_successfull_text).
-							setTitle(R.string.import_export_import_successfull_title).
+							setMessage(R.string.import_export_export_successful_text).
+							setTitle(R.string.import_export_export_successful_title).
 							setNeutralButton(R.string.ok, null).
 							show();
-
-				} catch (IOException | ClassNotFoundException e) {
-					e.printStackTrace();
-					importExportFailDialog.show();
-				}*/
+				}, error -> {
+					new AlertDialog.Builder(this)
+							.setMessage(R.string.import_export_failed_title)
+							.setTitle(R.string.import_export_failed_text)
+							.setNeutralButton(R.string.ok, null)
+							.show();
+				});
 				break;
 			}
 			case REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE: {

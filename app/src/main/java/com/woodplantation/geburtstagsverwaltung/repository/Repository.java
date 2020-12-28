@@ -58,12 +58,12 @@ public class Repository {
         return entryDao.getAll();
     }
 
-    public void insertData(Set<Entry> data, Action onComplete) {
+    public void insertData(Set<Entry> data, Action onSuccess, Consumer<Throwable> onFailure) {
         compositeDisposable.add(
                 entryDao.insertMany(data)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(onComplete)
+                        .subscribe(onSuccess, onFailure)
         );
     }
 
