@@ -27,10 +27,10 @@ public class DataAdapter extends ListAdapter<Entry, DataAdapter.DataViewHolder> 
 
     public static class DataViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView name;
-        private TextView remaining;
-        private TextView notes;
-        private TextView birthday;
+        private final TextView name;
+        private final TextView remaining;
+        private final TextView notes;
+        private final TextView birthday;
 
         public DataViewHolder(@NonNull View itemView) {
             super(itemView);

@@ -140,4 +140,22 @@ public class Repository {
         );
     }
 
+    public void deleteData(long id, Action onSuccess, Consumer<Throwable> onFailure) {
+        compositeDisposable.add(
+                entryDao.delete(id)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(onSuccess, onFailure)
+        );
+    }
+
+    public void getById(long id, Consumer<Entry> onSuccess, Consumer<Throwable> onFailure) {
+        compositeDisposable.add(
+                entryDao.getById(id)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(onSuccess, onFailure)
+        );
+    }
+
 }

@@ -38,7 +38,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_cancel_and_save, menu);
+        getMenuInflater().inflate(R.menu.menu_input, menu);
         return true;
     }
 

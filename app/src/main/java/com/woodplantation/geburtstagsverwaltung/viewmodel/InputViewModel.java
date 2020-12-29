@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.woodplantation.geburtstagsverwaltung.exceptions.NoIdToDeleteException;
 import com.woodplantation.geburtstagsverwaltung.model.Entry;
 import com.woodplantation.geburtstagsverwaltung.repository.Repository;
 
@@ -29,6 +30,7 @@ public class InputViewModel extends ViewModel {
     private final MutableLiveData<LocalDate> birthday = new MutableLiveData<>(LocalDate.now());
     private final MutableLiveData<Boolean> ignoreYear = new MutableLiveData<>(false);
     private final MutableLiveData<String> notes = new MutableLiveData<>("");
+    private Long id;
 
     public LiveData<String> getFirstName() {
         return firstName;
@@ -86,10 +88,49 @@ public class InputViewModel extends ViewModel {
     }
 
     public void save(Action onSuccess, Consumer<Throwable> onFailure) {
-        //noinspection ConstantConditions
         Entry entry = new Entry(firstName.getValue(), lastName.getValue(), birthday.getValue(), ignoreYear.getValue(), notes.getValue());
         Set<Entry> data = new HashSet<>();
         data.add(entry);
         repository.insertData(data, onSuccess, onFailure);
+    }
+
+    public void delete(Action onSuccess, Consumer<Throwable> onFailure) {
+        if (hasId()) {
+            repository.deleteData(id, onSuccess, onFailure);
+        } else {
+            try {
+                onFailure.accept(new NoIdToDeleteException());
+            } catch (Exception e) {
+                // this should NEVER happen.
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void init(Long id, Consumer<Throwable> onFailure) {
+        this.id = id;
+        if (hasId()) {
+            repository.getById(
+                    id,
+                    entry -> {
+                        firstName.setValue(entry.firstName);
+                        lastName.setValue(entry.lastName);
+                        birthday.setValue(entry.birthday);
+                        ignoreYear.setValue(entry.ignoreYear);
+                        notes.setValue(entry.notes);
+                    },
+                    onFailure
+            );
+        } else {
+            firstName.setValue("");
+            lastName.setValue("");
+            birthday.setValue(LocalDate.now());
+            ignoreYear.setValue(false);
+            notes.setValue("");
+        }
+    }
+
+    public boolean hasId() {
+        return id != null && id != -1;
     }
 }

@@ -37,9 +37,11 @@ import com.woodplantation.geburtstagsverwaltung.notifications.AlarmCreator;
 import com.woodplantation.geburtstagsverwaltung.repository.Repository;
 import com.woodplantation.geburtstagsverwaltung.storage.DataSet;
 import com.woodplantation.geburtstagsverwaltung.storage.StorageHandler;
+import com.woodplantation.geburtstagsverwaltung.util.IntentCodes;
 import com.woodplantation.geburtstagsverwaltung.util.MyPreferences;
 import com.woodplantation.geburtstagsverwaltung.util.SortingCategory;
 import com.woodplantation.geburtstagsverwaltung.view.DataAdapter;
+import com.woodplantation.geburtstagsverwaltung.view.RecyclerItemClickListener;
 import com.woodplantation.geburtstagsverwaltung.viewmodel.MainViewModel;
 
 import java.text.SimpleDateFormat;
@@ -127,6 +129,21 @@ public class MainActivity extends AppCompatActivity {
 		DataAdapter adapter = new DataAdapter(this);
 		dataView.setAdapter(adapter);
 		mainViewModel.getData().observe(this, adapter::submitList);
+		// connect recyclerview with click listener
+		dataView.addOnItemTouchListener(
+				new RecyclerItemClickListener(this, dataView, new RecyclerItemClickListener.OnItemClickListener() {
+					@Override public void onItemClick(View view, int position) {
+						// start edit
+						Intent intent = new Intent(MainActivity.this, InputActivity.class);
+						intent.putExtra(IntentCodes.ID, mainViewModel.getData().getValue().get(position).id);
+						startActivity(intent);
+					}
+
+					@Override public void onLongItemClick(View view, int position) {
+						//TODO dialog to delete
+					}
+				})
+		);
 
 		// check if this is first app start
 		if (myPreferences.getFirstTimeCall()) {
@@ -169,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	public void onAddClick(@Nullable View v) {
-		Intent intent = new Intent(MainActivity.this, AddActivity.class);
+		Intent intent = new Intent(MainActivity.this, InputActivity.class);
 		startActivity(intent);
 	}
 

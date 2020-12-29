@@ -8,20 +8,19 @@ import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
+import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.Switch;
+import android.widget.ImageButton;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.woodplantation.geburtstagsverwaltung.R;
+import com.woodplantation.geburtstagsverwaltung.exceptions.NoIdToDeleteException;
+import com.woodplantation.geburtstagsverwaltung.util.IntentCodes;
+import com.woodplantation.geburtstagsverwaltung.view.AfterTextChanged;
+import com.woodplantation.geburtstagsverwaltung.view.FocusNextViewTextWatcher;
 import com.woodplantation.geburtstagsverwaltung.viewmodel.InputViewModel;
-import com.woodplantation.geburtstagsverwaltung.viewmodel.MainViewModel;
 
-import java.util.Calendar;
+import java.time.LocalDate;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -32,157 +31,138 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public abstract class InputActivity extends AppCompatActivity {
 
-	private EditText firstName;
-	private EditText lastName;
-	private EditText birthdayDay, birthdayMonth, birthdayYear;
+	private TextInputEditText firstName;
+	private TextInputEditText lastName;
+	private TextInputEditText birthdayDay, birthdayMonth, birthdayYear;
+	private ImageButton birthdayButton;
 	private SwitchCompat ignoreYear;
-	private EditText notes;
+	private TextInputEditText notes;
 
 	private InputViewModel inputViewModel;
 
-	/**
-	 * text watcher that automatically requests focus for the next
-	 * textview once the given text length is reached
-	 */
-	private static class FocusNextViewTextWatcher implements TextWatcher {
-		int count;
-		View view;
-		FocusNextViewTextWatcher(int count, View view) {
-			this.count = count;
-			this.view = view;
-		}
-		@Override
-		public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
-		@Override
-		public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
-		@Override
-		public void afterTextChanged(Editable editable) {
-			if (editable.length() == count) view.requestFocus();
-		}
-	}
-
-	protected void onCreate(Bundle savedInstanceState, int contentView) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(contentView);
+		setContentView(R.layout.activity_input);
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-		firstName = findViewById(R.id.text_input_firstname);
-		lastName = findViewById(R.id.text_input_lastname);
-		birthdayDay = findViewById(R.id.text_input_birthday_day);
-		birthdayMonth = findViewById(R.id.text_input_birthday_month);
-		birthdayYear = findViewById(R.id.text_input_birthday_year);
+		firstName = findViewById(R.id.first_name);
+		lastName = findViewById(R.id.last_name);
+		birthdayDay = findViewById(R.id.birthday_day);
+		birthdayMonth = findViewById(R.id.birthday_month);
+		birthdayYear = findViewById(R.id.birthday_year);
+		birthdayButton = findViewById(R.id.birthday_button);
 		ignoreYear = findViewById(R.id.ignore_year);
-		notes = findViewById(R.id.text_input_others);
+		notes = findViewById(R.id.notes);
 
         birthdayDay.addTextChangedListener(new FocusNextViewTextWatcher(2, birthdayMonth));
 		birthdayMonth.addTextChangedListener(new FocusNextViewTextWatcher(2, birthdayYear));
 
 		inputViewModel = new ViewModelProvider(this).get(InputViewModel.class);
-
-		inputViewModel.getFirstName().observe(this, firstName::setText);
-		inputViewModel.getLastName().observe(this, lastName::setText);
-		inputViewModel.getBirthday().observe(this, birthday -> {
-			birthdayDay.setText(String.valueOf(birthday.getDayOfMonth()));
-			birthdayMonth.setText(String.valueOf(birthday.getMonth()));
-			birthdayYear.setText(String.valueOf(birthday.getYear()));
+		Long id = getIntent().hasExtra(IntentCodes.ID) ? getIntent().getLongExtra(IntentCodes.ID, -1) : null;
+		inputViewModel.init(id, error -> {
+			new AlertDialog.Builder(this)
+					.setTitle(R.string.loading_failed_title)
+					.setMessage(R.string.loading_failed_text)
+					.setNeutralButton(R.string.ok, (a,b) -> finish())
+					.setCancelable(false)
+					.show();
 		});
-		inputViewModel.getIgnoreYear()
+
+		inputViewModel.getFirstName().observe(this, _firstName -> {
+			if (!_firstName.contentEquals(firstName.getText())) {
+				firstName.setText(_firstName);
+			}
+		});
+		inputViewModel.getLastName().observe(this, _lastName -> {
+			if (!_lastName.contentEquals(lastName.getText())) {
+				lastName.setText(_lastName);
+			}
+		});
+		inputViewModel.getBirthday().observe(this, birthday -> {
+			if (!String.valueOf(birthday.getDayOfMonth()).contentEquals(birthdayDay.getText())) {
+				birthdayDay.setText(String.valueOf(birthday.getDayOfMonth()));
+			}
+			if (!String.valueOf(birthday.getMonth()).contentEquals(birthdayMonth.getText())) {
+				birthdayMonth.setText(String.valueOf(birthday.getMonth()));
+			}
+			if (!String.valueOf(birthday.getYear()).contentEquals(birthdayYear.getText())) {
+				birthdayYear.setText(String.valueOf(birthday.getYear()));
+			}
+		});
+		inputViewModel.getIgnoreYear().observe(this, _ignoreYear -> {
+			if (!_ignoreYear.equals(ignoreYear.isChecked())) {
+				ignoreYear.setChecked(_ignoreYear);
+			}
+		});
+		inputViewModel.getNotes().observe(this, _notes -> {
+			if (!_notes.contentEquals(notes.getText())) {
+				notes.setText(_notes);
+			}
+		});
+
+		firstName.addTextChangedListener(new AfterTextChanged(e -> inputViewModel.setFirstName(e.toString())));
+		lastName.addTextChangedListener(new AfterTextChanged(e -> inputViewModel.setLastName(e.toString())));
+		birthdayDay.addTextChangedListener(new AfterTextChanged(e -> inputViewModel.setBirthdayDay(Integer.parseInt(e.toString()))));
+		birthdayMonth.addTextChangedListener(new AfterTextChanged(e -> inputViewModel.setBirthdayMonth(Integer.parseInt(e.toString()))));
+		birthdayYear.addTextChangedListener(new AfterTextChanged(e -> inputViewModel.setBirthdayYear(Integer.parseInt(e.toString()))));
+		ignoreYear.setOnCheckedChangeListener((buttonView, isChecked) -> inputViewModel.setIgnoreYear(isChecked));
+		notes.addTextChangedListener(new AfterTextChanged(e -> inputViewModel.setNotes(e.toString())));
+
+		birthdayButton.setOnClickListener(view -> {
+			LocalDate birthday = inputViewModel.getBirthday().getValue();
+			new DatePickerDialog(
+					this,
+					(v, year, monthOfYear, dayOfMonth) -> inputViewModel.setBirthday(LocalDate.of(year, monthOfYear + 1, dayOfMonth)),
+					birthday.getYear(),
+					birthday.getMonthValue() - 1,
+					birthday.getDayOfMonth()
+			).show();
+		});
 
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.menu_input, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
 
-		if (item.getItemId() == android.R.id.home) {
-			setResult(RESULT_CANCELED);
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		MenuItem deleteItem = menu.findItem(R.id.menu_delete);
+		deleteItem.setVisible(inputViewModel.hasId());
+		return super.onPrepareOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == android.R.id.home || item.getItemId() == R.id.menu_cancel) {
 			finish();
 			return true;
+		} else if (item.getItemId() == R.id.menu_ok) {
+			inputViewModel.save(
+					this::finish,
+					error -> new AlertDialog.Builder(this)
+							.setTitle(R.string.save_failed_title)
+							.setMessage(getString(R.string.save_failed_text, error.getLocalizedMessage()))
+							.setNeutralButton(R.string.ok, null)
+							.show()
+			);
+		} else if (item.getItemId() == R.id.menu_delete) {
+			inputViewModel.delete(
+					this::finish,
+					error -> new AlertDialog.Builder(this)
+							.setTitle(R.string.delete_failed_title)
+							.setMessage(getString(R.string.delete_failed_text, error instanceof NoIdToDeleteException ? getString(R.string.no_id_to_delete) : error.getLocalizedMessage()))
+							.setNeutralButton(R.string.ok, null)
+							.show()
+			);
 		}
 
 		return super.onOptionsItemSelected(item);
 	}
 
-	public void changeBirthday(View view) {
-		DatePickerDialog.OnDateSetListener callback = new DatePickerDialog.OnDateSetListener() {
-			@Override
-			public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-				birthday.set(year, monthOfYear, dayOfMonth);
-				birthdayDay.setText(String.valueOf(dayOfMonth));
-				birthdayMonth.setText(String.valueOf(monthOfYear+1));
-				birthdayYear.setText(String.valueOf(year));
-			}
-		};
-
-		DatePickerDialog datePickerDialog = new DatePickerDialog(this, callback,
-				birthday.get(Calendar.YEAR),
-				birthday.get(Calendar.MONTH),
-				birthday.get(Calendar.DAY_OF_MONTH));
-
-		datePickerDialog.show();
-	}
-
-	protected boolean checkInput() {
-        String birthdayDay = this.birthdayDay.getText().toString();
-        String birthdayMonth = this.birthdayMonth.getText().toString();
-        String birthdayYear = this.birthdayYear.getText().toString();
-        String firstName = this.firstName.getText().toString();
-        String lastName = this.lastName.getText().toString();
-
-        boolean flag = true;
-        int messageResource = 0;
-
-        //check for valid birthday: first, check if all fields are set
-		if (TextUtils.isEmpty(birthdayDay)
-				|| TextUtils.isEmpty(birthdayMonth)
-				|| TextUtils.isEmpty(birthdayYear)) {
-            messageResource = R.string.wrong_input_birthday;
-            flag = false;
-        } else {
-            //all fields are set. check if the actual values are fine, e.g. 41.15.2088 is not valid
-            int birthdayD = Integer.parseInt(birthdayDay);
-            int birthdayM = Integer.parseInt(birthdayMonth);
-            int birthdayY = Integer.parseInt(birthdayYear);
-            Calendar inputBirthday = Calendar.getInstance();
-            inputBirthday.set(birthdayY, birthdayM-1, birthdayD);
-            if (inputBirthday.after(Calendar.getInstance())
-                    || inputBirthday.get(Calendar.YEAR) != birthdayY
-                    || inputBirthday.get(Calendar.MONTH) != birthdayM-1
-                    || inputBirthday.get(Calendar.DAY_OF_MONTH) != birthdayD) {
-                messageResource = R.string.wrong_input_birthday;
-                flag = false;
-            } else if (TextUtils.isEmpty(firstName) && TextUtils.isEmpty(lastName)) {
-                messageResource = R.string.wrong_input_no_name;
-                flag = false;
-            }
-        }
-
-        if (!flag) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage(messageResource);
-            builder.setTitle(R.string.wrong_input_title);
-            builder.setPositiveButton(R.string.ok, null);
-            builder.show();
-            return false;
-        }
-
-        return true;
-    }
-
-	/**
-	 * only call this function when checkInput() was called before AND returned true !
-	 */
-	protected void setBirthdayFromEditTexts() {
-		String birthdayDay = this.birthdayDay.getText().toString();
-		String birthdayMonth = this.birthdayMonth.getText().toString();
-		String birthdayYear = this.birthdayYear.getText().toString();
-		int birthdayD = Integer.parseInt(birthdayDay);
-		int birthdayM = Integer.parseInt(birthdayMonth);
-		int birthdayY = Integer.parseInt(birthdayYear);
-
-		birthday.set(birthdayY, birthdayM-1, birthdayD);
-
-	}
 }

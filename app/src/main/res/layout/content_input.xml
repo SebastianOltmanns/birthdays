@@ -28,6 +28,7 @@
                     android:id="@+id/birthday_day"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
                     android:hint="day">
                     <requestFocus />
                 </com.google.android.material.textfield.TextInputEditText>
@@ -43,6 +44,7 @@
                     android:id="@+id/birthday_month"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
                     android:hint="month"/>
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -56,11 +58,13 @@
                     android:id="@+id/birthday_year"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
                     android:hint="year"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <ImageButton
+                android:id="@+id/birthday_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -68,7 +72,6 @@
                 android:layout_marginStart="@dimen/text_gap"
                 android:background="@drawable/rounded_corners_button"
                 android:padding="@dimen/rounded_button_corner_radius"
-                android:onClick="changeBirthday"
                 android:src="@drawable/ic_event" />
 
         </LinearLayout>
@@ -93,6 +96,8 @@
                 android:lines="1"
                 android:inputType="textCapWords"
                 android:hint="first name"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"

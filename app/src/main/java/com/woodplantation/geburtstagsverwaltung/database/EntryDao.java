@@ -24,8 +24,8 @@ public interface EntryDao {
     @Insert
     Completable insertMany(Set<Entry> entries);
 
-    @Delete
-    Completable delete(Entry entry);
+    @Delete(entity = Entry.class)
+    Completable delete(long id);
 
     @Update
     Completable update(Entry entry);
@@ -35,5 +35,8 @@ public interface EntryDao {
 
     @Query("SELECT * FROM Entry")
     Single<List<Entry>> getAllRx();
+
+    @Query("SELECT * FROM Entry WHERE id = :id")
+    Single<Entry> getById(long id);
 
 }

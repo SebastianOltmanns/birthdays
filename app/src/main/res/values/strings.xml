@@ -85,6 +85,15 @@
     <string name="set_alarm_permissions_explanation_title">Please activate permission</string>
     <string name="set_alarm_permissions_explanation_text">To notify you about birthdays, the app needs permission to set alarms. If you deny this, the app can not notify you.</string>
 
+    <string name="save_failed_title">Saving data failed</string>
+    <string name="save_failed_text">Saving data failed due to the following reason:\n\n%s</string>
+
+    <string name="delete_failed_title">Deleting data failed</string>
+    <string name="delete_failed_text">Deleting data failed due to the following reason:\n\n%s</string>
+    <string name="no_id_to_delete">No data found to delete.</string>
+
+    <string name="loading_failed_title">Loading data failed</string>
+    <string name="loading_failed_text">Loading data failed due to the following reason:\n\n%s</string>
     <!-- - - - - - - - - - - - - - - - - - - NOTIFICATION - - - - - - - - - - - - - - - - - - - -->
     <string name="content_title">Birthday reminder</string>
     <string name="content_text">%1$s, it\'s %2$s\'s birthday</string>
