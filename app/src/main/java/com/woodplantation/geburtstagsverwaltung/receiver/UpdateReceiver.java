@@ -16,9 +16,7 @@ import com.woodplantation.geburtstagsverwaltung.util.MyPreferences;
 import com.woodplantation.geburtstagsverwaltung.widget.WidgetAlarmReceiver;
 import com.woodplantation.geburtstagsverwaltung.widget.WidgetService;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;

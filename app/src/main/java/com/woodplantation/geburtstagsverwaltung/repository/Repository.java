@@ -63,6 +63,15 @@ public class Repository {
         );
     }
 
+    public void insertData(Entry data, Action onSuccess, Consumer<Throwable> onFailure) {
+        compositeDisposable.add(
+                entryDao.insert(data)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(onSuccess, onFailure)
+        );
+    }
+
     public void exportData(Consumer<String> onSuccess, Consumer<Throwable> onFailure) {
         compositeDisposable.add(
                 entryDao.getAllRx()
@@ -148,6 +157,15 @@ public class Repository {
     public void getById(long id, Consumer<Entry> onSuccess, Consumer<Throwable> onFailure) {
         compositeDisposable.add(
                 entryDao.getById(id)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(onSuccess, onFailure)
+        );
+    }
+
+    public void updateData(Entry entry, Action onSuccess, Consumer<Throwable> onFailure) {
+        compositeDisposable.add(
+                entryDao.update(entry)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(onSuccess, onFailure)

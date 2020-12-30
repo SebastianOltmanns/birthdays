@@ -10,8 +10,6 @@ import com.woodplantation.geburtstagsverwaltung.model.Entry;
 import com.woodplantation.geburtstagsverwaltung.repository.Repository;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
@@ -92,10 +90,10 @@ public class InputViewModel extends ViewModel {
         Entry entry = new Entry(firstName.getValue(), lastName.getValue(), birthday.getValue(), ignoreYear.getValue(), notes.getValue());
         if (hasId()) {
             entry.id = id;
+            repository.updateData(entry, onSuccess, onFailure);
+        } else {
+            repository.insertData(entry, onSuccess, onFailure);
         }
-        Set<Entry> data = new HashSet<>();
-        data.add(entry);
-        repository.insertData(data, onSuccess, onFailure);
     }
 
     public void delete(Action onSuccess, Consumer<Throwable> onFailure) {
