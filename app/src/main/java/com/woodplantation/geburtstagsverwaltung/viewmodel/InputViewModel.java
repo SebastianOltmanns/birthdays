@@ -88,7 +88,11 @@ public class InputViewModel extends ViewModel {
     }
 
     public void save(Action onSuccess, Consumer<Throwable> onFailure) {
+        //noinspection ConstantConditions
         Entry entry = new Entry(firstName.getValue(), lastName.getValue(), birthday.getValue(), ignoreYear.getValue(), notes.getValue());
+        if (hasId()) {
+            entry.id = id;
+        }
         Set<Entry> data = new HashSet<>();
         data.add(entry);
         repository.insertData(data, onSuccess, onFailure);

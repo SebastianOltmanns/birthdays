@@ -1,6 +1,7 @@
 package com.woodplantation.geburtstagsverwaltung.model;
 
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.woodplantation.geburtstagsverwaltung.storage.DataSet;
@@ -13,7 +14,7 @@ import java.util.Calendar;
 @Entity
 public class Entry {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     public long id;
 
     @NotNull public String firstName = "";
@@ -32,6 +33,7 @@ public class Entry {
     public Entry() {
     }
 
+    @Ignore
     public Entry(DataSet dataSet) {
         firstName = dataSet.firstName;
         lastName = dataSet.lastName;
@@ -40,6 +42,7 @@ public class Entry {
         notes = dataSet.others;
     }
 
+    @Ignore
     public Entry(@NotNull String firstName, @NotNull String lastName, @NotNull LocalDate birthday, boolean ignoreYear, @NotNull String notes) {
         this.firstName = firstName;
         this.lastName = lastName;

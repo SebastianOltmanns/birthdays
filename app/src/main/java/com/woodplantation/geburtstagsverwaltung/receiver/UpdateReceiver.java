@@ -37,20 +37,17 @@ public class UpdateReceiver extends BroadcastReceiver {
     @Inject
     StorageHandler storageHandler;
     @Inject
-    MyPreferences myPreferences;
-    @Inject
     Repository repository;
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d("updatereceiver", "on receive!");
+        Log.d("updatereceiver", "on receive! preferences: " + preferences);
         migrateTwoPreferencesToOne(context);
         migrateStorageToDbAndContinueWithAlarmsAndWidget(context);
     }
 
-
     private void migrateStorageToDbAndContinueWithAlarmsAndWidget(Context context) {
-        if (!myPreferences.isStorageMigrated()) {
+        if (!preferences.isStorageMigrated()) {
             // load current data
             ArrayList<DataSet> data = storageHandler.loadData();
 
@@ -61,7 +58,7 @@ public class UpdateReceiver extends BroadcastReceiver {
                             .collect(Collectors.toSet()),
                     () -> {
                         // store in preferences that we did migration
-                        myPreferences.preferences
+                        preferences.preferences
                                 .edit()
                                 .putBoolean(context.getString(R.string.preferences_storage_migrated), true)
                                 .apply();
@@ -94,12 +91,12 @@ public class UpdateReceiver extends BroadcastReceiver {
     }
 
     private void migrateTwoPreferencesToOne(Context context) {
-        if (!myPreferences.arePreferencesMigrated()) {
+        if (!preferences.arePreferencesMigrated()) {
             // get notifications preferences
             @SuppressWarnings("deprecation")
             MyPreferences notificationPreferences = MyPreferences.getNotificationPreferences(context);
 
-            myPreferences.preferences
+            preferences.preferences
                     .edit()
                     // migrate all notification preferences to default preferences
                     .putBoolean(context.getString(R.string.preferences_active), notificationPreferences.getActive())

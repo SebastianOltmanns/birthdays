@@ -51,6 +51,14 @@
         </activity>
 
         <activity
+            android:name=".activities.InputActivity"
+            android:label="@string/activity_input_label"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".activities.MainActivity">
+
+        </activity>
+
+        <activity
             android:name=".activities.InfoActivity"
             android:label="@string/activity_info_label"
             android:theme="@style/AppTheme.NoActionBar"

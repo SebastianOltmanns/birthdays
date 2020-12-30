@@ -6,7 +6,6 @@ import androidx.lifecycle.LiveData;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.woodplantation.geburtstagsverwaltung.activities.MainActivity;
@@ -31,15 +30,12 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import io.reactivex.Completable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-
-import static com.woodplantation.geburtstagsverwaltung.activities.MainActivity.FILE_EXPORT_EXTENSION;
 
 public class Repository {
 
@@ -142,7 +138,7 @@ public class Repository {
 
     public void deleteData(long id, Action onSuccess, Consumer<Throwable> onFailure) {
         compositeDisposable.add(
-                entryDao.delete(id)
+                entryDao.deleteById(id)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(onSuccess, onFailure)

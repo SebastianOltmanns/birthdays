@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -186,8 +187,10 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	public void onAddClick(@Nullable View v) {
+		Log.d("mainactivity", "on add click");
 		Intent intent = new Intent(MainActivity.this, InputActivity.class);
 		startActivity(intent);
+		Log.d("mainactivity", "on add click done");
 	}
 
 	@Override

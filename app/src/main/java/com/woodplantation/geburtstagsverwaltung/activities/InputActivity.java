@@ -8,6 +8,7 @@ import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageButton;
@@ -29,7 +30,7 @@ import dagger.hilt.android.AndroidEntryPoint;
  * Contact: sebastian.oltmanns.developer@googlemail.com
  */
 @AndroidEntryPoint
-public abstract class InputActivity extends AppCompatActivity {
+public class InputActivity extends AppCompatActivity {
 
 	private TextInputEditText firstName;
 	private TextInputEditText lastName;
@@ -45,6 +46,7 @@ public abstract class InputActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_input);
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
+		Log.d("inputactivity", "oncreate");
 
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -62,6 +64,7 @@ public abstract class InputActivity extends AppCompatActivity {
 
 		inputViewModel = new ViewModelProvider(this).get(InputViewModel.class);
 		Long id = getIntent().hasExtra(IntentCodes.ID) ? getIntent().getLongExtra(IntentCodes.ID, -1) : null;
+		setTitle((id != null && id != -1) ? R.string.edit : R.string.add);
 		inputViewModel.init(id, error -> {
 			new AlertDialog.Builder(this)
 					.setTitle(R.string.loading_failed_title)
@@ -72,23 +75,23 @@ public abstract class InputActivity extends AppCompatActivity {
 		});
 
 		inputViewModel.getFirstName().observe(this, _firstName -> {
-			if (!_firstName.contentEquals(firstName.getText())) {
+			if (!_firstName.contentEquals(firstName.getText() == null ? "" : firstName.getText())) {
 				firstName.setText(_firstName);
 			}
 		});
 		inputViewModel.getLastName().observe(this, _lastName -> {
-			if (!_lastName.contentEquals(lastName.getText())) {
+			if (!_lastName.contentEquals(lastName.getText() == null ? "" : lastName.getText())) {
 				lastName.setText(_lastName);
 			}
 		});
 		inputViewModel.getBirthday().observe(this, birthday -> {
-			if (!String.valueOf(birthday.getDayOfMonth()).contentEquals(birthdayDay.getText())) {
+			if (!String.valueOf(birthday.getDayOfMonth()).contentEquals(birthdayDay.getText() == null ? "" : birthdayDay.getText())) {
 				birthdayDay.setText(String.valueOf(birthday.getDayOfMonth()));
 			}
-			if (!String.valueOf(birthday.getMonth()).contentEquals(birthdayMonth.getText())) {
-				birthdayMonth.setText(String.valueOf(birthday.getMonth()));
+			if (!String.valueOf(birthday.getMonthValue()).contentEquals(birthdayMonth.getText() == null ? "" : birthdayMonth.getText())) {
+				birthdayMonth.setText(String.valueOf(birthday.getMonthValue()));
 			}
-			if (!String.valueOf(birthday.getYear()).contentEquals(birthdayYear.getText())) {
+			if (!String.valueOf(birthday.getYear()).contentEquals(birthdayYear.getText() == null ? "" : birthdayYear.getText())) {
 				birthdayYear.setText(String.valueOf(birthday.getYear()));
 			}
 		});
@@ -98,7 +101,7 @@ public abstract class InputActivity extends AppCompatActivity {
 			}
 		});
 		inputViewModel.getNotes().observe(this, _notes -> {
-			if (!_notes.contentEquals(notes.getText())) {
+			if (!_notes.contentEquals(notes.getText() == null ? "" : notes.getText())) {
 				notes.setText(_notes);
 			}
 		});
@@ -121,7 +124,7 @@ public abstract class InputActivity extends AppCompatActivity {
 					birthday.getDayOfMonth()
 			).show();
 		});
-
+		Log.d("inputactivity", "oncreate done");
 	}
 
 	@Override
