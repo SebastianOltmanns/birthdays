@@ -5,8 +5,10 @@ import android.content.Context;
 import com.woodplantation.geburtstagsverwaltung.R;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
+import java.util.Locale;
 
 public class DateUtil {
 
@@ -23,7 +25,7 @@ public class DateUtil {
         return _date;
     }
 
-    public static String getRemainingWithAge(Context context, LocalDate birthday) {
+    public static String getRemainingWithAge(Context context, LocalDate birthday, boolean withAge) {
         LocalDate nextBirthday = getNextBirthday(birthday);
         long daysRemaining = getRemainingDaysUntilNextBirthday(nextBirthday);
 
@@ -39,7 +41,22 @@ public class DateUtil {
 
         int age = nextBirthday.getYear() - birthday.getYear();
 
-        return context.getString(R.string.xth_birthday, textRemaining, age);
+        if (withAge) {
+            return context.getString(R.string.xth_birthday, textRemaining, age);
+        } else {
+            return textRemaining;
+        }
+    }
+
+    private static DateTimeFormatter formatterWithYear = DateTimeFormatter.ofPattern("dd.MM.yyyy", Locale.US);
+    private static DateTimeFormatter formatterWithoutYear = DateTimeFormatter.ofPattern("dd.MM", Locale.US);
+
+    public static String getBirthdayString(LocalDate birthday, boolean ignoreYear) {
+        if (ignoreYear) {
+            return formatterWithoutYear.format(birthday);
+        } else {
+            return formatterWithYear.format(birthday);
+        }
     }
 
 }

@@ -15,8 +15,11 @@ import com.woodplantation.geburtstagsverwaltung.R;
 import com.woodplantation.geburtstagsverwaltung.model.Entry;
 import com.woodplantation.geburtstagsverwaltung.util.DateUtil;
 
+import java.time.chrono.IsoChronology;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.FormatStyle;
+import java.time.format.ResolverStyle;
 import java.util.Objects;
 
 import javax.inject.Inject;
@@ -74,9 +77,9 @@ public class DataAdapter extends ListAdapter<Entry, DataAdapter.DataViewHolder> 
     public void onBindViewHolder(@NonNull DataViewHolder holder, int position) {
         Entry data = getItem(position);
         holder.name.setText(data.getFullName());
-        holder.remaining.setText(DateUtil.getRemainingWithAge(context, data.birthday));
+        holder.remaining.setText(DateUtil.getRemainingWithAge(context, data.birthday, !data.ignoreYear));
         holder.notes.setText(data.notes);
-        holder.birthday.setText(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).format(data.birthday));
+        holder.birthday.setText(DateUtil.getBirthdayString(data.birthday, data.ignoreYear));
     }
 
 
