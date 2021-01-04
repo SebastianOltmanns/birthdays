@@ -17,7 +17,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.woodplantation.geburtstagsverwaltung.R;
 import com.woodplantation.geburtstagsverwaltung.exceptions.NoIdToDeleteException;
 import com.woodplantation.geburtstagsverwaltung.util.IntentCodes;
-import com.woodplantation.geburtstagsverwaltung.view.AfterTextChanged;
+import com.woodplantation.geburtstagsverwaltung.view.AfterTextChangedWatcher;
 import com.woodplantation.geburtstagsverwaltung.view.FocusNextViewTextWatcher;
 import com.woodplantation.geburtstagsverwaltung.viewmodel.InputViewModel;
 
@@ -106,13 +106,13 @@ public class InputActivity extends AppCompatActivity {
 			}
 		});
 
-		firstName.addTextChangedListener(new AfterTextChanged(e -> inputViewModel.setFirstName(e.toString())));
-		lastName.addTextChangedListener(new AfterTextChanged(e -> inputViewModel.setLastName(e.toString())));
-		birthdayDay.addTextChangedListener(new AfterTextChanged(e -> inputViewModel.setBirthdayDay(Integer.parseInt(e.toString()))));
-		birthdayMonth.addTextChangedListener(new AfterTextChanged(e -> inputViewModel.setBirthdayMonth(Integer.parseInt(e.toString()))));
-		birthdayYear.addTextChangedListener(new AfterTextChanged(e -> inputViewModel.setBirthdayYear(Integer.parseInt(e.toString()))));
+		firstName.addTextChangedListener(new AfterTextChangedWatcher(e -> inputViewModel.setFirstName(e.toString())));
+		lastName.addTextChangedListener(new AfterTextChangedWatcher(e -> inputViewModel.setLastName(e.toString())));
+		birthdayDay.addTextChangedListener(new AfterTextChangedWatcher(e -> inputViewModel.setBirthdayDay(Integer.parseInt(e.toString()))));
+		birthdayMonth.addTextChangedListener(new AfterTextChangedWatcher(e -> inputViewModel.setBirthdayMonth(Integer.parseInt(e.toString()))));
+		birthdayYear.addTextChangedListener(new AfterTextChangedWatcher(e -> inputViewModel.setBirthdayYear(Integer.parseInt(e.toString()))));
 		ignoreYear.setOnCheckedChangeListener((buttonView, isChecked) -> inputViewModel.setIgnoreYear(isChecked));
-		notes.addTextChangedListener(new AfterTextChanged(e -> inputViewModel.setNotes(e.toString())));
+		notes.addTextChangedListener(new AfterTextChangedWatcher(e -> inputViewModel.setNotes(e.toString())));
 
 		birthdayButton.setOnClickListener(view -> {
 			LocalDate birthday = inputViewModel.getBirthday().getValue();

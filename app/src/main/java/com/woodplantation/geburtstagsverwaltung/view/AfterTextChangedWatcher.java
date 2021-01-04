@@ -9,11 +9,11 @@ import java.util.function.Consumer;
  * text watcher that accepts one {@link Consumer} in the constructor. this consumer will
  * be called in {@link TextWatcher#afterTextChanged(Editable)}.
  */
-public class AfterTextChanged implements TextWatcher {
+public class AfterTextChangedWatcher implements TextWatcher {
 
     private final Consumer<Editable> afterTextChanged;
 
-    public AfterTextChanged(Consumer<Editable> afterTextChanged) {
+    public AfterTextChangedWatcher(Consumer<Editable> afterTextChanged) {
         this.afterTextChanged = afterTextChanged;
     }
 
