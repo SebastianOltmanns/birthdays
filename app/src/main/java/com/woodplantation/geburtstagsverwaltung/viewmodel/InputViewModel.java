@@ -5,14 +5,17 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.woodplantation.geburtstagsverwaltung.exceptions.InvalidDateException;
+import com.woodplantation.geburtstagsverwaltung.exceptions.NoFirstNameSpecifiedException;
 import com.woodplantation.geburtstagsverwaltung.exceptions.NoIdToDeleteException;
 import com.woodplantation.geburtstagsverwaltung.model.Entry;
 import com.woodplantation.geburtstagsverwaltung.repository.Repository;
 
+import java.time.DateTimeException;
 import java.time.LocalDate;
+import java.util.function.Consumer;
 
 import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
 
 public class InputViewModel extends ViewModel {
 
@@ -21,11 +24,17 @@ public class InputViewModel extends ViewModel {
     @ViewModelInject
     public InputViewModel(Repository repository) {
         this.repository = repository;
+        LocalDate now = LocalDate.now();
+        birthdayDay.setValue(now.getDayOfMonth());
+        birthdayMonth.setValue(now.getMonthValue());
+        birthdayYear.setValue(now.getYear());
     }
 
     private final MutableLiveData<String> firstName = new MutableLiveData<>("");
     private final MutableLiveData<String> lastName = new MutableLiveData<>("");
-    private final MutableLiveData<LocalDate> birthday = new MutableLiveData<>(LocalDate.now());
+    private final MutableLiveData<Integer> birthdayDay = new MutableLiveData<>();
+    private final MutableLiveData<Integer> birthdayMonth = new MutableLiveData<>();
+    private final MutableLiveData<Integer> birthdayYear = new MutableLiveData<>();
     private final MutableLiveData<Boolean> ignoreYear = new MutableLiveData<>(false);
     private final MutableLiveData<String> notes = new MutableLiveData<>("");
     private Long id;
@@ -38,8 +47,16 @@ public class InputViewModel extends ViewModel {
         return lastName;
     }
 
-    public LiveData<LocalDate> getBirthday() {
-        return birthday;
+    public LiveData<Integer> getBirthdayDay() {
+        return birthdayDay;
+    }
+
+    public LiveData<Integer> getBirthdayMonth() {
+        return birthdayMonth;
+    }
+
+    public LiveData<Integer> getBirthdayYear() {
+        return birthdayYear;
     }
 
     public LiveData<Boolean> getIgnoreYear() {
@@ -58,23 +75,16 @@ public class InputViewModel extends ViewModel {
         this.lastName.setValue(lastName);
     }
 
-    public void setBirthday(LocalDate birthday) {
-        this.birthday.setValue(birthday);
+    public void setBirthdayDay(int birthdayDay) {
+        this.birthdayDay.setValue(birthdayDay);
     }
 
-    public void setBirthdayDay(int day) {
-        //noinspection ConstantConditions
-        this.birthday.setValue(this.birthday.getValue().withDayOfMonth(day));
+    public void setBirthdayMonth(int birthdayMonth) {
+        this.birthdayMonth.setValue(birthdayMonth);
     }
 
-    public void setBirthdayMonth(int month) {
-        //noinspection ConstantConditions
-        this.birthday.setValue(this.birthday.getValue().withMonth(month));
-    }
-
-    public void setBirthdayYear(int year) {
-        //noinspection ConstantConditions
-        this.birthday.setValue(this.birthday.getValue().withYear(year));
+    public void setBirthdayYear(int birthdayYear) {
+        this.birthdayYear.setValue(birthdayYear);
     }
 
     public void setIgnoreYear(boolean ignoreYear) {
@@ -86,19 +96,40 @@ public class InputViewModel extends ViewModel {
     }
 
     public void save(Action onSuccess, Consumer<Throwable> onFailure) {
-        //noinspection ConstantConditions
-        Entry entry = new Entry(firstName.getValue(), lastName.getValue(), birthday.getValue(), ignoreYear.getValue(), notes.getValue());
-        if (hasId()) {
-            entry.id = id;
-            repository.updateData(entry, onSuccess, onFailure);
-        } else {
-            repository.insertData(entry, onSuccess, onFailure);
+        if (firstName.getValue() == null || firstName.getValue().equals("")) {
+            try {
+                onFailure.accept(new NoFirstNameSpecifiedException());
+            } catch (Exception e) {
+                // this should NEVER happen
+                e.printStackTrace();
+            }
+            return;
+        }
+        try {
+            //noinspection ConstantConditions
+            LocalDate birthday = LocalDate.of(birthdayYear.getValue(), birthdayMonth.getValue(), birthdayDay.getValue());
+
+            //noinspection ConstantConditions
+            Entry entry = new Entry(firstName.getValue(), lastName.getValue(), birthday, ignoreYear.getValue(), notes.getValue());
+            if (hasId()) {
+                entry.id = id;
+                repository.updateData(entry, onSuccess, onFailure::accept);
+            } else {
+                repository.insertData(entry, onSuccess, onFailure::accept);
+            }
+        } catch (DateTimeException e) {
+            try {
+                onFailure.accept(new InvalidDateException());
+            } catch (Exception e2) {
+                // this should NEVER happen
+                e.printStackTrace();
+            }
         }
     }
 
     public void delete(Action onSuccess, Consumer<Throwable> onFailure) {
         if (hasId()) {
-            repository.deleteData(id, onSuccess, onFailure);
+            repository.deleteData(id, onSuccess, onFailure::accept);
         } else {
             try {
                 onFailure.accept(new NoIdToDeleteException());
@@ -117,16 +148,21 @@ public class InputViewModel extends ViewModel {
                     entry -> {
                         firstName.setValue(entry.firstName);
                         lastName.setValue(entry.lastName);
-                        birthday.setValue(entry.birthday);
+                        birthdayDay.setValue(entry.birthday.getDayOfMonth());
+                        birthdayMonth.setValue(entry.birthday.getMonthValue());
+                        birthdayYear.setValue(entry.birthday.getYear());
                         ignoreYear.setValue(entry.ignoreYear);
                         notes.setValue(entry.notes);
                     },
-                    onFailure
+                    onFailure::accept
             );
         } else {
             firstName.setValue("");
             lastName.setValue("");
-            birthday.setValue(LocalDate.now());
+            LocalDate now = LocalDate.now();
+            birthdayYear.setValue(now.getYear());
+            birthdayMonth.setValue(now.getMonthValue());
+            birthdayDay.setValue(now.getDayOfMonth());
             ignoreYear.setValue(false);
             notes.setValue("");
         }

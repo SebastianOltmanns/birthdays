@@ -24,8 +24,8 @@ public interface EntryDao {
     @Insert
     Completable insertMany(Set<Entry> entries);
 
-    @Delete(entity = Entry.class)
-    Completable deleteById(Long id);
+    @Query("DELETE FROM Entry WHERE id = :id")
+    Completable deleteById(long id);
 
     @Update
     Completable update(Entry entry);

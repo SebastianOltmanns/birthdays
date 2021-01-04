@@ -31,20 +31,17 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class UpdateReceiver extends BroadcastReceiver {
 
     @Inject
-    MyPreferences preferences;
-    @Inject
-    StorageHandler storageHandler;
-    @Inject
     Repository repository;
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d("updatereceiver", "on receive! preferences: " + preferences);
-        migrateTwoPreferencesToOne(context);
-        migrateStorageToDbAndContinueWithAlarmsAndWidget(context);
+        MyPreferences preferences = new MyPreferences(context);
+        StorageHandler storageHandler = new StorageHandler(context);
+        migrateTwoPreferencesToOne(context, preferences);
+        migrateStorageToDbAndContinueWithAlarmsAndWidget(context, preferences, storageHandler);
     }
 
-    private void migrateStorageToDbAndContinueWithAlarmsAndWidget(Context context) {
+    private void migrateStorageToDbAndContinueWithAlarmsAndWidget(Context context, MyPreferences preferences, StorageHandler storageHandler) {
         if (!preferences.isStorageMigrated()) {
             // load current data
             ArrayList<DataSet> data = storageHandler.loadData();
@@ -88,7 +85,7 @@ public class UpdateReceiver extends BroadcastReceiver {
         }
     }
 
-    private void migrateTwoPreferencesToOne(Context context) {
+    private void migrateTwoPreferencesToOne(Context context, MyPreferences preferences) {
         if (!preferences.arePreferencesMigrated()) {
             // get notifications preferences
             @SuppressWarnings("deprecation")

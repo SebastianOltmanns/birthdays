@@ -15,12 +15,16 @@ import android.widget.ImageButton;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.woodplantation.geburtstagsverwaltung.R;
+import com.woodplantation.geburtstagsverwaltung.exceptions.InvalidDateException;
+import com.woodplantation.geburtstagsverwaltung.exceptions.NoFirstNameSpecifiedException;
 import com.woodplantation.geburtstagsverwaltung.exceptions.NoIdToDeleteException;
 import com.woodplantation.geburtstagsverwaltung.util.IntentCodes;
 import com.woodplantation.geburtstagsverwaltung.view.AfterTextChangedWatcher;
 import com.woodplantation.geburtstagsverwaltung.view.FocusNextViewTextWatcher;
+import com.woodplantation.geburtstagsverwaltung.view.ObserverThatSetsTextIfContentIsNotEqual;
 import com.woodplantation.geburtstagsverwaltung.viewmodel.InputViewModel;
 
+import java.time.DateTimeException;
 import java.time.LocalDate;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -46,7 +50,6 @@ public class InputActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_input);
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
-		Log.d("inputactivity", "oncreate");
 
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -74,37 +77,17 @@ public class InputActivity extends AppCompatActivity {
 					.show();
 		});
 
-		inputViewModel.getFirstName().observe(this, _firstName -> {
-			if (!_firstName.contentEquals(firstName.getText() == null ? "" : firstName.getText())) {
-				firstName.setText(_firstName);
-			}
-		});
-		inputViewModel.getLastName().observe(this, _lastName -> {
-			if (!_lastName.contentEquals(lastName.getText() == null ? "" : lastName.getText())) {
-				lastName.setText(_lastName);
-			}
-		});
-		inputViewModel.getBirthday().observe(this, birthday -> {
-			if (!String.valueOf(birthday.getDayOfMonth()).contentEquals(birthdayDay.getText() == null ? "" : birthdayDay.getText())) {
-				birthdayDay.setText(String.valueOf(birthday.getDayOfMonth()));
-			}
-			if (!String.valueOf(birthday.getMonthValue()).contentEquals(birthdayMonth.getText() == null ? "" : birthdayMonth.getText())) {
-				birthdayMonth.setText(String.valueOf(birthday.getMonthValue()));
-			}
-			if (!String.valueOf(birthday.getYear()).contentEquals(birthdayYear.getText() == null ? "" : birthdayYear.getText())) {
-				birthdayYear.setText(String.valueOf(birthday.getYear()));
-			}
-		});
+		inputViewModel.getFirstName().observe(this, ObserverThatSetsTextIfContentIsNotEqual.forString(firstName));
+		inputViewModel.getLastName().observe(this, ObserverThatSetsTextIfContentIsNotEqual.forString(lastName));
+		inputViewModel.getBirthdayDay().observe(this, ObserverThatSetsTextIfContentIsNotEqual.forInteger(birthdayDay));
+		inputViewModel.getBirthdayMonth().observe(this, ObserverThatSetsTextIfContentIsNotEqual.forInteger(birthdayMonth));
+		inputViewModel.getBirthdayYear().observe(this, ObserverThatSetsTextIfContentIsNotEqual.forInteger(birthdayYear));
 		inputViewModel.getIgnoreYear().observe(this, _ignoreYear -> {
 			if (!_ignoreYear.equals(ignoreYear.isChecked())) {
 				ignoreYear.setChecked(_ignoreYear);
 			}
 		});
-		inputViewModel.getNotes().observe(this, _notes -> {
-			if (!_notes.contentEquals(notes.getText() == null ? "" : notes.getText())) {
-				notes.setText(_notes);
-			}
-		});
+		inputViewModel.getNotes().observe(this, ObserverThatSetsTextIfContentIsNotEqual.forString(notes));
 
 		firstName.addTextChangedListener(new AfterTextChangedWatcher(e -> inputViewModel.setFirstName(e.toString())));
 		lastName.addTextChangedListener(new AfterTextChangedWatcher(e -> inputViewModel.setLastName(e.toString())));
@@ -115,16 +98,24 @@ public class InputActivity extends AppCompatActivity {
 		notes.addTextChangedListener(new AfterTextChangedWatcher(e -> inputViewModel.setNotes(e.toString())));
 
 		birthdayButton.setOnClickListener(view -> {
-			LocalDate birthday = inputViewModel.getBirthday().getValue();
+			LocalDate birthday = LocalDate.now();
+			try {
+				//noinspection ConstantConditions
+				birthday = LocalDate.of(inputViewModel.getBirthdayYear().getValue(), inputViewModel.getBirthdayMonth().getValue(), inputViewModel.getBirthdayDay().getValue());
+			} catch (DateTimeException ignored) {
+			}
 			new DatePickerDialog(
 					this,
-					(v, year, monthOfYear, dayOfMonth) -> inputViewModel.setBirthday(LocalDate.of(year, monthOfYear + 1, dayOfMonth)),
+					(v, year, monthOfYear, dayOfMonth) -> {
+						inputViewModel.setBirthdayYear(year);
+						inputViewModel.setBirthdayMonth(monthOfYear + 1);
+						inputViewModel.setBirthdayDay(dayOfMonth);
+					},
 					birthday.getYear(),
 					birthday.getMonthValue() - 1,
 					birthday.getDayOfMonth()
 			).show();
 		});
-		Log.d("inputactivity", "oncreate done");
 	}
 
 	@Override
@@ -148,11 +139,21 @@ public class InputActivity extends AppCompatActivity {
 		} else if (item.getItemId() == R.id.menu_ok) {
 			inputViewModel.save(
 					this::finish,
-					error -> new AlertDialog.Builder(this)
-							.setTitle(R.string.save_failed_title)
-							.setMessage(getString(R.string.save_failed_text, error.getLocalizedMessage()))
-							.setNeutralButton(R.string.ok, null)
-							.show()
+					error -> {
+						String errorMessage;
+						if (error instanceof NoFirstNameSpecifiedException) {
+							errorMessage = getString(R.string.no_first_name_specified);
+						} else if (error instanceof InvalidDateException) {
+							errorMessage = getString(R.string.invalid_date);
+						} else {
+							errorMessage = error.getLocalizedMessage();
+						}
+						new AlertDialog.Builder(this)
+								.setTitle(R.string.save_failed_title)
+								.setMessage(getString(R.string.save_failed_text, errorMessage))
+								.setNeutralButton(R.string.ok, null)
+								.show();
+					}
 			);
 		} else if (item.getItemId() == R.id.menu_delete) {
 			inputViewModel.delete(
