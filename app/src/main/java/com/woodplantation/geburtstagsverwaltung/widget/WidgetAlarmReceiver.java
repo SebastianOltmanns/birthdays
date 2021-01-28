@@ -2,15 +2,10 @@ package com.woodplantation.geburtstagsverwaltung.widget;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.appwidget.AppWidgetManager;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.util.Log;
-
-import com.woodplantation.geburtstagsverwaltung.R;
 
 import java.util.Calendar;
 

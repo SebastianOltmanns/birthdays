@@ -2,7 +2,6 @@ package com.woodplantation.geburtstagsverwaltung.database;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
@@ -38,5 +37,8 @@ public interface EntryDao {
 
     @Query("SELECT * FROM Entry WHERE id = :id")
     Single<Entry> getById(long id);
+
+    @Query("SELECT * FROM Entry")
+    List<Entry> getAllSynchronously();
 
 }

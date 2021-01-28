@@ -7,11 +7,11 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.woodplantation.geburtstagsverwaltung.comparators.AgeComparator;
+import com.woodplantation.geburtstagsverwaltung.comparators.CalendricComparator;
 import com.woodplantation.geburtstagsverwaltung.comparators.LexicographicComparator;
+import com.woodplantation.geburtstagsverwaltung.comparators.NextBirthdayComparator;
 import com.woodplantation.geburtstagsverwaltung.model.Entry;
 import com.woodplantation.geburtstagsverwaltung.repository.Repository;
-import com.woodplantation.geburtstagsverwaltung.comparators.CalendricComparator;
-import com.woodplantation.geburtstagsverwaltung.comparators.NextBirthdayComparator;
 import com.woodplantation.geburtstagsverwaltung.util.SortingCategory;
 import com.woodplantation.geburtstagsverwaltung.util.SortingOrder;
 

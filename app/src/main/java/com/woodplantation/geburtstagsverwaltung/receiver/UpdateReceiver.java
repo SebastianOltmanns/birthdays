@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.util.Log;
 
 import com.woodplantation.geburtstagsverwaltung.R;
 import com.woodplantation.geburtstagsverwaltung.model.Entry;

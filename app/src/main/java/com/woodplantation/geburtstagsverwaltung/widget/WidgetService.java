@@ -4,28 +4,33 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.text.TextUtils;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.woodplantation.geburtstagsverwaltung.R;
-import com.woodplantation.geburtstagsverwaltung.activities.MainActivity;
-import com.woodplantation.geburtstagsverwaltung.storage.DataSet;
-import com.woodplantation.geburtstagsverwaltung.storage.StorageHandler;
+import com.woodplantation.geburtstagsverwaltung.model.Entry;
+import com.woodplantation.geburtstagsverwaltung.repository.Repository;
+import com.woodplantation.geburtstagsverwaltung.util.DateUtil;
 
-import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.List;
+
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
 
 /**
  * Created by Sebu on 21.10.2019.
  * Contact: sebastian.oltmanns.developer@gmail.com
  */
+@AndroidEntryPoint
 public class WidgetService extends RemoteViewsService {
+
+	@Inject
+	Repository repository;
 
 	@Override
 	public RemoteViewsFactory onGetViewFactory(Intent intent) {
-		return new WidgetFactory(this.getApplicationContext());
+		return new WidgetFactory(repository, getApplicationContext());
 	}
 
 	public static void notifyDataChanged(Context context) {
@@ -35,12 +40,15 @@ public class WidgetService extends RemoteViewsService {
 		appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.data_list_view);
 	}
 
-	class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
+	static class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
 
-		private Context context;
-		private ArrayList<DataSet> dataList;
+		private final Repository repository;
+		private final Context context;
+		private final String lineSeparator = System.getProperty("line.separator") == null ? "\n" : System.getProperty("line.separator");
+		private List<Entry> dataList;
 
-		WidgetFactory(Context context) {
+		WidgetFactory(Repository repository, Context context) {
+			this.repository = repository;
 			this.context = context;
 		}
 
@@ -50,9 +58,7 @@ public class WidgetService extends RemoteViewsService {
 
 		@Override
 		public void onDataSetChanged() {
-			StorageHandler storageHandler = new StorageHandler(context);
-			dataList = MainActivity.sortAndStoreData(storageHandler, storageHandler.loadData(),
-					new DataSet.NextBirthdayComparator());
+			dataList = repository.getDataSynchronously();
 		}
 
 		@Override
@@ -68,28 +74,12 @@ public class WidgetService extends RemoteViewsService {
 		@Override
 		public RemoteViews getViewAt(int i) {
 			RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.viewholder);
-			DataSet dataSet = dataList.get(i);
+			Entry entry = dataList.get(i);
 
-			String remaining = dataSet.getRemainingWithAge(context);
-			String firstname = dataSet.firstName;
-			String lastname = dataSet.lastName;
-			String others = dataSet.others;
-			others = others.replaceAll(System.getProperty("line.separator"), " ");
-			Calendar birthday = dataSet.birthday;
-
-			String name;
-			if (TextUtils.isEmpty(firstname)) {
-				name = lastname;
-			} else if (TextUtils.isEmpty(lastname)) {
-				name = firstname;
-			} else {
-				name = firstname + " " + lastname;
-			}
-
-			views.setTextViewText(R.id.viewholder_name, name);
-			views.setTextViewText(R.id.viewholder_notes, others);
-			views.setTextViewText(R.id.viewholder_birthday, DateFormat.getDateInstance(DateFormat.MEDIUM).format(birthday.getTime()));
-			views.setTextViewText(R.id.viewholder_remaining, remaining);
+			views.setTextViewText(R.id.viewholder_name, entry.getFullName());
+			views.setTextViewText(R.id.viewholder_notes, entry.notes.replaceAll(lineSeparator, " "));
+			views.setTextViewText(R.id.viewholder_birthday, DateUtil.getBirthdayString(entry.birthday, entry.ignoreYear));
+			views.setTextViewText(R.id.viewholder_remaining, DateUtil.getRemainingWithAge(context, entry.birthday, !entry.ignoreYear));
 			return views;
 		}
 

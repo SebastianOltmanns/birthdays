@@ -7,12 +7,9 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.widget.RemoteViews;
 
 import com.woodplantation.geburtstagsverwaltung.R;
-
-import java.util.Calendar;
 
 /**
  * Created by Sebu on 19.10.2019.

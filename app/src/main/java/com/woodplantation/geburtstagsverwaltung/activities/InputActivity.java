@@ -3,15 +3,14 @@ package com.woodplantation.geburtstagsverwaltung.activities;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.ImageButton;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
-
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.ImageButton;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.woodplantation.geburtstagsverwaltung.R;

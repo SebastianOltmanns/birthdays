@@ -3,10 +3,6 @@ package com.woodplantation.geburtstagsverwaltung.comparators;
 import com.woodplantation.geburtstagsverwaltung.model.Entry;
 import com.woodplantation.geburtstagsverwaltung.util.DateUtil;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.temporal.ChronoField;
-import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 
 /**

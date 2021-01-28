@@ -36,8 +36,6 @@ import com.woodplantation.geburtstagsverwaltung.exceptions.NoStorageAvailableExc
 import com.woodplantation.geburtstagsverwaltung.exceptions.UnableToCreateDirectoryException;
 import com.woodplantation.geburtstagsverwaltung.notifications.AlarmCreator;
 import com.woodplantation.geburtstagsverwaltung.repository.Repository;
-import com.woodplantation.geburtstagsverwaltung.storage.DataSet;
-import com.woodplantation.geburtstagsverwaltung.storage.StorageHandler;
 import com.woodplantation.geburtstagsverwaltung.util.IntentCodes;
 import com.woodplantation.geburtstagsverwaltung.util.MyPreferences;
 import com.woodplantation.geburtstagsverwaltung.util.SortingCategory;
@@ -46,9 +44,6 @@ import com.woodplantation.geburtstagsverwaltung.view.RecyclerItemClickListener;
 import com.woodplantation.geburtstagsverwaltung.viewmodel.MainViewModel;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
@@ -288,21 +283,6 @@ public class MainActivity extends AppCompatActivity {
 				break;
 			}
 		}
-	}
-
-	public static ArrayList<DataSet> sortAndStoreData(StorageHandler storageHandler,
-												 ArrayList<DataSet> dataList,
-												 Comparator<DataSet> comparator) {
-		if (dataList == null) {
-			dataList = new ArrayList<>();
-		}
-		try {
-			Collections.sort(dataList, comparator);
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		}
-		storageHandler.saveData(dataList);
-		return dataList;
 	}
 
 	private void exportWithPermissionCheck() {

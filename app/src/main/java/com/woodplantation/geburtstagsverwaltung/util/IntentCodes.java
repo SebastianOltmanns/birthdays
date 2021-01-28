@@ -1,7 +1,5 @@
 package com.woodplantation.geburtstagsverwaltung.util;
 
-import com.woodplantation.geburtstagsverwaltung.activities.MainActivity;
-
 /**
  * Created by Sebu on 18.10.2019.
  * Contact: sebastian.oltmanns.developer@gmail.com

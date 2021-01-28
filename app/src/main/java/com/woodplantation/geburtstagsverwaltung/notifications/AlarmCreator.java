@@ -26,14 +26,7 @@ public class AlarmCreator {
 	}
 
 	private static boolean allNothing(ChangeType[] changeTypes) {
-		boolean allNothing = true;
-		for (ChangeType ct : changeTypes) {
-			if (ct != ChangeType.NOTHING) {
-				allNothing = false;
-				break;
-			}
-		}
-		return allNothing;
+		return Arrays.stream(changeTypes).allMatch(ChangeType.NOTHING::equals);
 	}
 
 	public static void changeAlarms(Context context, ChangeType[] changeTypes, MyPreferences preferences) {

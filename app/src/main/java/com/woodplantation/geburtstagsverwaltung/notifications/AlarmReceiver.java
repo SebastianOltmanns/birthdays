@@ -6,18 +6,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+
 import com.woodplantation.geburtstagsverwaltung.R;
 import com.woodplantation.geburtstagsverwaltung.activities.MainActivity;
-import com.woodplantation.geburtstagsverwaltung.storage.DataSet;
-import com.woodplantation.geburtstagsverwaltung.storage.StorageHandler;
+import com.woodplantation.geburtstagsverwaltung.model.Entry;
+import com.woodplantation.geburtstagsverwaltung.repository.Repository;
+import com.woodplantation.geburtstagsverwaltung.util.DateUtil;
 import com.woodplantation.geburtstagsverwaltung.util.IntentCodes;
 import com.woodplantation.geburtstagsverwaltung.util.MyPreferences;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -32,6 +34,8 @@ public class AlarmReceiver extends BroadcastReceiver {
 
 	@Inject
 	MyPreferences preferences;
+	@Inject
+	Repository repository;
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -41,21 +45,21 @@ public class AlarmReceiver extends BroadcastReceiver {
 		// get preferences
 		int xDaysBeforeDays = preferences.getXDaysBeforeDays();
 		// iterate all data
-		ArrayList<DataSet> dataList = new StorageHandler(context).loadData();
-		Calendar now = Calendar.getInstance();
-		for (DataSet data : dataList) {
-			Calendar birthdayAlarm = data.getNextBirthday();
+		//TODO this receiver must be registered on a background thread
+		List<Entry> dataList = repository.getDataSynchronously();
+		LocalDate now = LocalDate.now();
+		for (Entry data : dataList) {
+			LocalDate birthdayAlarm = DateUtil.getNextBirthday(data.birthday);
 			if (which == 1) {
-				birthdayAlarm.add(Calendar.DAY_OF_YEAR, -1);
+				birthdayAlarm = birthdayAlarm.minus(1, ChronoUnit.DAYS);
 			} else if (which == 2) {
-				birthdayAlarm.add(Calendar.DAY_OF_YEAR, -xDaysBeforeDays);
+				birthdayAlarm = birthdayAlarm.minus(xDaysBeforeDays, ChronoUnit.DAYS);
 			}
 			Log.d("alarmreceiver","in loop. which: " + which);
 			Log.d("alarmreceiver","in loop." + now);
 			Log.d("alarmreceiver","in loop." + birthdayAlarm);
 
-			if ((now.get(Calendar.YEAR) == birthdayAlarm.get(Calendar.YEAR))
-					&& (now.get(Calendar.DAY_OF_YEAR) == birthdayAlarm.get(Calendar.DAY_OF_YEAR))) {
+			if (now.equals(birthdayAlarm)) {
 				// show notification
 				createNotification(context, data, which, xDaysBeforeDays, preferences);
 			}
@@ -76,30 +80,20 @@ public class AlarmReceiver extends BroadcastReceiver {
 
 	}
 
-	private void createNotification(Context context, DataSet dataSet, int which, int xDaysBeforeDays, MyPreferences notificationPreferences) {
+	private void createNotification(Context context, Entry dataSet, int which, int xDaysBeforeDays, MyPreferences notificationPreferences) {
 		Log.d("alarmreceiver","creating notification for" + dataSet.firstName + dataSet.lastName);
 		String dayText;
 		if ((which < 0) || (which > 2)) {
 			// if which is something weird, we find out how many days are left on our own
-			Calendar now = Calendar.getInstance();
-			Calendar nextBirthday = dataSet.getNextBirthday();
-			int diffDays = nextBirthday.get(Calendar.DAY_OF_YEAR) - now.get(Calendar.DAY_OF_YEAR);
-			if (nextBirthday.get(Calendar.YEAR) > now.get(Calendar.YEAR)) {
-				diffDays += now.getActualMaximum(Calendar.YEAR);
-			}
-			switch (diffDays) {
-				case 0: {
-					which = 0;
-					break;
-				}
-				case 1: {
-					which = 1;
-					break;
-				}
-				default: {
-					which = 2;
-					break;
-				}
+			LocalDate now = LocalDate.now();
+			LocalDate nextBirthday = DateUtil.getNextBirthday(dataSet.birthday);
+			long diffDays = nextBirthday.toEpochDay() - now.toEpochDay();
+			if (diffDays == 0) {
+				which = 0;
+			} else if (diffDays == 1) {
+				which = 1;
+			} else {
+				which = 2;
 			}
 		}
 		switch (which) {

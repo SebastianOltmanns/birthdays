@@ -15,11 +15,6 @@ import com.woodplantation.geburtstagsverwaltung.R;
 import com.woodplantation.geburtstagsverwaltung.model.Entry;
 import com.woodplantation.geburtstagsverwaltung.util.DateUtil;
 
-import java.time.chrono.IsoChronology;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.time.format.FormatStyle;
-import java.time.format.ResolverStyle;
 import java.util.Objects;
 
 import javax.inject.Inject;

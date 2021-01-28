@@ -172,4 +172,8 @@ public class Repository {
         );
     }
 
+    public List<Entry> getDataSynchronously() {
+        return entryDao.getAllSynchronously();
+    }
+
 }
