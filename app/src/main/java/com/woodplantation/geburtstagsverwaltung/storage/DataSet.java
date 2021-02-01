@@ -26,6 +26,10 @@ public class DataSet implements Serializable {
 	public String lastName;
 	public String others;
 
+	public DataSet() {
+
+	}
+
 	public DataSet(int id, Calendar birthday, String firstName, String lastName, String others) {
 		this.id = id;
 		this.birthday = birthday;

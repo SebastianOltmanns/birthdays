@@ -260,11 +260,11 @@ public class MainActivity extends AppCompatActivity {
 				}
 				String filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
 				repository.importData(filePath, () -> {
-					new AlertDialog.Builder(this).
-							setMessage(R.string.import_export_export_successful_text).
-							setTitle(R.string.import_export_export_successful_title).
-							setNeutralButton(R.string.ok, null).
-							show();
+					new AlertDialog.Builder(this)
+							.setMessage(R.string.import_export_import_successfull_text)
+							.setTitle(R.string.import_export_import_successfull_title)
+							.setNeutralButton(R.string.ok, null)
+							.show();
 				}, error -> {
 					new AlertDialog.Builder(this)
 							.setMessage(R.string.import_export_failed_title)
