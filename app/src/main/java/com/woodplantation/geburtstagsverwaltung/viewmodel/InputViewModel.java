@@ -25,16 +25,16 @@ public class InputViewModel extends ViewModel {
     public InputViewModel(Repository repository) {
         this.repository = repository;
         LocalDate now = LocalDate.now();
-        birthdayDay.setValue(now.getDayOfMonth());
-        birthdayMonth.setValue(now.getMonthValue());
-        birthdayYear.setValue(now.getYear());
+        birthdayDay.setValue(String.valueOf(now.getDayOfMonth()));
+        birthdayMonth.setValue(String.valueOf(now.getMonthValue()));
+        birthdayYear.setValue(String.valueOf(now.getYear()));
     }
 
     private final MutableLiveData<String> firstName = new MutableLiveData<>("");
     private final MutableLiveData<String> lastName = new MutableLiveData<>("");
-    private final MutableLiveData<Integer> birthdayDay = new MutableLiveData<>();
-    private final MutableLiveData<Integer> birthdayMonth = new MutableLiveData<>();
-    private final MutableLiveData<Integer> birthdayYear = new MutableLiveData<>();
+    private final MutableLiveData<String> birthdayDay = new MutableLiveData<>();
+    private final MutableLiveData<String> birthdayMonth = new MutableLiveData<>();
+    private final MutableLiveData<String> birthdayYear = new MutableLiveData<>();
     private final MutableLiveData<Boolean> ignoreYear = new MutableLiveData<>(false);
     private final MutableLiveData<String> notes = new MutableLiveData<>("");
     private Long id;
@@ -47,15 +47,15 @@ public class InputViewModel extends ViewModel {
         return lastName;
     }
 
-    public LiveData<Integer> getBirthdayDay() {
+    public LiveData<String> getBirthdayDay() {
         return birthdayDay;
     }
 
-    public LiveData<Integer> getBirthdayMonth() {
+    public LiveData<String> getBirthdayMonth() {
         return birthdayMonth;
     }
 
-    public LiveData<Integer> getBirthdayYear() {
+    public LiveData<String> getBirthdayYear() {
         return birthdayYear;
     }
 
@@ -75,15 +75,15 @@ public class InputViewModel extends ViewModel {
         this.lastName.setValue(lastName);
     }
 
-    public void setBirthdayDay(int birthdayDay) {
+    public void setBirthdayDay(String birthdayDay) {
         this.birthdayDay.setValue(birthdayDay);
     }
 
-    public void setBirthdayMonth(int birthdayMonth) {
+    public void setBirthdayMonth(String birthdayMonth) {
         this.birthdayMonth.setValue(birthdayMonth);
     }
 
-    public void setBirthdayYear(int birthdayYear) {
+    public void setBirthdayYear(String birthdayYear) {
         this.birthdayYear.setValue(birthdayYear);
     }
 
@@ -107,7 +107,10 @@ public class InputViewModel extends ViewModel {
         }
         try {
             //noinspection ConstantConditions
-            LocalDate birthday = LocalDate.of(birthdayYear.getValue(), birthdayMonth.getValue(), birthdayDay.getValue());
+            LocalDate birthday = LocalDate.of(
+                    Integer.parseInt(birthdayYear.getValue()),
+                    Integer.parseInt(birthdayMonth.getValue()),
+                    Integer.parseInt(birthdayDay.getValue()));
 
             //noinspection ConstantConditions
             Entry entry = new Entry(firstName.getValue(), lastName.getValue(), birthday, ignoreYear.getValue(), notes.getValue());
@@ -148,9 +151,9 @@ public class InputViewModel extends ViewModel {
                     entry -> {
                         firstName.setValue(entry.firstName);
                         lastName.setValue(entry.lastName);
-                        birthdayDay.setValue(entry.birthday.getDayOfMonth());
-                        birthdayMonth.setValue(entry.birthday.getMonthValue());
-                        birthdayYear.setValue(entry.birthday.getYear());
+                        birthdayDay.setValue(String.valueOf(entry.birthday.getDayOfMonth()));
+                        birthdayMonth.setValue(String.valueOf(entry.birthday.getMonthValue()));
+                        birthdayYear.setValue(String.valueOf(entry.birthday.getYear()));
                         ignoreYear.setValue(entry.ignoreYear);
                         notes.setValue(entry.notes);
                     },
@@ -160,9 +163,9 @@ public class InputViewModel extends ViewModel {
             firstName.setValue("");
             lastName.setValue("");
             LocalDate now = LocalDate.now();
-            birthdayYear.setValue(now.getYear());
-            birthdayMonth.setValue(now.getMonthValue());
-            birthdayDay.setValue(now.getDayOfMonth());
+            birthdayYear.setValue(String.valueOf(now.getYear()));
+            birthdayMonth.setValue(String.valueOf(now.getMonthValue()));
+            birthdayDay.setValue(String.valueOf(now.getDayOfMonth()));
             ignoreYear.setValue(false);
             notes.setValue("");
         }

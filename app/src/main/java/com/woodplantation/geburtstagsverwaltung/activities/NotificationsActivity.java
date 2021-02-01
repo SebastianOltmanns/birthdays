@@ -26,6 +26,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
 import com.woodplantation.geburtstagsverwaltung.R;
+import com.woodplantation.geburtstagsverwaltung.notifications.AlarmCreator;
 import com.woodplantation.geburtstagsverwaltung.util.IntentCodes;
 import com.woodplantation.geburtstagsverwaltung.util.MyPreferences;
 
@@ -118,17 +119,14 @@ public class NotificationsActivity extends AppCompatActivity {
 		switch (id) {
 			case R.id.menu_cancel:
 			case android.R.id.home:
-				setResult(RESULT_CANCELED);
 				finish();
 				return true;
 			case R.id.menu_ok:
-				Map<String, ?> map = preferences.preferences.getAll();
-				Intent resultIntent = new Intent();
-				resultIntent.putExtra(IntentCodes.OLD_PREFERENCES, (Serializable) map);
+				Map<String, ?> oldPreferences = preferences.preferences.getAll();
 
 				saveThePreferences();
 
-				setResult(RESULT_OK, resultIntent);
+				AlarmCreator.preferencesChanged(getApplicationContext(), oldPreferences, preferences);
 				finish();
 				return true;
 		}

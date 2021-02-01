@@ -11,6 +11,10 @@ import com.woodplantation.geburtstagsverwaltung.R;
 import com.woodplantation.geburtstagsverwaltung.util.IntentCodes;
 import com.woodplantation.geburtstagsverwaltung.util.MyPreferences;
 
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Map;
@@ -43,30 +47,29 @@ public class AlarmCreator {
 			} else {
 				Intent intent = new Intent(context, AlarmReceiver.class);
 				intent.putExtra(IntentCodes.WHICH, i);
-				Log.d("alamcreator","putting intent extra" + i + " which code:" + IntentCodes.WHICH);
+				Log.d("alarmcreator","putting intent extra" + i + " which code:" + IntentCodes.WHICH);
 				if (changeType == ChangeType.CANCEL) {
 					PendingIntent pi = PendingIntent.getBroadcast(context, i, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 					am.cancel(pi);
 				} else {
 					int flag = changeType == ChangeType.UPDATE ? PendingIntent.FLAG_CANCEL_CURRENT : 0;
 					PendingIntent pi = PendingIntent.getBroadcast(context, i, intent, flag);
-					Calendar when = Calendar.getInstance();
+					OffsetDateTime alarm = OffsetDateTime.now();
 					int h = clocks[i] / 60;
 					int m = clocks[i] % 60;
-					if ((when.get(Calendar.HOUR_OF_DAY) > h) || (when.get(Calendar.HOUR_OF_DAY) == h && when.get(Calendar.MINUTE) >= m)) {
+					if ((alarm.getHour() > h) || (alarm.getHour() == h && alarm.getMinute() >= m)) {
 						// the time point today already happened. add one day
-						when.add(Calendar.DAY_OF_YEAR, 1);
+						alarm = alarm.plusDays(1);
 					}
-					when.set(Calendar.MINUTE, m);
-					when.set(Calendar.HOUR_OF_DAY, h);
-					when.set(Calendar.SECOND, 0);
+					alarm = alarm.withSecond(0).withHour(h).withMinute(m);
 					// set the alarm
+					Log.d("alarmcreator","going to set alarm at time: " + alarm);
 					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-						am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, when.getTimeInMillis(), pi);
+						am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, alarm.toEpochSecond(), pi);
 					} else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-						am.setExact(AlarmManager.RTC_WAKEUP, when.getTimeInMillis(), pi);
+						am.setExact(AlarmManager.RTC_WAKEUP, alarm.toEpochSecond(), pi);
 					} else {
-						am.set(AlarmManager.RTC_WAKEUP, when.getTimeInMillis(), pi);
+						am.set(AlarmManager.RTC_WAKEUP, alarm.toEpochSecond(), pi);
 					}
 				}
 			}

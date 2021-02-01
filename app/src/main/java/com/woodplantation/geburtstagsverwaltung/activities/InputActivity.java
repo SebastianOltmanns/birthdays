@@ -78,9 +78,9 @@ public class InputActivity extends AppCompatActivity {
 
 		inputViewModel.getFirstName().observe(this, ObserverThatSetsTextIfContentIsNotEqual.forString(firstName));
 		inputViewModel.getLastName().observe(this, ObserverThatSetsTextIfContentIsNotEqual.forString(lastName));
-		inputViewModel.getBirthdayDay().observe(this, ObserverThatSetsTextIfContentIsNotEqual.forInteger(birthdayDay));
-		inputViewModel.getBirthdayMonth().observe(this, ObserverThatSetsTextIfContentIsNotEqual.forInteger(birthdayMonth));
-		inputViewModel.getBirthdayYear().observe(this, ObserverThatSetsTextIfContentIsNotEqual.forInteger(birthdayYear));
+		inputViewModel.getBirthdayDay().observe(this, ObserverThatSetsTextIfContentIsNotEqual.forString(birthdayDay));
+		inputViewModel.getBirthdayMonth().observe(this, ObserverThatSetsTextIfContentIsNotEqual.forString(birthdayMonth));
+		inputViewModel.getBirthdayYear().observe(this, ObserverThatSetsTextIfContentIsNotEqual.forString(birthdayYear));
 		inputViewModel.getIgnoreYear().observe(this, _ignoreYear -> {
 			if (!_ignoreYear.equals(ignoreYear.isChecked())) {
 				ignoreYear.setChecked(_ignoreYear);
@@ -90,9 +90,9 @@ public class InputActivity extends AppCompatActivity {
 
 		firstName.addTextChangedListener(new AfterTextChangedWatcher(e -> inputViewModel.setFirstName(e.toString())));
 		lastName.addTextChangedListener(new AfterTextChangedWatcher(e -> inputViewModel.setLastName(e.toString())));
-		birthdayDay.addTextChangedListener(new AfterTextChangedWatcher(e -> inputViewModel.setBirthdayDay(Integer.parseInt(e.toString()))));
-		birthdayMonth.addTextChangedListener(new AfterTextChangedWatcher(e -> inputViewModel.setBirthdayMonth(Integer.parseInt(e.toString()))));
-		birthdayYear.addTextChangedListener(new AfterTextChangedWatcher(e -> inputViewModel.setBirthdayYear(Integer.parseInt(e.toString()))));
+		birthdayDay.addTextChangedListener(new AfterTextChangedWatcher(e -> inputViewModel.setBirthdayDay(e.toString())));
+		birthdayMonth.addTextChangedListener(new AfterTextChangedWatcher(e -> inputViewModel.setBirthdayMonth(e.toString())));
+		birthdayYear.addTextChangedListener(new AfterTextChangedWatcher(e -> inputViewModel.setBirthdayYear(e.toString())));
 		ignoreYear.setOnCheckedChangeListener((buttonView, isChecked) -> inputViewModel.setIgnoreYear(isChecked));
 		notes.addTextChangedListener(new AfterTextChangedWatcher(e -> inputViewModel.setNotes(e.toString())));
 
@@ -100,15 +100,18 @@ public class InputActivity extends AppCompatActivity {
 			LocalDate birthday = LocalDate.now();
 			try {
 				//noinspection ConstantConditions
-				birthday = LocalDate.of(inputViewModel.getBirthdayYear().getValue(), inputViewModel.getBirthdayMonth().getValue(), inputViewModel.getBirthdayDay().getValue());
+				birthday = LocalDate.of(
+						Integer.parseInt(inputViewModel.getBirthdayYear().getValue()),
+						Integer.parseInt(inputViewModel.getBirthdayMonth().getValue()),
+						Integer.parseInt(inputViewModel.getBirthdayDay().getValue()));
 			} catch (DateTimeException ignored) {
 			}
 			new DatePickerDialog(
 					this,
 					(v, year, monthOfYear, dayOfMonth) -> {
-						inputViewModel.setBirthdayYear(year);
-						inputViewModel.setBirthdayMonth(monthOfYear + 1);
-						inputViewModel.setBirthdayDay(dayOfMonth);
+						inputViewModel.setBirthdayYear(String.valueOf(year));
+						inputViewModel.setBirthdayMonth(String.valueOf(monthOfYear + 1));
+						inputViewModel.setBirthdayDay(String.valueOf(dayOfMonth));
 					},
 					birthday.getYear(),
 					birthday.getMonthValue() - 1,
