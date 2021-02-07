@@ -1,4 +1,4 @@
-package com.woodplantation.geburtstagsverwaltung.modules;
+package com.woodplantation.geburtstagsverwaltung.util;
 
 import android.app.Application;
 

@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.util.Log;
 
 import com.woodplantation.geburtstagsverwaltung.R;
 import com.woodplantation.geburtstagsverwaltung.model.Entry;
@@ -31,16 +32,19 @@ public class UpdateReceiver extends BroadcastReceiver {
 
     @Inject
     Repository repository;
+    @Inject
+    MyPreferences myPreferences;
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        MyPreferences preferences = new MyPreferences(context);
+        Log.d("updatereceiver","on receive!");
         StorageHandler storageHandler = new StorageHandler(context);
-        migrateTwoPreferencesToOne(context, preferences);
-        migrateStorageToDbAndContinueWithAlarmsAndWidget(context, preferences, storageHandler);
+        migrateTwoPreferencesToOne(context, myPreferences);
+        migrateStorageToDbAndContinueWithAlarmsAndWidget(context, myPreferences, storageHandler);
     }
 
     private void migrateStorageToDbAndContinueWithAlarmsAndWidget(Context context, MyPreferences preferences, StorageHandler storageHandler) {
+        Log.d("update receiveer", "migrateStorageToDbAndContinueWithAlarmsAndWidget!");
         if (!preferences.isStorageMigrated()) {
             // load current data
             ArrayList<DataSet> data = storageHandler.loadData();

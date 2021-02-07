@@ -44,8 +44,7 @@ public class Repository {
     //TODO cancel compositedisposable when application closes
     public final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
-    @Inject
-    public Repository(EntryDao entryDao, ObjectMapper objectMapper) {
+    Repository(EntryDao entryDao, ObjectMapper objectMapper) {
         this.entryDao = entryDao;
         this.objectMapper = objectMapper;
     }
