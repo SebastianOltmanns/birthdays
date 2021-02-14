@@ -66,10 +66,8 @@ public class AlarmCreator {
 					Log.d("alarmcreator","going to set alarm at time: " + alarm);
 					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 						am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, alarm.toEpochSecond(), pi);
-					} else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-						am.setExact(AlarmManager.RTC_WAKEUP, alarm.toEpochSecond(), pi);
 					} else {
-						am.set(AlarmManager.RTC_WAKEUP, alarm.toEpochSecond(), pi);
+						am.setExact(AlarmManager.RTC_WAKEUP, alarm.toEpochSecond(), pi);
 					}
 				}
 			}

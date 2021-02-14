@@ -176,4 +176,13 @@ public class Repository {
         return entryDao.getAllSynchronously();
     }
 
+    public void getData(Consumer<List<Entry>> onSuccess, Consumer<Throwable> onFailure) {
+        compositeDisposable.add(
+                entryDao.getAllRx()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(onSuccess, onFailure)
+        );
+    }
+
 }
