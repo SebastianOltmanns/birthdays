@@ -11,6 +11,7 @@ import dagger.Module;
 import dagger.Provides;
 import dagger.hilt.InstallIn;
 import dagger.hilt.android.components.ApplicationComponent;
+import dagger.hilt.android.qualifiers.ApplicationContext;
 
 @Module
 @InstallIn(ApplicationComponent.class)
@@ -18,7 +19,7 @@ public class MyPreferencesModule {
 
     @Provides
     @Singleton
-    public static MyPreferences provideMyPreferences(Application application) {
+    public static MyPreferences provideMyPreferences(@ApplicationContext Application application) {
         return new MyPreferences(application);
     }
 
