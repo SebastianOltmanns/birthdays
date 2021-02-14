@@ -8,10 +8,12 @@ import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.woodplantation.geburtstagsverwaltung.R;
+import com.woodplantation.geburtstagsverwaltung.comparators.NextBirthdayComparator;
 import com.woodplantation.geburtstagsverwaltung.model.Entry;
 import com.woodplantation.geburtstagsverwaltung.repository.Repository;
 import com.woodplantation.geburtstagsverwaltung.util.DateUtil;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -59,6 +61,7 @@ public class WidgetService extends RemoteViewsService {
 		@Override
 		public void onDataSetChanged() {
 			dataList = repository.getDataSynchronously();
+			Collections.sort(dataList, new NextBirthdayComparator());
 		}
 
 		@Override
