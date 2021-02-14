@@ -26,7 +26,8 @@ public class MyPreferences {
 	private final Context context;
 	public final SharedPreferences preferences;
 
-	MyPreferences(@ApplicationContext Context context) {
+	@Inject
+	public MyPreferences(@ApplicationContext Context context) {
 		this(context, FILEPATH_SETTINGS);
 		Log.d("preferences", "constructor" + this);
 	}
