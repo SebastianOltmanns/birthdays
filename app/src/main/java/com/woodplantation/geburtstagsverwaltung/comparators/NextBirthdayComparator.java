@@ -8,7 +8,7 @@ import java.util.Comparator;
 /**
  * this comparator compares two entries and sets the entry that has its birthday
  * coming up closer as smaller. <br>
- * e.g. when birthday of a is in 3 days, and birthday of b is in 5 days: o1 < o2.
+ * e.g. when birthday of a is in 3 days, and birthday of b is in 5 days: a < b.
  */
 public class NextBirthdayComparator implements Comparator<Entry> {
     @Override

@@ -50,4 +50,16 @@ public class Entry {
         this.ignoreYear = ignoreYear;
         this.notes = notes;
     }
+
+    @Override
+    public String toString() {
+        return "Entry{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", birthday=" + birthday +
+                ", ignoreYear=" + ignoreYear +
+                ", notes='" + notes + '\'' +
+                '}';
+    }
 }

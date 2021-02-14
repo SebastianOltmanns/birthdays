@@ -29,12 +29,10 @@ public class MainViewModel extends ViewModel {
 
         rawData = repository.getData();
         data.addSource(sortingCategory, __ -> sort());
-        data.addSource(sortingOrder, __ -> reverse());
         data.addSource(rawData, __ -> sort());
     }
 
     private final MutableLiveData<SortingCategory> sortingCategory = new MutableLiveData<>(SortingCategory.NEXT_BIRTHDAY);
-    private final MutableLiveData<SortingOrder> sortingOrder = new MutableLiveData<>(SortingOrder.ASC);
     private final MediatorLiveData<List<Entry>> data = new MediatorLiveData<>();
     private final LiveData<List<Entry>> rawData;
 
@@ -75,33 +73,12 @@ public class MainViewModel extends ViewModel {
         }
     }
 
-    private void reverse() {
-        List<Entry> _data = data.getValue();
-        if (_data != null) {
-            Collections.reverse(_data);
-            data.setValue(_data);
-        }
-    }
-
-    /**
-     * if the category changed, the new category will be chosen. if the category stayed the
-     * same, the order will be changed.
-     */
     public void sortingCategoryClicked(SortingCategory newSortingCategory) {
-        SortingCategory oldSortingCategory = sortingCategory.getValue();
-        if (oldSortingCategory == newSortingCategory) {
-            sortingOrder.setValue(sortingOrder.getValue() == SortingOrder.ASC ? SortingOrder.DESC : SortingOrder.ASC);
-        } else {
-            sortingCategory.setValue(newSortingCategory);
-        }
+        sortingCategory.setValue(newSortingCategory);
     }
 
     public LiveData<SortingCategory> getSortingCategory() {
         return sortingCategory;
-    }
-
-    public LiveData<SortingOrder> getSortingOrder() {
-        return sortingOrder;
     }
 
 }

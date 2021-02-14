@@ -44,12 +44,14 @@ import com.woodplantation.geburtstagsverwaltung.view.RecyclerItemClickListener;
 import com.woodplantation.geburtstagsverwaltung.viewmodel.MainViewModel;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
+import kotlin.collections.ArrayDeque;
 
 @AndroidEntryPoint
 public class MainActivity extends AppCompatActivity {
@@ -124,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
 		dataView.setHasFixedSize(true);
 		DataAdapter adapter = new DataAdapter(this);
 		dataView.setAdapter(adapter);
-		mainViewModel.getData().observe(this, adapter::submitList);
+		mainViewModel.getData().observe(this, data -> adapter.submitList(data == null ? null : new ArrayList<>(data)));
 		// connect recyclerview with click listener
 		dataView.addOnItemTouchListener(
 				new RecyclerItemClickListener(this, dataView, new RecyclerItemClickListener.OnItemClickListener() {
