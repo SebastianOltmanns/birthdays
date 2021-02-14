@@ -16,11 +16,11 @@ keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
     compileSdkVersion 30
-    buildToolsVersion '30.0.2'
+    buildToolsVersion '30.0.3'
 
     defaultConfig {
         applicationId "com.woodplantation.geburtstagsverwaltung"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 30
         versionCode 18
         versionName "2.0.0"
