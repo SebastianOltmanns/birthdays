@@ -30,10 +30,8 @@ public class WidgetAlarmReceiver extends BroadcastReceiver {
 		AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 			am.setExactAndAllowWhileIdle(AlarmManager.RTC, when.getTimeInMillis(), pendingIntent);
-		} else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-			am.setExact(AlarmManager.RTC, when.getTimeInMillis(), pendingIntent);
 		} else {
-			am.set(AlarmManager.RTC, when.getTimeInMillis(), pendingIntent);
+			am.setExact(AlarmManager.RTC, when.getTimeInMillis(), pendingIntent);
 		}
 	}
 }

@@ -1,5 +1,6 @@
 package com.woodplantation.geburtstagsverwaltung.repository;
 
+import android.content.Context;
 import android.os.Environment;
 
 import androidx.lifecycle.LiveData;
@@ -15,6 +16,7 @@ import com.woodplantation.geburtstagsverwaltung.exceptions.NoStorageAvailableExc
 import com.woodplantation.geburtstagsverwaltung.exceptions.UnableToCreateDirectoryException;
 import com.woodplantation.geburtstagsverwaltung.model.Entry;
 import com.woodplantation.geburtstagsverwaltung.storage.DataSet;
+import com.woodplantation.geburtstagsverwaltung.widget.WidgetService;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -30,6 +32,7 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import dagger.hilt.android.qualifiers.ApplicationContext;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -43,11 +46,13 @@ public class Repository {
     private final ObjectMapper objectMapper;
     //TODO cancel compositedisposable when application closes
     public final CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private final Context context;
 
     @Inject
-    public Repository(EntryDao entryDao, ObjectMapper objectMapper) {
+    public Repository(EntryDao entryDao, ObjectMapper objectMapper, @ApplicationContext Context context) {
         this.entryDao = entryDao;
         this.objectMapper = objectMapper;
+        this.context = context;
     }
 
     public LiveData<List<Entry>> getData() {
@@ -59,7 +64,10 @@ public class Repository {
                 entryDao.insertMany(data)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(onSuccess, onFailure)
+                        .subscribe(() -> {
+                            onSuccess.run();
+                            WidgetService.notifyDataChanged(context);
+                        }, onFailure)
         );
     }
 
@@ -68,7 +76,10 @@ public class Repository {
                 entryDao.insert(data)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(onSuccess, onFailure)
+                        .subscribe(() -> {
+                            onSuccess.run();
+                            WidgetService.notifyDataChanged(context);
+                        }, onFailure)
         );
     }
 
@@ -141,7 +152,10 @@ public class Repository {
                         .flatMapCompletable(entryDao::insertMany)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(onSuccess, onFailure)
+                        .subscribe(() -> {
+                            onSuccess.run();
+                            WidgetService.notifyDataChanged(context);
+                        }, onFailure)
         );
     }
 
@@ -150,7 +164,10 @@ public class Repository {
                 entryDao.deleteById(id)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(onSuccess, onFailure)
+                        .subscribe(() -> {
+                            onSuccess.run();
+                            WidgetService.notifyDataChanged(context);
+                        }, onFailure)
         );
     }
 
@@ -168,7 +185,10 @@ public class Repository {
                 entryDao.update(entry)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(onSuccess, onFailure)
+                        .subscribe(() -> {
+                            onSuccess.run();
+                            WidgetService.notifyDataChanged(context);
+                        }, onFailure)
         );
     }
 
