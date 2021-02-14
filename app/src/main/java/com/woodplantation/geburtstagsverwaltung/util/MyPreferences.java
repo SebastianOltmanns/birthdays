@@ -29,7 +29,6 @@ public class MyPreferences {
 	@Inject
 	public MyPreferences(@ApplicationContext Context context) {
 		this(context, FILEPATH_SETTINGS);
-		Log.d("preferences", "constructor" + this);
 	}
 
 	private MyPreferences(Context context, String filepath) {

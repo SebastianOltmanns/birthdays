@@ -37,17 +37,23 @@ import static android.content.Context.JOB_SCHEDULER_SERVICE;
  * Created by Sebu on 29.10.2019.
  * Contact: sebastian.oltmanns.developer@gmail.com
  */
+@AndroidEntryPoint
 public class AlarmReceiver extends BroadcastReceiver {
+
+	@Inject
+	MyPreferences preferences;
 
 	private static final int JOB_ID = 0;
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		Log.d("alarmreceiver","onreceive!");
+		int which =  intent.getIntExtra(IntentCodes.WHICH, -1);
+
+		// start job to get data and create notification
 		JobScheduler jobScheduler = (JobScheduler) context.getSystemService(JOB_SCHEDULER_SERVICE);
 		ComponentName serviceName = new ComponentName(context.getPackageName(), NotificationJobService.class.getName());
 		PersistableBundle extras = new PersistableBundle();
-		extras.putInt(IntentCodes.WHICH, intent.getIntExtra(IntentCodes.WHICH, -1));
+		extras.putInt(IntentCodes.WHICH, which);
 		JobInfo jobInfo = new JobInfo
 				.Builder(JOB_ID, serviceName)
 				.setExtras(extras)
@@ -56,6 +62,20 @@ public class AlarmReceiver extends BroadcastReceiver {
 				.setOverrideDeadline(0)
 				.build();
 		jobScheduler.schedule(jobInfo);
+
+		// reschedule the alarm
+		if (which < 0 || which > 2) {
+			AlarmCreator.createFromScratch(context, preferences);
+		} else {
+			// recreate the alarm in 24 hours
+			AlarmCreator.ChangeType[] changeTypes = {
+					AlarmCreator.ChangeType.NOTHING,
+					AlarmCreator.ChangeType.NOTHING,
+					AlarmCreator.ChangeType.NOTHING
+			};
+			changeTypes[which] = AlarmCreator.ChangeType.CREATE;
+			AlarmCreator.changeAlarms(context, changeTypes, preferences);
+		}
 	}
 
 

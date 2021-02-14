@@ -50,7 +50,6 @@ public class NotificationJobService extends JobService {
     private Consumer<List<Entry>> dataCallback(JobParameters params) {
         return dataList -> {
             // get which alarm this is
-            //int which = intent.getIntExtra(IntentCodes.WHICH, -1);
             int which = params.getExtras().getInt(IntentCodes.WHICH, -1);
             // get preferences
             int xDaysBeforeDays = preferences.getXDaysBeforeDays();
@@ -63,27 +62,11 @@ public class NotificationJobService extends JobService {
                 } else if (which == 2) {
                     birthdayAlarm = birthdayAlarm.minus(xDaysBeforeDays, ChronoUnit.DAYS);
                 }
-                Log.d("alarmreceiver","in loop. which: " + which);
-                Log.d("alarmreceiver","in loop." + now);
-                Log.d("alarmreceiver","in loop." + birthdayAlarm);
 
                 if (now.equals(birthdayAlarm)) {
                     // show notification
                     createNotification(getApplicationContext(), data, which, xDaysBeforeDays, preferences);
                 }
-            }
-
-            if (which < 0 || which > 2) {
-                AlarmCreator.createFromScratch(getApplicationContext(), preferences);
-            } else {
-                // recreate the alarm in 24 hours
-                AlarmCreator.ChangeType[] changeTypes = {
-                        AlarmCreator.ChangeType.NOTHING,
-                        AlarmCreator.ChangeType.NOTHING,
-                        AlarmCreator.ChangeType.NOTHING
-                };
-                changeTypes[which] = AlarmCreator.ChangeType.UPDATE;
-                AlarmCreator.changeAlarms(getApplicationContext(), changeTypes, preferences);
             }
 
             // notify that the job is finished
@@ -92,7 +75,6 @@ public class NotificationJobService extends JobService {
     }
 
     private void createNotification(Context context, Entry dataSet, int which, int xDaysBeforeDays, MyPreferences notificationPreferences) {
-        Log.d("alarmreceiver","creating notification for" + dataSet.firstName + dataSet.lastName);
         String dayText;
         if ((which < 0) || (which > 2)) {
             // if which is something weird, we find out how many days are left on our own

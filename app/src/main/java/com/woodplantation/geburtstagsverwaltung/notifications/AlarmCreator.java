@@ -18,6 +18,7 @@ import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * Created by Sebu on 29.10.2019.
@@ -47,7 +48,6 @@ public class AlarmCreator {
 			} else {
 				Intent intent = new Intent(context, AlarmReceiver.class);
 				intent.putExtra(IntentCodes.WHICH, i);
-				Log.d("alarmcreator","putting intent extra" + i + " which code:" + IntentCodes.WHICH);
 				if (changeType == ChangeType.CANCEL) {
 					PendingIntent pi = PendingIntent.getBroadcast(context, i, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 					am.cancel(pi);
@@ -63,11 +63,11 @@ public class AlarmCreator {
 					}
 					alarm = alarm.withSecond(0).withHour(h).withMinute(m);
 					// set the alarm
-					Log.d("alarmcreator","going to set alarm at time: " + alarm);
+					Log.d("alarmcreator", "going to set alarm at time: " + alarm);
 					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-						am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, alarm.toEpochSecond(), pi);
+						am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, alarm.toEpochSecond()*1000, pi);
 					} else {
-						am.setExact(AlarmManager.RTC_WAKEUP, alarm.toEpochSecond(), pi);
+						am.setExact(AlarmManager.RTC_WAKEUP, alarm.toEpochSecond()*1000, pi);
 					}
 				}
 			}
@@ -75,7 +75,6 @@ public class AlarmCreator {
 	}
 
 	public static void createFromScratch(Context context, MyPreferences preferences) {
-		Log.d("alarmcreator","create from scratch");
 		// whatever we will create in the following, at first we delete all existing alarms
 		changeAlarms(context, new ChangeType[]{ChangeType.CANCEL, ChangeType.CANCEL, ChangeType.CANCEL}, preferences);
 		if (!preferences.getActive()) {
@@ -96,7 +95,6 @@ public class AlarmCreator {
 	}
 
 	public static void preferencesChanged(Context context, Map<String, ?> oldPref, MyPreferences preferences) {
-		Log.d("alarmcreator","preferences changed");
 
 		// old settings
 		boolean[] oldWhich = new boolean[3];
