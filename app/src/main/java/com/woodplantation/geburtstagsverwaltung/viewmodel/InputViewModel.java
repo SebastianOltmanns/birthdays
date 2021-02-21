@@ -24,17 +24,13 @@ public class InputViewModel extends ViewModel {
     @ViewModelInject
     public InputViewModel(Repository repository) {
         this.repository = repository;
-        LocalDate now = LocalDate.now();
-        birthdayDay.setValue(String.valueOf(now.getDayOfMonth()));
-        birthdayMonth.setValue(String.valueOf(now.getMonthValue()));
-        birthdayYear.setValue(String.valueOf(now.getYear()));
     }
 
     private final MutableLiveData<String> firstName = new MutableLiveData<>("");
     private final MutableLiveData<String> lastName = new MutableLiveData<>("");
-    private final MutableLiveData<String> birthdayDay = new MutableLiveData<>();
-    private final MutableLiveData<String> birthdayMonth = new MutableLiveData<>();
-    private final MutableLiveData<String> birthdayYear = new MutableLiveData<>();
+    private final MutableLiveData<String> birthdayDay = new MutableLiveData<>("");
+    private final MutableLiveData<String> birthdayMonth = new MutableLiveData<>("");
+    private final MutableLiveData<String> birthdayYear = new MutableLiveData<>("");
     private final MutableLiveData<Boolean> ignoreYear = new MutableLiveData<>(false);
     private final MutableLiveData<String> notes = new MutableLiveData<>("");
     private Long id;
@@ -106,13 +102,22 @@ public class InputViewModel extends ViewModel {
             return;
         }
         try {
-            //noinspection ConstantConditions
+            // if the user set to ignore the year and the year is not set, we set it to this year
+            if (birthdayYear.getValue().equals("") && ignoreYear.getValue()) {
+                birthdayYear.setValue(String.valueOf(LocalDate.now().getYear()));
+            }
+            // if day or month is not given or year is not given while NOT ignoring year, we throw exception
+            if (birthdayDay.getValue().equals("")
+                    || birthdayMonth.getValue().equals("")
+                    || (birthdayYear.getValue().equals("") && !ignoreYear.getValue())
+            ) {
+                throw new InvalidDateException();
+            }
             LocalDate birthday = LocalDate.of(
                     Integer.parseInt(birthdayYear.getValue()),
                     Integer.parseInt(birthdayMonth.getValue()),
                     Integer.parseInt(birthdayDay.getValue()));
 
-            //noinspection ConstantConditions
             Entry entry = new Entry(firstName.getValue(), lastName.getValue(), birthday, ignoreYear.getValue(), notes.getValue());
             if (hasId()) {
                 entry.id = id;
@@ -120,7 +125,7 @@ public class InputViewModel extends ViewModel {
             } else {
                 repository.insertData(entry, onSuccess, onFailure::accept);
             }
-        } catch (DateTimeException e) {
+        } catch (DateTimeException | InvalidDateException e) {
             try {
                 onFailure.accept(new InvalidDateException());
             } catch (Exception e2) {
@@ -162,10 +167,9 @@ public class InputViewModel extends ViewModel {
         } else {
             firstName.setValue("");
             lastName.setValue("");
-            LocalDate now = LocalDate.now();
-            birthdayYear.setValue(String.valueOf(now.getYear()));
-            birthdayMonth.setValue(String.valueOf(now.getMonthValue()));
-            birthdayDay.setValue(String.valueOf(now.getDayOfMonth()));
+            birthdayYear.setValue("");
+            birthdayMonth.setValue("");
+            birthdayDay.setValue("");
             ignoreYear.setValue(false);
             notes.setValue("");
         }

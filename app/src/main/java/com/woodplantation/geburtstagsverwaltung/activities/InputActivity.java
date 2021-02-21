@@ -25,6 +25,7 @@ import com.woodplantation.geburtstagsverwaltung.viewmodel.InputViewModel;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
+import java.util.Locale;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -99,19 +100,25 @@ public class InputActivity extends AppCompatActivity {
 		birthdayButton.setOnClickListener(view -> {
 			LocalDate birthday = LocalDate.now();
 			try {
-				//noinspection ConstantConditions
-				birthday = LocalDate.of(
-						Integer.parseInt(inputViewModel.getBirthdayYear().getValue()),
-						Integer.parseInt(inputViewModel.getBirthdayMonth().getValue()),
-						Integer.parseInt(inputViewModel.getBirthdayDay().getValue()));
+				if (inputViewModel.getBirthdayDay().getValue().equals("")
+						|| inputViewModel.getBirthdayMonth().getValue().equals("")
+						|| inputViewModel.getBirthdayYear().getValue().equals("")
+				) {
+					birthday = LocalDate.now();
+				} else {
+					birthday = LocalDate.of(
+							Integer.parseInt(inputViewModel.getBirthdayYear().getValue()),
+							Integer.parseInt(inputViewModel.getBirthdayMonth().getValue()),
+							Integer.parseInt(inputViewModel.getBirthdayDay().getValue()));
+				}
 			} catch (DateTimeException ignored) {
 			}
 			new DatePickerDialog(
 					this,
 					(v, year, monthOfYear, dayOfMonth) -> {
-						inputViewModel.setBirthdayYear(String.valueOf(year));
-						inputViewModel.setBirthdayMonth(String.valueOf(monthOfYear + 1));
-						inputViewModel.setBirthdayDay(String.valueOf(dayOfMonth));
+						inputViewModel.setBirthdayYear(String.format(Locale.US, "%04d", year));
+						inputViewModel.setBirthdayMonth(String.format(Locale.US, "%02d", monthOfYear + 1));
+						inputViewModel.setBirthdayDay(String.format(Locale.US, "%02d", dayOfMonth));
 					},
 					birthday.getYear(),
 					birthday.getMonthValue() - 1,
