@@ -2,15 +2,15 @@
     xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Geburtstage verwalten</string>
     <string name="activity_main_label">Übersicht</string>
-    <string name="activity_add_label">Hinzufügen</string>
-    <string name="activity_edit_label">Bearbeiten</string>
     <string name="activity_info_label">Informationen</string>
+    <string name="activity_input_label">Hinzufügen/Bearbeiten</string>
     <string name="activity_notifications_label">Benachrichtigungen</string>
     <string name="activity_settings_label">Einstellungen</string>
 
     <string name="first_name">Vorname</string>
     <string name="last_name">Nachname</string>
     <string name="birthday">Geburtstag</string>
+    <string name="ignore_year">Jahr ignorieren</string>
     <string name="others">Sonstiges</string>
 
     <string name="today">Heute</string>
@@ -25,6 +25,8 @@
     <string name="allow">Erlauben</string>
     <string name="rate_app">App bewerten</string>
     <string name="cancel">Abbrechen</string>
+    <string name="add">Hinzufügen</string>
+    <string name="edit">Bearbeiten</string>
 
     <string name="activity_main_nothing_to_show">Keine Einträge verfügbar.</string>
 
@@ -72,11 +74,29 @@
     <string name="import_export_import_successfull_title">Erfolgreich importiert</string>
     <string name="import_export_import_successfull_text">Die Datei wurde erfolgreich importiert und die Geburtstage zur App hinzugefügt.</string>
 
+    <string name="export_failed_title">Export fehlgeschlagen</string>
+    <string name="export_failed_text">Der export ist mit folgender Meldung fehlgeschlagen:\n\n%s</string>
+    <string name="no_data_to_export">Keine Daten zum Exportieren</string>
+    <string name="no_storage_available">Kein Speichermedium verfügbar</string>
+    <string name="unable_to_create_directory">Erstellen des Ordners war nicht möglich</string>
+
     <string name="import_export_maximum_data_size_title">Maximale Anzahl überschritten</string>
     <string name="import_export_maximum_data_size_text">Deine bereits gespeicherten Geburtstage sind zusammen mit den zu importierenden zu viele. Die maximale Anzahl beträgt %1$d. Damit die Datei erfolgreich importiert werden kann, musst Du Geburtstage entfernen.</string>
 
     <string name="set_alarm_permissions_explanation_title">Bitte Berechtigung aktivieren</string>
     <string name="set_alarm_permissions_explanation_text">Damit die App Dich an Geburtstage erinnern kann, benötigt sie die Berechtigung, Alarme zu erstellen. Falls Du der App diese Berechtigung verweigerst, kann Dich die App auch nicht erinnern.</string>
+
+    <string name="save_failed_title">Eintrag speichern ist fehlgeschlagen</string>
+    <string name="save_failed_text">Das Speichern des Eintrags ist mit der folgenden Meldung fehlgeschlagen:\n\n%s</string>
+    <string name="no_first_name_specified">Kein Vorname angegeben</string>
+    <string name="invalid_date">Ungültiges Datum angegeben</string>
+
+    <string name="delete_failed_title">Eintrag löschen ist fehlgeschlagen</string>
+    <string name="delete_failed_text">Das Löschen des Eintrags ist mit der folgenden Meldung fehlgeschlagen:\n\n%s</string>
+    <string name="no_id_to_delete">Kein Eintrag gefunden</string>
+
+    <string name="loading_failed_title">Laden der Daten ist fehlgeschlagen</string>
+    <string name="loading_failed_text">Das Laden der Daten ist mit der folgenden Meldung fehlgeschlagen:\n\n%s</string>
 
     <!-- - - - - - - - - - - - - - - - - - - NOTIFICATION - - - - - - - - - - - - - - - - - - - -->
     <string name="content_title">Geburtstagserinnerung</string>
