@@ -165,14 +165,21 @@ public class InputActivity extends AppCompatActivity {
 					}
 			);
 		} else if (item.getItemId() == R.id.menu_delete) {
-			inputViewModel.delete(
-					this::finish,
-					error -> new AlertDialog.Builder(this)
-							.setTitle(R.string.delete_failed_title)
-							.setMessage(getString(R.string.delete_failed_text, error instanceof NoIdToDeleteException ? getString(R.string.no_id_to_delete) : error.getLocalizedMessage()))
-							.setNeutralButton(R.string.ok, null)
-							.show()
-			);
+			new AlertDialog.Builder(this)
+					.setTitle(R.string.sure_delete_title)
+					.setMessage(R.string.sure_delete_text)
+					.setPositiveButton(R.string.yes, (a, b) -> {
+						inputViewModel.delete(
+								this::finish,
+								error -> new AlertDialog.Builder(this)
+										.setTitle(R.string.delete_failed_title)
+										.setMessage(getString(R.string.delete_failed_text, error instanceof NoIdToDeleteException ? getString(R.string.no_id_to_delete) : error.getLocalizedMessage()))
+										.setNeutralButton(R.string.ok, null)
+										.show()
+						);
+					})
+					.setNegativeButton(R.string.no, null)
+					.show();
 		}
 
 		return super.onOptionsItemSelected(item);

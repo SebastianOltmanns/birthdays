@@ -9,9 +9,11 @@
 
     <string name="first_name">First name</string>
     <string name="last_name">Last name</string>
-    <string name="birthday">Birthday</string>
+    <string name="day">day</string>
+    <string name="month">month</string>
+    <string name="year">year</string>
     <string name="ignore_year">Ignore Year</string>
-    <string name="others">Others</string>
+    <string name="notes">Notes</string>
 
     <string name="today">Today</string>
     <string name="tomorrow">Tomorrow</string>
@@ -30,23 +32,9 @@
 
     <string name="activity_main_nothing_to_show">No entries available.</string>
 
-    <string name="activity_input_day_hint">dd</string>
-    <string name="activity_input_month_hint">mm</string>
-    <string name="activity_input_year_hint">yyyy</string>
-
     <!-- - - - - - - - - - - - - - - - - - - DIALOGS - - - - - - - - - - - - - - - - - - - - - -->
     <string name="sure_delete_title">Confirm deletion</string>
     <string name="sure_delete_text">Do you really want to remove this birthday?</string>
-
-    <string name="wrong_input_title">Wrong input</string>
-    <string name="wrong_input_no_name">You did not specify a name.</string>
-    <string name="wrong_input_birthday">You specified an invalid birthday or none.</string>
-
-    <string name="failure_loading_data_title">Problem</string>
-    <string name="failure_loading_data_text">There has been a problem loading data. Please restart the application.</string>
-
-    <string name="maximum_data_achieved_title">Maximum amount reached</string>
-    <string name="maximum_data_achieved_text">You reached the maximum amount for birthdays (%1$d). Before adding a new birthday, you need to remove another one.</string>
 
     <string name="rating_title">Rate this app</string>
     <string name="rating_text">If you like this app, rate it in the Google Play Store!</string>
@@ -62,9 +50,6 @@
     <string name="import_export_failed_title">Problem with import/export</string>
     <string name="import_export_failed_text">There was a problem importing or exporting.</string>
 
-    <string name="import_export_storage_error_title">Storage problem</string>
-    <string name="import_export_storage_error_text">There was a problem with the availability of the storage.</string>
-
     <string name="import_export_permissions_fail_title">Missing permissions</string>
     <string name="import_export_permissions_fail_text">Without the missing permission, the app can not access the external storage. For a successful import or export, please allow the app access.</string>
 
@@ -79,9 +64,6 @@
     <string name="no_data_to_export">No data to export</string>
     <string name="no_storage_available">No storage available</string>
     <string name="unable_to_create_directory">Unable to create directory</string>
-
-    <string name="import_export_maximum_data_size_title">Maximum amount exceeded</string>
-    <string name="import_export_maximum_data_size_text">The amount of saved and imported birthdays exceed the maximum amount of %1$d. To import the file successfully, remove one or more saved birthdays.</string>
 
     <string name="set_alarm_permissions_explanation_title">Please activate permission</string>
     <string name="set_alarm_permissions_explanation_text">To notify you about birthdays, the app needs permission to set alarms. If you deny this, the app can not notify you.</string>

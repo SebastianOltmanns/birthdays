@@ -29,7 +29,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="numberDecimal"
-                    android:hint="day">
+                    android:hint="@string/day">
                     <requestFocus />
                 </com.google.android.material.textfield.TextInputEditText>
 
@@ -45,7 +45,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="numberDecimal"
-                    android:hint="month"/>
+                    android:hint="@string/month"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -59,7 +59,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="numberDecimal"
-                    android:hint="year"/>
+                    android:hint="@string/year"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -68,7 +68,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginLeft="@dimen/text_gap"
                 android:layout_marginStart="@dimen/text_gap"
                 android:background="@drawable/rounded_corners_button"
                 android:padding="@dimen/rounded_button_corner_radius"
@@ -95,7 +94,7 @@
                 android:gravity="top"
                 android:lines="1"
                 android:inputType="textCapWords"
-                android:hint="first name"/>
+                android:hint="@string/first_name"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -111,7 +110,7 @@
                 android:gravity="top"
                 android:lines="1"
                 android:inputType="textCapWords"
-                android:hint="last name"/>
+                android:hint="@string/last_name"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -128,7 +127,7 @@
                 android:gravity="top"
                 android:inputType="textMultiLine"
                 android:scrollbars="vertical"
-                android:hint="notes"/>
+                android:hint="@string/notes"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
