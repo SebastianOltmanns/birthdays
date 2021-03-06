@@ -79,7 +79,7 @@ public class InfoActivity extends AppCompatActivity {
 		motivationDialog =
 				new AlertDialog.Builder(this).
 						setTitle(R.string.info_motivation_title).
-						setMessage(getString(R.string.info_motivation_text, getResources().getInteger(R.integer.MAXIMUM_DATA_SIZE))).
+						setMessage(R.string.info_motivation_text).
 						setNeutralButton(R.string.ok, null).
 						create();
 

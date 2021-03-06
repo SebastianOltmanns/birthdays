@@ -8,12 +8,12 @@ import androidx.lifecycle.ViewModel;
 
 import com.woodplantation.geburtstagsverwaltung.comparators.AgeComparator;
 import com.woodplantation.geburtstagsverwaltung.comparators.CalendricComparator;
-import com.woodplantation.geburtstagsverwaltung.comparators.LexicographicComparator;
+import com.woodplantation.geburtstagsverwaltung.comparators.LexicographicFullNameComparator;
+import com.woodplantation.geburtstagsverwaltung.comparators.LexicographicLastNameComparator;
 import com.woodplantation.geburtstagsverwaltung.comparators.NextBirthdayComparator;
 import com.woodplantation.geburtstagsverwaltung.model.Entry;
 import com.woodplantation.geburtstagsverwaltung.repository.Repository;
 import com.woodplantation.geburtstagsverwaltung.util.SortingCategory;
-import com.woodplantation.geburtstagsverwaltung.util.SortingOrder;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -43,8 +43,12 @@ public class MainViewModel extends ViewModel {
     private void sort() {
         List<Entry> _data = rawData.getValue();
         if (_data != null) {
-            Comparator<Entry> comparator;
+            Comparator<Entry> comparator = null;
             SortingCategory _sortingCategory = sortingCategory.getValue();
+            if (_sortingCategory == null) {
+                _sortingCategory = SortingCategory.NEXT_BIRTHDAY;
+                sortingCategory.setValue(_sortingCategory);
+            }
             switch (_sortingCategory) {
                 case NEXT_BIRTHDAY: {
                     comparator = new NextBirthdayComparator();
@@ -54,22 +58,21 @@ public class MainViewModel extends ViewModel {
                     comparator = new CalendricComparator();
                     break;
                 }
-                case LEXICOGRAPHIC: {
-                    comparator = new LexicographicComparator();
+                case LEXICOGRAPHIC_FULL_NAME: {
+                    comparator = new LexicographicFullNameComparator();
+                    break;
+                }
+                case LEXICOGRAPHIC_LAST_NAME: {
+                    comparator = new LexicographicLastNameComparator();
                     break;
                 }
                 case AGE: {
                     comparator = new AgeComparator();
                     break;
                 }
-                default: {
-                    comparator = null;
-                }
             }
-            if (comparator != null) {
-                Collections.sort(_data, comparator);
-                data.setValue(_data);
-            }
+            Collections.sort(_data, comparator);
+            data.setValue(_data);
         }
     }
 

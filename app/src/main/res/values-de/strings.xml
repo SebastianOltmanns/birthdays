@@ -98,7 +98,8 @@
     <string name="menu_title_sort">Sortieren</string>
     <string name="menu_title_sort_next">Nächster Geburtstag</string>
     <string name="menu_title_sort_calendric">Kalendarisch</string>
-    <string name="menu_title_sort_lexicographic">Lexikographisch</string>
+    <string name="menu_title_sort_lexicographic_full_name">Ganzer Name</string>
+    <string name="menu_title_sort_lexicographic_last_name">Nachname</string>
     <string name="menu_title_sort_age">Alter</string>
 
     <!-- - - - - - - - - - - - - - - - - - - NOTIFICATION SETTINGS - - - - - - - - - - - - - - - - - - - -->

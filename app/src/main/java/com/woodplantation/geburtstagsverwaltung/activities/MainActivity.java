@@ -51,7 +51,6 @@ import java.util.regex.Pattern;
 import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
-import kotlin.collections.ArrayDeque;
 
 @AndroidEntryPoint
 public class MainActivity extends AppCompatActivity {
@@ -180,14 +179,35 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.menu_main, menu);
+		SortingCategory sortingCategory = mainViewModel.getSortingCategory().getValue();
+		if (sortingCategory == null) {
+			sortingCategory = SortingCategory.NEXT_BIRTHDAY;
+			mainViewModel.sortingCategoryClicked(sortingCategory);
+		}
+		switch (sortingCategory) {
+			case AGE: {
+				mainViewModel.sortingCategoryClicked(SortingCategory.AGE);
+				menu.findItem(R.id.main_sort_age).setChecked(true);
+			}
+			case CALENDRIC: {
+				menu.findItem(R.id.main_sort_calendric).setChecked(true);
+			}
+			case LEXICOGRAPHIC_FULL_NAME: {
+				menu.findItem(R.id.main_sort_lexicographic_full_name).setChecked(true);
+			}
+			case LEXICOGRAPHIC_LAST_NAME: {
+				menu.findItem(R.id.main_sort_lexicographic_last_name).setChecked(true);
+			}
+			case NEXT_BIRTHDAY: {
+				menu.findItem(R.id.main_sort_next).setChecked(true);
+			}
+		}
 		return true;
 	}
 
 	public void onAddClick(@Nullable View v) {
-		Log.d("mainactivity", "on add click");
 		Intent intent = new Intent(MainActivity.this, InputActivity.class);
 		startActivity(intent);
-		Log.d("mainactivity", "on add click done");
 	}
 
 	@Override
@@ -219,7 +239,7 @@ public class MainActivity extends AppCompatActivity {
 		} else if (itemId == R.id.main_import_export) {
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle(R.string.import_export_dialog_title);
-			builder.setMessage(getString(R.string.import_export_dialog_text, getResources().getInteger(R.integer.MAXIMUM_DATA_SIZE)));
+			builder.setMessage(R.string.import_export_dialog_text);
 			builder.setPositiveButton(R.string.import_export_export, exportClickListener);
 			builder.setNeutralButton(R.string.import_export_import, importClickListener);
 			builder.show();
@@ -239,8 +259,12 @@ public class MainActivity extends AppCompatActivity {
 			mainViewModel.sortingCategoryClicked(SortingCategory.CALENDRIC);
 			item.setChecked(true);
 			return true;
-		} else if (itemId == R.id.main_sort_lexicographic) {
-			mainViewModel.sortingCategoryClicked(SortingCategory.LEXICOGRAPHIC);
+		} else if (itemId == R.id.main_sort_lexicographic_full_name) {
+			mainViewModel.sortingCategoryClicked(SortingCategory.LEXICOGRAPHIC_FULL_NAME);
+			item.setChecked(true);
+			return true;
+		} else if (itemId == R.id.main_sort_lexicographic_last_name) {
+			mainViewModel.sortingCategoryClicked(SortingCategory.LEXICOGRAPHIC_LAST_NAME);
 			item.setChecked(true);
 			return true;
 		} else if (itemId == R.id.main_sort_age) {
