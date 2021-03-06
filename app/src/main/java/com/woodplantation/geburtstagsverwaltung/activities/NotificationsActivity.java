@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
@@ -50,13 +51,13 @@ public class NotificationsActivity extends AppCompatActivity {
 
 	private boolean is24h;
 
-	private Switch switchActive;
+	private SwitchCompat switchActive;
 	private LinearLayout layoutActive;
-	private CheckBox[] checkBoxes = new CheckBox[3];
-	private TextView[] textViews = new TextView[3];
+	private final CheckBox[] checkBoxes = new CheckBox[3];
+	private final TextView[] textViews = new TextView[3];
 
 	private boolean active;
-	private boolean[] actives = new boolean[3];
+	private final boolean[] actives = new boolean[3];
 	int[] clocks = new int[3];
 	private int xDaysBeforeDays;
 
@@ -64,7 +65,7 @@ public class NotificationsActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_notifications);
-		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		Toolbar toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -73,14 +74,14 @@ public class NotificationsActivity extends AppCompatActivity {
 
 		//initalize the layout variables
 
-		switchActive = (Switch) findViewById(R.id.activity_notifications_switch_active);
-		layoutActive = (LinearLayout) findViewById(R.id.activity_notifications_layout_active);
-		checkBoxes[0] = (CheckBox) findViewById(R.id.activity_notifications_checkbox_on_birthday);
-		textViews[0] = (TextView) findViewById(R.id.activity_notifications_textview_on_birthday);
-		checkBoxes[1] = (CheckBox) findViewById(R.id.activity_notifications_checkbox_one_day_before);
-		textViews[1] = (TextView) findViewById(R.id.activity_notifications_textview_one_day_before);
-		checkBoxes[2] = (CheckBox) findViewById(R.id.activity_notifications_checkbox_x_days_before);
-		textViews[2] = (TextView) findViewById(R.id.activity_notifications_textview_x_days_before);
+		switchActive = findViewById(R.id.activity_notifications_switch_active);
+		layoutActive = findViewById(R.id.activity_notifications_layout_active);
+		checkBoxes[0] = findViewById(R.id.activity_notifications_checkbox_on_birthday);
+		textViews[0] = findViewById(R.id.activity_notifications_textview_on_birthday);
+		checkBoxes[1] = findViewById(R.id.activity_notifications_checkbox_one_day_before);
+		textViews[1] = findViewById(R.id.activity_notifications_textview_one_day_before);
+		checkBoxes[2] = findViewById(R.id.activity_notifications_checkbox_x_days_before);
+		textViews[2] = findViewById(R.id.activity_notifications_textview_x_days_before);
 
 		//load all preferences and save it once so the preferences are initialized
 
@@ -114,21 +115,17 @@ public class NotificationsActivity extends AppCompatActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		int id = item.getItemId();
+		if (item.getItemId() == R.id.menu_cancel || item.getItemId() == android.R.id.home) {
+			finish();
+			return true;
+		} else if (item.getItemId() == R.id.menu_ok) {
+			Map<String, ?> oldPreferences = preferences.preferences.getAll();
 
-		switch (id) {
-			case R.id.menu_cancel:
-			case android.R.id.home:
-				finish();
-				return true;
-			case R.id.menu_ok:
-				Map<String, ?> oldPreferences = preferences.preferences.getAll();
+			saveThePreferences();
 
-				saveThePreferences();
-
-				AlarmCreator.preferencesChanged(getApplicationContext(), oldPreferences, preferences);
-				finish();
-				return true;
+			AlarmCreator.preferencesChanged(getApplicationContext(), oldPreferences, preferences);
+			finish();
+			return true;
 		}
 
 		return super.onOptionsItemSelected(item);
@@ -175,7 +172,7 @@ public class NotificationsActivity extends AppCompatActivity {
 		}
 	}
 
-	private Calendar c = Calendar.getInstance(); {
+	private final Calendar c = Calendar.getInstance(); {
 		c.set(Calendar.SECOND, 0);
 		c.set(Calendar.MILLISECOND, 0);
 	}
@@ -211,7 +208,7 @@ public class NotificationsActivity extends AppCompatActivity {
 			dialog.show();
 		}
 		class MyOnTimeSetListener implements TimePickerDialog.OnTimeSetListener {
-			private int which;
+			private final int which;
 			private MyOnTimeSetListener(int which) {
 				this.which = which;
 			}
@@ -222,9 +219,9 @@ public class NotificationsActivity extends AppCompatActivity {
 			}
 		}
 
-	};
+	}
 
-	private ClickableSpan clickableSetDaysBeforeSpan = new DisableableClickableSpan(2) {
+	private final ClickableSpan clickableSetDaysBeforeSpan = new DisableableClickableSpan(2) {
 		private AlertDialog dialog;
 		private TextView dialogTextView;
 		private NumberPicker numberPicker;
@@ -238,10 +235,10 @@ public class NotificationsActivity extends AppCompatActivity {
 			View dialogNumberPicker = View.inflate(NotificationsActivity.this, R.layout.dialog_number_picker, null);
 			dialog.setView(dialogNumberPicker);
 
-			dialogTextView = (TextView) dialogNumberPicker.findViewById(R.id.dialog_number_picker_text);
+			dialogTextView = dialogNumberPicker.findViewById(R.id.dialog_number_picker_text);
 			dialogTextView.setText(getResources().getString(R.string.activity_notifications_x_days_before_without_time, xDaysBeforeDays));
 
-			numberPicker = (NumberPicker) dialogNumberPicker.findViewById(R.id.number_picker);
+			numberPicker = dialogNumberPicker.findViewById(R.id.number_picker);
 
 			numberPicker.setMaxValue(28);
 			numberPicker.setMinValue(2);

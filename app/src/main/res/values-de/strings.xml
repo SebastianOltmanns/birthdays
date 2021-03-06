@@ -40,7 +40,7 @@
     <string name="rating_text">Wenn Dir diese App gefällt, dann bewerte Sie im Google Play Store!</string>
 
     <string name="import_export_dialog_title">Import/Export</string>
-    <string name="import_export_dialog_text" tools:ignore="PluralsCandidate">
+    <string name="import_export_dialog_text">
         Du kannst alle eingegebenen Geburtstage in eine Datei exportieren. Diese Datei wird in dem Primärspeicher des Smartphones gespeichert und wird nicht verschlüsselt. Das Risiko, welches hiervon ausgeht, insbesondere Datenschutz betreffend, liegt ganz alleine bei Dir.
         \n\nFalls Du Geburtstage aus einer solchen Datei importieren möchtest, beachte, dass sie zu den aktuell in der App gespeicherten Geburtstagen hinzugefügt werden. Falls die Anzahl der Geburtstage aus beiden Quellen die maximale Anzahl von %1$d übersteigt, ist das Importieren nicht möglich.
     </string>

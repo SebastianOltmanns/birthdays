@@ -150,27 +150,16 @@ public class InfoActivity extends AppCompatActivity {
 	}
 
 	public void openDialog(View view) {
-		switch(view.getId()) {
-			case R.id.information_activity_about_button: {
-				aboutDialog.show();
-				break;
-			}
-			case R.id.information_activity_motivation_button: {
-				motivationDialog.show();
-				break;
-			}
-			case R.id.information_activity_notification_button: {
-				notificationDialog.show();
-				break;
-			}
-			case R.id.information_activity_developer_button: {
-				developerDialog.show();
-				break;
-			}
-			case R.id.information_activity_privacy_button: {
-				privacyDialog.show();
-				break;
-			}
+		if (view.getId() == R.id.information_activity_about_button) {
+			aboutDialog.show();
+		} else if (view.getId() == R.id.information_activity_motivation_button) {
+			motivationDialog.show();
+		} else if (view.getId() == R.id.information_activity_notification_button) {
+			notificationDialog.show();
+		} else if (view.getId() == R.id.information_activity_developer_button) {
+			developerDialog.show();
+		} else if (view.getId() == R.id.information_activity_privacy_button) {
+			privacyDialog.show();
 		}
 	}
 

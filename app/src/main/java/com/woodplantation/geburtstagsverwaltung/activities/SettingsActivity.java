@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.widget.Switch;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 
 import com.woodplantation.geburtstagsverwaltung.R;
@@ -22,7 +23,7 @@ public class SettingsActivity extends AppCompatActivity {
     @Inject
     MyPreferences preferences;
 
-    private Switch switchDisplayFAB;
+    private SwitchCompat switchDisplayFAB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,21 +47,16 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        switch (id) {
-            case R.id.menu_cancel:
-            case android.R.id.home:
-                finish();
-                return true;
-            case R.id.menu_ok:
-                SharedPreferences.Editor editor = preferences.preferences.edit();
-                editor.putBoolean(getString(R.string.preferences_display_fab), switchDisplayFAB.isChecked());
-                editor.apply();
-                finish();
-                return true;
+        if (item.getItemId() == R.id.menu_cancel || item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        } else if (item.getItemId() == R.id.menu_ok) {
+            SharedPreferences.Editor editor = preferences.preferences.edit();
+            editor.putBoolean(getString(R.string.preferences_display_fab), switchDisplayFAB.isChecked());
+            editor.apply();
+            finish();
+            return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
