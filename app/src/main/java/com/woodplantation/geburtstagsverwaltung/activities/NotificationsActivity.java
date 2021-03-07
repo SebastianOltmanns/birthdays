@@ -3,7 +3,6 @@ package com.woodplantation.geburtstagsverwaltung.activities;
 import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
@@ -17,7 +16,6 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -28,11 +26,11 @@ import androidx.core.content.ContextCompat;
 
 import com.woodplantation.geburtstagsverwaltung.R;
 import com.woodplantation.geburtstagsverwaltung.notifications.AlarmCreator;
-import com.woodplantation.geburtstagsverwaltung.util.IntentCodes;
 import com.woodplantation.geburtstagsverwaltung.util.MyPreferences;
 
-import java.io.Serializable;
-import java.util.Calendar;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -172,11 +170,6 @@ public class NotificationsActivity extends AppCompatActivity {
 		}
 	}
 
-	private final Calendar c = Calendar.getInstance(); {
-		c.set(Calendar.SECOND, 0);
-		c.set(Calendar.MILLISECOND, 0);
-	}
-
 	private abstract class DisableableClickableSpan extends ClickableSpan {
 		protected int which;
 		DisableableClickableSpan(int which) {
@@ -271,9 +264,7 @@ public class NotificationsActivity extends AppCompatActivity {
 		String[] stringClocks = getResources().getStringArray(R.array.activity_notifications_settings);
 
 		for (int i = 0; i < clocks.length; i++) {
-			c.set(Calendar.HOUR_OF_DAY, clocks[i]/60);
-			c.set(Calendar.MINUTE, clocks[i]%60);
-			String clock = java.text.DateFormat.getTimeInstance(java.text.DateFormat.SHORT).format(c.getTime());
+			String clock = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).format(LocalTime.ofSecondOfDay(clocks[i]*60));
 
 			String string;
 			if (i == 2) {

@@ -16,6 +16,7 @@ import java.util.Comparator;
  * Created by Sebu on 10.03.2016.
  * Contact: sebastian.oltmanns.developer@googlemail.com
  */
+@Deprecated
 public class DataSet implements Serializable {
 
 	static final long serialVersionUID =-2227872867228907805L;

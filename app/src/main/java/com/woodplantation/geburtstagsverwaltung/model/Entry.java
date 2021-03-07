@@ -51,6 +51,7 @@ public class Entry {
         this.notes = notes;
     }
 
+    @NotNull
     @Override
     public String toString() {
         return "Entry{" +

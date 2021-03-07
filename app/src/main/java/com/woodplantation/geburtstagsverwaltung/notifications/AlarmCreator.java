@@ -11,14 +11,9 @@ import com.woodplantation.geburtstagsverwaltung.R;
 import com.woodplantation.geburtstagsverwaltung.util.IntentCodes;
 import com.woodplantation.geburtstagsverwaltung.util.MyPreferences;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Map;
-import java.util.Random;
 
 /**
  * Created by Sebu on 29.10.2019.
