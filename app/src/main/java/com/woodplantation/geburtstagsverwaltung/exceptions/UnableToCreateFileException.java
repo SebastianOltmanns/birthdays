@@ -1,4 +1,4 @@
 package com.woodplantation.geburtstagsverwaltung.exceptions;
 
-public class NoStorageAvailableException extends Exception {
+public class UnableToCreateFileException extends Exception {
 }

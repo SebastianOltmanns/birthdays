@@ -4,6 +4,7 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.woodplantation.geburtstagsverwaltung.storage.DataSet;
 
 import org.jetbrains.annotations.NotNull;
@@ -15,6 +16,7 @@ import java.util.Calendar;
 public class Entry {
 
     @PrimaryKey(autoGenerate = true)
+    @JsonIgnore
     public long id;
 
     @NotNull public String firstName = "";
@@ -26,6 +28,7 @@ public class Entry {
     @NotNull public String notes = "";
 
     @NotNull
+    @JsonIgnore
     public String getFullName() {
         return String.format("%s %s", firstName, lastName);
     }
