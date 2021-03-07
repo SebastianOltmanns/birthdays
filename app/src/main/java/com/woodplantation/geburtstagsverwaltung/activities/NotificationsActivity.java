@@ -277,7 +277,7 @@ public class NotificationsActivity extends AppCompatActivity {
 
 			String string;
 			if (i == 2) {
-				string = String.format(stringClocks[i], xDaysBeforeDays, clock);
+				string = String.format(stringClocks[i], getString(R.string.activity_notifications_x_days_clickable, xDaysBeforeDays), clock);
 			} else {
 				string = String.format(stringClocks[i], clock);
 			}
@@ -286,7 +286,7 @@ public class NotificationsActivity extends AppCompatActivity {
 			ssb[i].setSpan(new ClickableTimeSpan(i), string.length()-clock.length(), string.length(), 0);
 
 			if (i == 2) {
-				ssb[i].setSpan(clickableSetDaysBeforeSpan, 0, String.valueOf(xDaysBeforeDays).length(), 0);
+				ssb[i].setSpan(clickableSetDaysBeforeSpan, 0, getString(R.string.activity_notifications_x_days_clickable, xDaysBeforeDays).length(), 0);
 			}
 		}
 

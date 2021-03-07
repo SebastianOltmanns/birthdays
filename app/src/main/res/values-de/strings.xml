@@ -107,8 +107,9 @@
     <string-array name="activity_notifications_settings">
         <item>Am Geburtstag um %1$s</item>
         <item>Einen Tag vor dem Geburtstag um %1$s</item>
-        <item>%1$d Tage vor dem Geburtstag %2$s</item>
+        <item>%s vor dem Geburtstag %2$s</item>
     </string-array>
+    <string name="activity_notifications_x_days_clickable">%d Tage</string>
     <string name="activity_notifications_x_days_before_without_time" tools:ignore="PluralsCandidate">%1$d Tage vor dem Geburtstag</string>
 
     <string name="activity_notifications_time_picker_title">Zeit wählen</string>
