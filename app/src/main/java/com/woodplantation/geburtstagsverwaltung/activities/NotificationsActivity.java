@@ -27,6 +27,7 @@ import androidx.core.content.ContextCompat;
 import com.woodplantation.geburtstagsverwaltung.R;
 import com.woodplantation.geburtstagsverwaltung.notifications.AlarmCreator;
 import com.woodplantation.geburtstagsverwaltung.util.MyPreferences;
+import com.woodplantation.geburtstagsverwaltung.view.AppTheme;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -46,6 +47,8 @@ public class NotificationsActivity extends AppCompatActivity {
 
 	@Inject
 	MyPreferences preferences;
+	@Inject
+	AppTheme appTheme;
 
 	private boolean is24h;
 
@@ -62,6 +65,7 @@ public class NotificationsActivity extends AppCompatActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		appTheme.applyAppTheme(this);
 		setContentView(R.layout.activity_notifications);
 		Toolbar toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
@@ -178,7 +182,7 @@ public class NotificationsActivity extends AppCompatActivity {
 		@Override
 		public void updateDrawState(TextPaint ds) {
 			if (textViews[which].isEnabled()) {
-				ds.setColor(ContextCompat.getColor(NotificationsActivity.this, R.color.colorAccent));
+				ds.setColor(appTheme.getColorAccent(NotificationsActivity.this));
 				ds.setUnderlineText(true);
 			} else {
 				ds.setColor(ContextCompat.getColor(NotificationsActivity.this, R.color.text_color_disabled));

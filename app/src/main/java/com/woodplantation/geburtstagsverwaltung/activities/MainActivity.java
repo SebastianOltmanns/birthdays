@@ -37,6 +37,7 @@ import com.woodplantation.geburtstagsverwaltung.repository.Repository;
 import com.woodplantation.geburtstagsverwaltung.util.IntentCodes;
 import com.woodplantation.geburtstagsverwaltung.util.MyPreferences;
 import com.woodplantation.geburtstagsverwaltung.util.SortingCategory;
+import com.woodplantation.geburtstagsverwaltung.view.AppTheme;
 import com.woodplantation.geburtstagsverwaltung.view.DataAdapter;
 import com.woodplantation.geburtstagsverwaltung.view.RecyclerItemClickListener;
 import com.woodplantation.geburtstagsverwaltung.viewmodel.MainViewModel;
@@ -59,10 +60,13 @@ public class MainActivity extends AppCompatActivity {
 	MyPreferences myPreferences;
 	@Inject
 	Repository repository;
+	@Inject
+	AppTheme appTheme;
 
 	public static final int REQUEST_PERMISSION_SET_ALARM = 7;
 	public static final int REQUEST_EXPORT_FILE_CREATE = 8;
 	public static final int REQUEST_IMPORT_FILE_OPEN = 9;
+	public static final int REQUEST_SETTINGS_ACTIVITY = 10;
 
 	public static final String FILE_EXPORT_NAME = "export_";
 	public static final String FILE_EXPORT_EXTENSION = ".birthdays";
@@ -89,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		//initialize layout and toolbar
 		super.onCreate(savedInstanceState);
+		appTheme.applyAppTheme(this);
 		setContentView(R.layout.activity_main);
 		Toolbar toolbar = findViewById(R.id.toolbar);
 		toolbar.setTitle(R.string.activity_main_label);
@@ -238,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
 			return true;
 		} else if (itemId == R.id.main_settings) {
 			Intent intent = new Intent(this, SettingsActivity.class);
-			startActivity(intent);
+			startActivityForResult(intent, REQUEST_SETTINGS_ACTIVITY);
 			return true;
 		} else if (itemId == R.id.main_add) {
 			onAddClick(null);
@@ -306,6 +311,15 @@ public class MainActivity extends AppCompatActivity {
 				} else {
 					importFailedHandler(new UnableToOpenFileException());
 				}
+				break;
+			}
+			case REQUEST_SETTINGS_ACTIVITY: {
+				if (resultCode == Activity.RESULT_OK) {
+					if (data.getBooleanExtra(IntentCodes.THEME_CHANGED, false)) {
+						recreate();
+					}
+				}
+				break;
 			}
 		}
 	}
@@ -360,22 +374,20 @@ public class MainActivity extends AppCompatActivity {
 
 	@Override
 	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-		switch (requestCode) {
-			case REQUEST_PERMISSION_SET_ALARM: {
-				if (grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-					if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.SET_ALARM)) {
-						AlertDialog.Builder builder = new AlertDialog.Builder(this);
-						builder.setTitle(R.string.set_alarm_permissions_explanation_title);
-						builder.setMessage(R.string.set_alarm_permissions_explanation_text);
-						builder.setCancelable(false);
-						builder.setNeutralButton(R.string.ok, (dialogInterface, i) ->
-								ActivityCompat.requestPermissions(MainActivity.this,
-										new String[] {Manifest.permission.SET_ALARM},
-										REQUEST_PERMISSION_SET_ALARM
-								)
-						);
-						builder.show();
-					}
+		if (requestCode == REQUEST_PERMISSION_SET_ALARM) {
+			if (grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+				if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.SET_ALARM)) {
+					AlertDialog.Builder builder = new AlertDialog.Builder(this);
+					builder.setTitle(R.string.set_alarm_permissions_explanation_title);
+					builder.setMessage(R.string.set_alarm_permissions_explanation_text);
+					builder.setCancelable(false);
+					builder.setNeutralButton(R.string.ok, (dialogInterface, i) ->
+							ActivityCompat.requestPermissions(MainActivity.this,
+									new String[]{Manifest.permission.SET_ALARM},
+									REQUEST_PERMISSION_SET_ALARM
+							)
+					);
+					builder.show();
 				}
 			}
 		}

@@ -157,5 +157,6 @@
 
     <!-- - - - - - - - - - - - - - - - - - - SETTINGS ACTIVITY - - - - - - - - - - - - - - - - - - - - - -->
     <string name="activity_settings_fab">Button zum Geburtstage hinzufügen anzeigen</string>
+    <string name="activity_settings_theme">Farben</string>
 
 </resources>

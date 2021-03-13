@@ -27,5 +27,7 @@
     <bool name="preferences_storage_migrated">false</bool>
     <string tools:ignore="MissingTranslation" name="preferences_preferences_migrated">PREFERENCES_MIGRATED</string>
     <bool name="preferences_preferences_migrated">false</bool>
+    <string tools:ignore="MissingTranslation" name="preferences_theme">THEME</string>
+    <integer name="preferences_theme">0</integer>
 
 </resources>

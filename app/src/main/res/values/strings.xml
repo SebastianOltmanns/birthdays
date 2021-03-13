@@ -157,5 +157,6 @@
 
     <!-- - - - - - - - - - - - - - - - - - - SETTINGS ACTIVITY - - - - - - - - - - - - - - - - - - - - - -->
     <string name="activity_settings_fab">Display Button to add birthdays</string>
+    <string name="activity_settings_theme">Theme</string>
 
 </resources>

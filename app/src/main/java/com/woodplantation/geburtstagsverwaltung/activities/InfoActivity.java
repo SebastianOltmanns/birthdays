@@ -16,6 +16,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.woodplantation.geburtstagsverwaltung.BuildConfig;
 import com.woodplantation.geburtstagsverwaltung.R;
+import com.woodplantation.geburtstagsverwaltung.view.AppTheme;
 
 import org.xml.sax.XMLReader;
 
@@ -24,17 +25,25 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
+
 /**
  * Created by Sebu on 22.03.2016.
  * Contact: sebastian.oltmanns.developer@googlemail.com
  */
+@AndroidEntryPoint
 public class InfoActivity extends AppCompatActivity {
+	@Inject
+	AppTheme appTheme;
 
-	private AlertDialog aboutDialog, motivationDialog, notificationDialog, developerDialog, githubDialog, privacyDialog;
+	private AlertDialog aboutDialog, motivationDialog, notificationDialog, developerDialog, privacyDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		appTheme.applyAppTheme(this);
 		setContentView(R.layout.activity_info);
 		Toolbar toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
@@ -48,16 +57,13 @@ public class InfoActivity extends AppCompatActivity {
 	}
 
 	private static DialogInterface.OnShowListener makeLinksClickableListener(final AlertDialog dialog, final boolean email) {
-		return new DialogInterface.OnShowListener() {
-			@Override
-			public void onShow(DialogInterface dialogInterface) {
-				if (email) ((TextView) dialog.findViewById(android.R.id.message)).setAutoLinkMask(Linkify.EMAIL_ADDRESSES);
-				((TextView) dialog.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
-			}
+		return dialogInterface -> {
+			if (email) ((TextView) dialog.findViewById(android.R.id.message)).setAutoLinkMask(Linkify.EMAIL_ADDRESSES);
+			((TextView) dialog.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
 		};
 	}
 
-	private class UlTagHandler implements Html.TagHandler{
+	private static class UlTagHandler implements Html.TagHandler{
 		@Override
 		public void handleTag(boolean opening, String tag, Editable output,
 							  XMLReader xmlReader) {
@@ -124,7 +130,7 @@ public class InfoActivity extends AppCompatActivity {
 			String line;
 			StringBuilder builder = new StringBuilder();
 			while ((line = br.readLine()) != null) {
-				builder.append(line + "\n");
+				builder.append(line).append("\n");
 			}
 			text += "\n\n" + builder.toString();
 

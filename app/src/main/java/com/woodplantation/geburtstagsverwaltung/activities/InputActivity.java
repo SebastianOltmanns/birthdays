@@ -19,6 +19,7 @@ import com.woodplantation.geburtstagsverwaltung.exceptions.NoFirstNameSpecifiedE
 import com.woodplantation.geburtstagsverwaltung.exceptions.NoIdToDeleteException;
 import com.woodplantation.geburtstagsverwaltung.util.IntentCodes;
 import com.woodplantation.geburtstagsverwaltung.view.AfterTextChangedWatcher;
+import com.woodplantation.geburtstagsverwaltung.view.AppTheme;
 import com.woodplantation.geburtstagsverwaltung.view.FocusNextViewTextWatcher;
 import com.woodplantation.geburtstagsverwaltung.view.ObserverThatSetsTextIfContentIsNotEqual;
 import com.woodplantation.geburtstagsverwaltung.viewmodel.InputViewModel;
@@ -26,6 +27,8 @@ import com.woodplantation.geburtstagsverwaltung.viewmodel.InputViewModel;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.Locale;
+
+import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -35,32 +38,30 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class InputActivity extends AppCompatActivity {
+	@Inject
+	AppTheme appTheme;
 
-	private TextInputEditText firstName;
-	private TextInputEditText lastName;
-	private TextInputEditText birthdayDay, birthdayMonth, birthdayYear;
-	private ImageButton birthdayButton;
 	private SwitchCompat ignoreYear;
-	private TextInputEditText notes;
 
 	private InputViewModel inputViewModel;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		appTheme.applyAppTheme(this);
 		setContentView(R.layout.activity_input);
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-		firstName = findViewById(R.id.first_name);
-		lastName = findViewById(R.id.last_name);
-		birthdayDay = findViewById(R.id.birthday_day);
-		birthdayMonth = findViewById(R.id.birthday_month);
-		birthdayYear = findViewById(R.id.birthday_year);
-		birthdayButton = findViewById(R.id.birthday_button);
+		TextInputEditText firstName = findViewById(R.id.first_name);
+		TextInputEditText lastName = findViewById(R.id.last_name);
+		TextInputEditText birthdayDay = findViewById(R.id.birthday_day);
+		TextInputEditText birthdayMonth = findViewById(R.id.birthday_month);
+		TextInputEditText birthdayYear = findViewById(R.id.birthday_year);
+		ImageButton birthdayButton = findViewById(R.id.birthday_button);
 		ignoreYear = findViewById(R.id.ignore_year);
-		notes = findViewById(R.id.notes);
+		TextInputEditText notes = findViewById(R.id.notes);
 
         birthdayDay.addTextChangedListener(new FocusNextViewTextWatcher(2, birthdayMonth));
 		birthdayMonth.addTextChangedListener(new FocusNextViewTextWatcher(2, birthdayYear));

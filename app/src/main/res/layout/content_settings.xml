@@ -27,5 +27,18 @@
             android:textColor="@color/text_color"
             android:textSize="@dimen/text_size"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/activity_settings_theme"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/text_size"/>
+
+        <RadioGroup
+            android:id="@+id/themes_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </RadioGroup>
+
     </LinearLayout>
 </ScrollView>

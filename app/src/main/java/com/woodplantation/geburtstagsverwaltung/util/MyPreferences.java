@@ -8,6 +8,7 @@ import android.util.Log;
 import androidx.annotation.RequiresApi;
 
 import com.woodplantation.geburtstagsverwaltung.R;
+import com.woodplantation.geburtstagsverwaltung.view.AppTheme;
 
 import javax.inject.Inject;
 
@@ -149,6 +150,12 @@ public class MyPreferences {
 		return preferences
 				.getBoolean(context.getString(R.string.preferences_preferences_migrated),
 						context.getResources().getBoolean(R.bool.preferences_preferences_migrated));
+	}
+
+	public AppTheme.Theme getAppTheme() {
+		return AppTheme.Theme.values()[preferences
+				.getInt(context.getString(R.string.preferences_theme),
+						context.getResources().getInteger(R.integer.preferences_theme))];
 	}
 
 }
