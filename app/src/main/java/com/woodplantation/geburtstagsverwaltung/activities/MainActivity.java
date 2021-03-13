@@ -28,8 +28,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.woodplantation.geburtstagsverwaltung.R;
 import com.woodplantation.geburtstagsverwaltung.exceptions.NoDataToExportException;
+import com.woodplantation.geburtstagsverwaltung.exceptions.NoIdToDeleteException;
 import com.woodplantation.geburtstagsverwaltung.exceptions.UnableToCreateFileException;
 import com.woodplantation.geburtstagsverwaltung.exceptions.UnableToOpenFileException;
+import com.woodplantation.geburtstagsverwaltung.model.Entry;
 import com.woodplantation.geburtstagsverwaltung.notifications.AlarmCreator;
 import com.woodplantation.geburtstagsverwaltung.repository.Repository;
 import com.woodplantation.geburtstagsverwaltung.util.IntentCodes;
@@ -114,7 +116,23 @@ public class MainActivity extends AppCompatActivity {
 					}
 
 					@Override public void onLongItemClick(View view, int position) {
-						//TODO dialog to delete
+						Entry toDelete = mainViewModel.getData().getValue().get(position);
+						new AlertDialog.Builder(MainActivity.this)
+								.setTitle(R.string.sure_delete_title)
+								.setMessage(getString(R.string.sure_delete_text_with_name, toDelete.getFullName()))
+								.setNegativeButton(R.string.cancel, null)
+								.setPositiveButton(R.string.yes, (a, b) ->
+										repository.deleteData(
+												toDelete.id,
+												() -> {},
+												error -> new AlertDialog.Builder(MainActivity.this)
+														.setTitle(R.string.delete_failed_title)
+														.setMessage(getString(R.string.delete_failed_text, error instanceof NoIdToDeleteException ? getString(R.string.no_id_to_delete) : error.getLocalizedMessage()))
+														.setNeutralButton(R.string.ok, null)
+														.show()
+										)
+								)
+								.show();
 					}
 				})
 		);

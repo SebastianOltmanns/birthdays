@@ -44,7 +44,6 @@ public class Repository {
 
     private final EntryDao entryDao;
     private final ObjectMapper objectMapper;
-    //TODO cancel compositedisposable when application closes
     public final CompositeDisposable compositeDisposable = new CompositeDisposable();
     private final Context context;
 

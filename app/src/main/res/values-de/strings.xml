@@ -35,6 +35,7 @@
     <!-- - - - - - - - - - - - - - - - - - - DIALOGS - - - - - - - - - - - - - - - - - - - - - -->
     <string name="sure_delete_title">Wirklich entfernen?</string>
     <string name="sure_delete_text">Möchtest Du diesen Geburtstag wirklich entfernen?</string>
+    <string name="sure_delete_text_with_name">Möchtest Du wirklich den Eintrag mit dem Geburtstag von %s entfernen?</string>
 
     <string name="rating_title">App bewerten</string>
     <string name="rating_text">Wenn Dir diese App gefällt, dann bewerte Sie im Google Play Store!</string>

@@ -47,6 +47,9 @@ public class NotificationJobService extends JobService {
         return true;
     }
 
+    /**
+     * this callback iterates all data and checks for what birthday a notification should be shown.
+     */
     private Consumer<List<Entry>> dataCallback(JobParameters params) {
         return dataList -> {
             // get which alarm this is
@@ -131,11 +134,15 @@ public class NotificationJobService extends JobService {
         notificationManager.notify(notificationPreferences.getNextNotificationId(), builder.build());
     }
 
+    /**
+     * this callback is called when loading data was not successful. the job
+     * will be rescheduled using {@link JobService#jobFinished(JobParameters, boolean)}.
+     * this applies an exponential backoff, s.t. no infinite-loop happens.
+     */
     private Consumer<Throwable> failureCallback(JobParameters params) {
         return throwable -> {
-            //TODO failure
-            // TODO maybe want reschedule?
-            jobFinished(params, false);
+            throwable.printStackTrace();
+            jobFinished(params, true);
         };
     }
 
