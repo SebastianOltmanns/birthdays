@@ -1,6 +1,7 @@
 package com.woodplantation.geburtstagsverwaltung.activities;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -11,114 +12,66 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.Settings;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.TextView;
 
-import com.nbsp.materialfilepicker.MaterialFilePicker;
-import com.nbsp.materialfilepicker.ui.FilePickerActivity;
-import com.woodplantation.geburtstagsverwaltung.adapter.DataListViewAdapter;
-import com.woodplantation.geburtstagsverwaltung.notifications.AlarmCreator;
-import com.woodplantation.geburtstagsverwaltung.util.MyPreferences;
-import com.woodplantation.geburtstagsverwaltung.storage.DataSet;
-import com.woodplantation.geburtstagsverwaltung.notifications.IdGenerator;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.woodplantation.geburtstagsverwaltung.R;
-import com.woodplantation.geburtstagsverwaltung.storage.StorageHandler;
+import com.woodplantation.geburtstagsverwaltung.exceptions.NoDataToExportException;
+import com.woodplantation.geburtstagsverwaltung.exceptions.NoIdToDeleteException;
+import com.woodplantation.geburtstagsverwaltung.exceptions.UnableToCreateFileException;
+import com.woodplantation.geburtstagsverwaltung.exceptions.UnableToOpenFileException;
+import com.woodplantation.geburtstagsverwaltung.model.Entry;
+import com.woodplantation.geburtstagsverwaltung.notifications.AlarmCreator;
+import com.woodplantation.geburtstagsverwaltung.repository.Repository;
 import com.woodplantation.geburtstagsverwaltung.util.IntentCodes;
-import com.woodplantation.geburtstagsverwaltung.widget.WidgetService;
+import com.woodplantation.geburtstagsverwaltung.util.MyPreferences;
+import com.woodplantation.geburtstagsverwaltung.util.SortingCategory;
+import com.woodplantation.geburtstagsverwaltung.view.AppTheme;
+import com.woodplantation.geburtstagsverwaltung.view.DataAdapter;
+import com.woodplantation.geburtstagsverwaltung.view.RecyclerItemClickListener;
+import com.woodplantation.geburtstagsverwaltung.viewmodel.MainViewModel;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.text.SimpleDateFormat;
+import java.io.FileNotFoundException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.Locale;
-import java.util.Map;
-import java.util.regex.Pattern;
 
-/**
- * Created by Sebu on 09.03.2016.
- * Contact: sebastian.oltmanns.developer@googlemail.com
- */
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class MainActivity extends AppCompatActivity {
 
-	public static final int REQUEST_INTENT_CREATE_DATA_SET = 1;
-	public static final int REQUEST_INTENT_EDIT_DATA_SET = 2;
-	public static final int REQUEST_INTENT_NOTIFICATIONS = 3;
-	public static final int REQUEST_INTENT_FILEPICKER_IMPORT = 4;
-	public static final int REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE = 5;
-	public static final int REQUEST_PERMISSION_READ_EXTERNAL_STORAGE = 6;
+	private MainViewModel mainViewModel;
+	@Inject
+	MyPreferences myPreferences;
+	@Inject
+	Repository repository;
+	@Inject
+	AppTheme appTheme;
+
 	public static final int REQUEST_PERMISSION_SET_ALARM = 7;
+	public static final int REQUEST_EXPORT_FILE_CREATE = 8;
+	public static final int REQUEST_IMPORT_FILE_OPEN = 9;
+	public static final int REQUEST_SETTINGS_ACTIVITY = 10;
 
-	private static final String FILE_EXPORT_DIRECTORY = "birthdays";
-	private static final String FILE_EXPORT_NAME = "export_";
-	private static final String FILE_EXPORT_EXTENSION = ".birthdays";
-	private static final SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy_HH-mm-ss", Locale.US);
-
-	private ArrayList<DataSet> data;
-	private StorageHandler storageHandler;
-	private DataListViewAdapter dataListViewAdapter;
-
-	private Comparator<DataSet> comparator = new DataSet.NextBirthdayComparator();
-
-	private AlertDialog importExportFailDialog;
-	private AlertDialog importExportStorageFailDialog;
-	private AlertDialog.Builder importExportPermissionFailDialogBuilder;
-	private AlertDialog failureLoadingDataDialog;
+	public static final String FILE_EXPORT_NAME = "export_";
+	public static final String FILE_EXPORT_EXTENSION = ".birthdays";
 
 	private FloatingActionButton fab;
-
-	private void initDialogs() {
-		importExportFailDialog =
-				new AlertDialog.Builder(this).
-						setTitle(R.string.import_export_failed_title).
-						setMessage(R.string.import_export_failed_text).
-						setNeutralButton(R.string.ok, null).
-						create();
-		importExportStorageFailDialog =
-				new AlertDialog.Builder(MainActivity.this).
-						setTitle(R.string.import_export_storage_error_title).
-						setMessage(R.string.import_export_storage_error_text).
-						setNeutralButton(R.string.ok, null).
-						create();
-		importExportPermissionFailDialogBuilder =
-				new AlertDialog.Builder(MainActivity.this).
-						setTitle(R.string.import_export_permissions_fail_title).
-						setMessage(R.string.import_export_permissions_fail_text).
-						setNegativeButton(R.string.cancel, null);
-		failureLoadingDataDialog =
-				new AlertDialog.Builder(this).
-						setTitle(R.string.failure_loading_data_title).
-						setMessage(R.string.failure_loading_data_text).
-						setPositiveButton(R.string.ok, null).
-						create();
-	}
 
 	//Code adapted from https://developer.android.com/training/notify-user/channels.html
 	private void initNotificationChannel() {
@@ -140,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		//initialize layout and toolbar
 		super.onCreate(savedInstanceState);
+		appTheme.applyAppTheme(this);
 		setContentView(R.layout.activity_main);
 		Toolbar toolbar = findViewById(R.id.toolbar);
 		toolbar.setTitle(R.string.activity_main_label);
@@ -147,39 +101,63 @@ public class MainActivity extends AppCompatActivity {
 
 		fab = findViewById(R.id.fab);
 
-		//execute code one time to create alarms
-		if (new MyPreferences(this, MyPreferences.FILEPATH_SETTINGS).getFirstTimeCall()) {
-			AlarmCreator.createFromScratch(this);
+		mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
+
+		// init recyclerview, observe the livedata and connect it to recyclerview
+		RecyclerView dataView = findViewById(R.id.data_view);
+		dataView.setLayoutManager(new LinearLayoutManager(this));
+		dataView.setHasFixedSize(true);
+		DataAdapter adapter = new DataAdapter(this);
+		dataView.setAdapter(adapter);
+		mainViewModel.getData().observe(this, data -> adapter.submitList(data == null ? null : new ArrayList<>(data)));
+		// connect recyclerview with click listener
+		dataView.addOnItemTouchListener(
+				new RecyclerItemClickListener(this, dataView, new RecyclerItemClickListener.OnItemClickListener() {
+					@Override public void onItemClick(View view, int position) {
+						// start edit
+						Intent intent = new Intent(MainActivity.this, InputActivity.class);
+						intent.putExtra(IntentCodes.ID, mainViewModel.getData().getValue().get(position).id);
+						startActivity(intent);
+					}
+
+					@Override public void onLongItemClick(View view, int position) {
+						Entry toDelete = mainViewModel.getData().getValue().get(position);
+						new AlertDialog.Builder(MainActivity.this)
+								.setTitle(R.string.sure_delete_title)
+								.setMessage(getString(R.string.sure_delete_text_with_name, toDelete.getFullName()))
+								.setNegativeButton(R.string.cancel, null)
+								.setPositiveButton(R.string.yes, (a, b) ->
+										repository.deleteData(
+												toDelete.id,
+												() -> {},
+												error -> new AlertDialog.Builder(MainActivity.this)
+														.setTitle(R.string.delete_failed_title)
+														.setMessage(getString(R.string.delete_failed_text, error instanceof NoIdToDeleteException ? getString(R.string.no_id_to_delete) : error.getLocalizedMessage()))
+														.setNeutralButton(R.string.ok, null)
+														.show()
+										)
+								)
+								.show();
+					}
+				})
+		);
+
+		// check if this is first app start
+		if (myPreferences.getFirstTimeCall()) {
+			// if it is first app start, create alarms and set migrations to true because they
+			// are not necessary
+			AlarmCreator.createFromScratch(this, myPreferences);
+			myPreferences.preferences
+					.edit()
+					.putBoolean(getString(R.string.preferences_preferences_migrated), true)
+					.putBoolean(getString(R.string.preferences_storage_migrated), true)
+					.apply();
 		}
 
 		//check about alarm permissions
 		ActivityCompat.requestPermissions(this,
 				new String[]{Manifest.permission.SET_ALARM},
 				REQUEST_PERMISSION_SET_ALARM);
-
-		//bind the list layout to data adapter
-		dataListViewAdapter = new DataListViewAdapter(this, R.layout.data_list_view_item);
-		ListView dataListView = findViewById(R.id.data_list_view);
-		dataListView.setAdapter(dataListViewAdapter);
-		dataListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				DataSet dataSet = dataListViewAdapter.getItem(position);
-				Intent editIntent = new Intent(MainActivity.this, EditActivity.class);
-				editIntent.putExtra(IntentCodes.INDEX, data.indexOf(dataSet));
-				editIntent.putExtra(IntentCodes.DATASET, dataSet);
-				startActivityForResult(editIntent, REQUEST_INTENT_EDIT_DATA_SET);
-			}
-		});
-
-		//initialize storage handler
-		storageHandler = new StorageHandler(this);
-		if ((data = storageHandler.loadData()) == null) {
-			failureLoadingDataDialog.show();
-		}
-
-		//init dialogs
-		initDialogs();
 
 		//init notification channel
         initNotificationChannel();
@@ -188,9 +166,7 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		refresh();
-		MyPreferences preferences = new MyPreferences(this, MyPreferences.FILEPATH_SETTINGS);
-		if (preferences.getDisplayFAB()) {
+		if (myPreferences.getDisplayFAB()) {
 			fab.show();
 		} else {
 			fab.hide();
@@ -200,412 +176,218 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.menu_main, menu);
+		SortingCategory sortingCategory = mainViewModel.getSortingCategory().getValue();
+		if (sortingCategory == null) {
+			sortingCategory = SortingCategory.NEXT_BIRTHDAY;
+			mainViewModel.sortingCategoryClicked(sortingCategory);
+		}
+		switch (sortingCategory) {
+			case AGE: {
+				mainViewModel.sortingCategoryClicked(SortingCategory.AGE);
+				menu.findItem(R.id.main_sort_age).setChecked(true);
+			}
+			case CALENDRIC: {
+				menu.findItem(R.id.main_sort_calendric).setChecked(true);
+			}
+			case LEXICOGRAPHIC_FULL_NAME: {
+				menu.findItem(R.id.main_sort_lexicographic_full_name).setChecked(true);
+			}
+			case LEXICOGRAPHIC_LAST_NAME: {
+				menu.findItem(R.id.main_sort_lexicographic_last_name).setChecked(true);
+			}
+			case NEXT_BIRTHDAY: {
+				menu.findItem(R.id.main_sort_next).setChecked(true);
+			}
+		}
 		return true;
 	}
 
 	public void onAddClick(@Nullable View v) {
-		//check for entry limit
-		if (data.size() >= getResources().getInteger(R.integer.MAXIMUM_DATA_SIZE)) {
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setMessage(getString(R.string.maximum_data_achieved_text, getResources().getInteger(R.integer.MAXIMUM_DATA_SIZE)));
-			builder.setTitle(R.string.maximum_data_achieved_title);
-			builder.setNeutralButton(R.string.ok, null);
-			builder.show();
-			return;
-		}
-
-		//get new id
-		int id = IdGenerator.getNewId(this);
-		if (id == -1) {
-			failureLoadingDataDialog.show();
-			return;
-		}
-
-		//open the create activity and pass the new id
-		Intent intent = new Intent(MainActivity.this, AddActivity.class);
-		intent.putExtra(IntentCodes.NEW_ID, id);
-		startActivityForResult(intent, REQUEST_INTENT_CREATE_DATA_SET);
+		Intent intent = new Intent(MainActivity.this, InputActivity.class);
+		startActivity(intent);
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch(item.getItemId()) {
-
-			case R.id.main_info: {
-				Intent intent = new Intent(this, InfoActivity.class);
-				startActivity(intent);
-				return true;
-			}
-			case R.id.main_rate: {
-				AlertDialog.Builder builder = new AlertDialog.Builder(this);
-				builder.setTitle(R.string.rating_title);
-				builder.setMessage(R.string.rating_text);
-				builder.setPositiveButton(R.string.rate_app, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						String packageName = getPackageName();
-						try {
-							startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName)));
-						} catch (ActivityNotFoundException e) {
-							startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + packageName)));
-						}
-					}
-				});
-				builder.setNegativeButton(R.string.cancel, null);
-				builder.show();
-				return true;
-			}
-			case R.id.main_notifications: {
-				Intent intent = new Intent(this, NotificationsActivity.class);
-				startActivityForResult(intent, REQUEST_INTENT_NOTIFICATIONS);
-				return true;
-			}
-			case R.id.main_import_export: {
-				AlertDialog.Builder builder = new AlertDialog.Builder(this);
-				builder.setTitle(R.string.import_export_dialog_title);
-				builder.setMessage(getString(R.string.import_export_dialog_text, getResources().getInteger(R.integer.MAXIMUM_DATA_SIZE)));
-				builder.setPositiveButton(R.string.import_export_export, exportClickListener);
-				builder.setNeutralButton(R.string.import_export_import, importClickListener);
-				builder.show();
-				return true;
-			}
-			case R.id.main_settings: {
-				Intent intent = new Intent(this, SettingsActivity.class);
-				startActivity(intent);
-				return true;
-			}
-			case R.id.main_add: {
-				onAddClick(null);
-				return true;
-			}
-			case R.id.main_sort_next: {
-				comparator = new DataSet.NextBirthdayComparator();
-				item.setChecked(true);
-				refresh();
-				return true;
-			}
-			case R.id.main_sort_calendric: {
-				comparator = new DataSet.CalendarComparator();
-				item.setChecked(true);
-				refresh();
-				return true;
-			}
-			case R.id.main_sort_lexicographic: {
-				comparator = new DataSet.NameComparator();
-				item.setChecked(true);
-				refresh();
-				return true;
-			}
-			case R.id.main_sort_age: {
-				comparator = new DataSet.AgeComparator();
-				item.setChecked(true);
-				refresh();
-				return true;
-			}
-			default: {
-				return super.onOptionsItemSelected(item);
-			}
+		int itemId = item.getItemId();
+		if (itemId == R.id.main_info) {
+			Intent intent = new Intent(this, InfoActivity.class);
+			startActivity(intent);
+			return true;
+		} else if (itemId == R.id.main_rate) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle(R.string.rating_title);
+			builder.setMessage(R.string.rating_text);
+			builder.setPositiveButton(R.string.rate_app, (dialog, which) -> {
+				String packageName = getPackageName();
+				try {
+					startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName)));
+				} catch (ActivityNotFoundException e) {
+					startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + packageName)));
+				}
+			});
+			builder.setNegativeButton(R.string.cancel, null);
+			builder.show();
+			return true;
+		} else if (itemId == R.id.main_notifications) {
+			Intent intent = new Intent(this, NotificationsActivity.class);
+			startActivity(intent);
+			return true;
+		} else if (itemId == R.id.main_import_export) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle(R.string.import_export_dialog_title);
+			builder.setMessage(R.string.import_export_dialog_text);
+			builder.setPositiveButton(R.string.import_export_export, exportClickListener);
+			builder.setNeutralButton(R.string.import_export_import, importClickListener);
+			builder.show();
+			return true;
+		} else if (itemId == R.id.main_settings) {
+			Intent intent = new Intent(this, SettingsActivity.class);
+			startActivityForResult(intent, REQUEST_SETTINGS_ACTIVITY);
+			return true;
+		} else if (itemId == R.id.main_add) {
+			onAddClick(null);
+			return true;
+		} else if (itemId == R.id.main_sort_next) {
+			mainViewModel.sortingCategoryClicked(SortingCategory.NEXT_BIRTHDAY);
+			item.setChecked(true);
+			return true;
+		} else if (itemId == R.id.main_sort_calendric) {
+			mainViewModel.sortingCategoryClicked(SortingCategory.CALENDRIC);
+			item.setChecked(true);
+			return true;
+		} else if (itemId == R.id.main_sort_lexicographic_full_name) {
+			mainViewModel.sortingCategoryClicked(SortingCategory.LEXICOGRAPHIC_FULL_NAME);
+			item.setChecked(true);
+			return true;
+		} else if (itemId == R.id.main_sort_lexicographic_last_name) {
+			mainViewModel.sortingCategoryClicked(SortingCategory.LEXICOGRAPHIC_LAST_NAME);
+			item.setChecked(true);
+			return true;
+		} else if (itemId == R.id.main_sort_age) {
+			mainViewModel.sortingCategoryClicked(SortingCategory.AGE);
+			item.setChecked(true);
+			return true;
 		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		Log.d("mainactivity", "onactivity result! requestcode: " + requestCode + " resultCode : " + resultCode);
 		switch (requestCode) {
-
-			case REQUEST_INTENT_CREATE_DATA_SET: {
-				if (resultCode == RESULT_OK) {
-					DataSet dataSet = (DataSet) data.getSerializableExtra(IntentCodes.DATASET);
-					this.data.add(dataSet);
-					WidgetService.notifyDataChanged(this);
-				}
-				break;
-			}
-			case REQUEST_INTENT_EDIT_DATA_SET: {
-				if (resultCode == RESULT_OK) {
-					DataSet newDataSet = (DataSet) data.getSerializableExtra(IntentCodes.DATASET);
-					int index = data.getIntExtra(IntentCodes.INDEX, -1);
-					if (index == -1) {
-						return;
-					}
-					if (newDataSet != null) {
-						this.data.add(newDataSet);
-					}
-					this.data.remove(index);
-					WidgetService.notifyDataChanged(this);
-				}
-				break;
-			}
-			case REQUEST_INTENT_NOTIFICATIONS: {
-				if (resultCode == RESULT_OK) {
-					Map<String, ?> map = (Map<String, ?>) data.getSerializableExtra(IntentCodes.OLD_PREFERENCES);
-					AlarmCreator.preferencesChanged(this, map);
-				}
-				break;
-			}
-			case REQUEST_INTENT_FILEPICKER_IMPORT: {
-				if (resultCode != RESULT_OK) {
-					importExportFailDialog.show();
-					break;
-				}
-				String filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
-				Log.d("MainActivity", "import: " + filePath);
-				File file = new File(filePath);
-				if (!file.exists()) {
-					importExportFailDialog.show();
-				}
-				try {
-					ArrayList<DataSet> importedData = new ArrayList<>();
+			case REQUEST_EXPORT_FILE_CREATE: {
+				if (resultCode == Activity.RESULT_OK) {
 					try {
-						//first try block: for json reading
-						FileReader fr = new FileReader(file);
-						BufferedReader br = new BufferedReader(fr);
-
-						JSONArray jsonArray = new JSONArray(br.readLine());
-						for (int i = 0; i < jsonArray.length(); i++) {
-							importedData.add(new DataSet((JSONObject) jsonArray.get(i)));
-						}
-
-						br.close();
-						fr.close();
-					} catch (JSONException e) {
-						e.printStackTrace();
-						//if json fails: try old reading method (using serializable interface)
-						FileInputStream fis = new FileInputStream(file);
-						BufferedInputStream bis = new BufferedInputStream(fis);
-						ObjectInputStream ois = new ObjectInputStream(bis);
-
-						importedData = (ArrayList<DataSet>) ois.readObject();
-
-						ois.close();
-						bis.close();
-						fis.close();
+						repository.exportData(
+								getContentResolver().openFileDescriptor(data.getData(), "w"),
+								() -> new AlertDialog.Builder(MainActivity.this).
+										setTitle(R.string.export_successful_title).
+										setMessage(getString(R.string.export_successful_text)).
+										setNeutralButton(R.string.ok, null).
+										show(),
+								this::exportFailedHandler
+						);
+					} catch (FileNotFoundException e) {
+						exportFailedHandler(e);
 					}
-
-					if (importedData.size() + this.data.size() >= getResources().getInteger(R.integer.MAXIMUM_DATA_SIZE)) {
-						new AlertDialog.Builder(this).
-								setMessage(getString(R.string.import_export_maximum_data_size_text, getResources().getInteger(R.integer.MAXIMUM_DATA_SIZE))).
-								setTitle(R.string.import_export_maximum_data_size_title).
-								setNeutralButton(R.string.ok, null).
-								show();
-						return;
-					}
-
-					for (DataSet dataSet : importedData) {
-						dataSet.id = IdGenerator.getNewId(this);
-						this.data.add(dataSet);
-					}
-					WidgetService.notifyDataChanged(this);
-
-					new AlertDialog.Builder(this).
-							setMessage(R.string.import_export_import_successfull_text).
-							setTitle(R.string.import_export_import_successfull_title).
-							setNeutralButton(R.string.ok, null).
-							show();
-
-				} catch (IOException | ClassNotFoundException e) {
-					e.printStackTrace();
-					importExportFailDialog.show();
+				} else {
+					exportFailedHandler(new UnableToCreateFileException());
 				}
 				break;
 			}
-			case REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE: {
-				exportWithPermissionCheck();
+			case REQUEST_IMPORT_FILE_OPEN: {
+				if (resultCode == Activity.RESULT_OK) {
+					repository.importData(
+							data.getData(),
+							getContentResolver(),
+							() -> new AlertDialog.Builder(MainActivity.this).
+									setTitle(R.string.import_successful_title).
+									setMessage(getString(R.string.import_successful_text)).
+									setNeutralButton(R.string.ok, null).
+									show(),
+							this::importFailedHandler
+					);
+				} else {
+					importFailedHandler(new UnableToOpenFileException());
+				}
 				break;
 			}
-			case REQUEST_PERMISSION_READ_EXTERNAL_STORAGE: {
-				importWithPermissionCheck();
+			case REQUEST_SETTINGS_ACTIVITY: {
+				if (resultCode == Activity.RESULT_OK) {
+					if (data.getBooleanExtra(IntentCodes.THEME_CHANGED, false)) {
+						recreate();
+					}
+				}
 				break;
 			}
 		}
 	}
 
-	public static ArrayList<DataSet> sortAndStoreData(StorageHandler storageHandler,
-												 ArrayList<DataSet> dataList,
-												 Comparator<DataSet> comparator) {
-		if (dataList == null) {
-			dataList = new ArrayList<>();
-		}
-		try {
-			Collections.sort(dataList, comparator);
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		}
-		storageHandler.saveData(dataList);
-		return dataList;
-	}
-
-	private void refresh() {
-		data = sortAndStoreData(storageHandler, data, comparator);
-		dataListViewAdapter.clear();
-		dataListViewAdapter.addAll(data);
-		dataListViewAdapter.notifyDataSetChanged();
-
-		TextView tv = findViewById(R.id.activity_main_textview_nothing_to_show);
-		if (data.size() == 0) {
-			tv.setVisibility(View.VISIBLE);
+	private void exportFailedHandler(Throwable error) {
+		String reason;
+		if (error instanceof NoDataToExportException) {
+			reason = getString(R.string.no_data_to_export);
+		} else if (error instanceof UnableToCreateFileException) {
+			reason = getString(R.string.unable_to_create_file);
 		} else {
-			tv.setVisibility(View.GONE);
+			reason = error.getLocalizedMessage();
 		}
+		new AlertDialog.Builder(MainActivity.this).
+				setTitle(R.string.export_failed_title).
+				setMessage(getString(R.string.export_failed_text, reason)).
+				setNeutralButton(R.string.ok, null).
+				show();
 	}
 
-	private void exportWithPermissionCheck() {
-		//check permissions to write external storage
-		if (PackageManager.PERMISSION_GRANTED ==
-				ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-			exportWithoutPermissionCheck();
+	private void importFailedHandler(Throwable error) {
+		error.printStackTrace();
+		String reason;
+		if (error instanceof UnableToOpenFileException) {
+			reason = getString(R.string.unable_to_open_file);
 		} else {
-			//no permission to write external storage. ask for it.
-			ActivityCompat.requestPermissions(MainActivity.this,
-					new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-					REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE);
+			reason = error.getLocalizedMessage();
 		}
+		new AlertDialog.Builder(MainActivity.this).
+				setTitle(R.string.import_failed_title).
+				setMessage(getString(R.string.import_failed_text, reason)).
+				setNeutralButton(R.string.ok, null).
+				show();
 	}
-
-	private void exportWithoutPermissionCheck() {
-		String state = Environment.getExternalStorageState();
-		if (state.equals(Environment.MEDIA_MOUNTED) || state.equals(Environment.MEDIA_MOUNTED_READ_ONLY)) {
-			File dir = new File(Environment.getExternalStorageDirectory(), FILE_EXPORT_DIRECTORY);
-			if (!dir.exists() && !dir.mkdir()) {
-				importExportStorageFailDialog.show();
-			}
-			String filename = FILE_EXPORT_NAME + sdf.format(new Date()) + FILE_EXPORT_EXTENSION;
-			File output = new File(dir + File.separator + filename);
-			if (data == null) {
-				importExportFailDialog.show();
-			}
-			JSONArray jsonArray = new JSONArray();
-			for (DataSet dataSet : data) {
-				jsonArray.put(dataSet.toJSON());
-			}
-			try {
-				FileWriter fw = new FileWriter(output);
-				BufferedWriter bw = new BufferedWriter(fw);
-
-				bw.write(jsonArray.toString());
-
-				bw.close();
-				fw.close();
-
-				new AlertDialog.Builder(MainActivity.this).
-						setTitle(R.string.import_export_export_successfull_title).
-						setMessage(getString(R.string.import_export_export_successfull_text, output.getAbsolutePath())).
-						setNeutralButton(R.string.ok, null).
-						show();
-			} catch (IOException e) {
-				e.printStackTrace();
-				importExportStorageFailDialog.show();
-			}
-		} else {
-			importExportStorageFailDialog.show();
-		}
-	}
-
-	private void importWithPermissionCheck() {
-		//check permissions to read external storage
-		if (PackageManager.PERMISSION_GRANTED ==
-				ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-			importWithoutPermissionCheck();
-		} else {
-			//no permission to read external storage. ask for it.
-			ActivityCompat.requestPermissions(MainActivity.this,
-					new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-					REQUEST_PERMISSION_READ_EXTERNAL_STORAGE);
-		}
-	}
-
-	private void importWithoutPermissionCheck() {
-		new MaterialFilePicker()
-				.withActivity(MainActivity.this)
-				.withRequestCode(REQUEST_INTENT_FILEPICKER_IMPORT)
-				.withFilter(Pattern.compile(".*\\.birthdays")) // Filtering files and directories by file name using regexp
-				.start();
-	}
-
-	private DialogInterface.OnClickListener exportClickListener = new DialogInterface.OnClickListener() {
-		@Override
-		public void onClick(DialogInterface dialogInterface, int i) {
-			exportWithPermissionCheck();
-		}
+	private final DialogInterface.OnClickListener exportClickListener = (dialogInterface, i) -> {
+		Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+		intent.setType("application/json");
+		intent.addCategory(Intent.CATEGORY_OPENABLE);
+		intent.putExtra(Intent.EXTRA_TITLE,
+				MainActivity.FILE_EXPORT_NAME
+						+ DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss", Locale.US).format(LocalDateTime.now())
+						+ MainActivity.FILE_EXPORT_EXTENSION);
+		startActivityForResult(intent, REQUEST_EXPORT_FILE_CREATE);
 	};
 
-	private DialogInterface.OnClickListener importClickListener = new DialogInterface.OnClickListener() {
-		@Override
-		public void onClick(DialogInterface dialogInterface, int i) {
-			importWithPermissionCheck();
-		}
+	private final DialogInterface.OnClickListener importClickListener = (dialogInterface, i) -> {
+		Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+		intent.setType("*/*");
+		intent.addCategory(Intent.CATEGORY_OPENABLE);
+		startActivityForResult(intent, REQUEST_IMPORT_FILE_OPEN);
 	};
-
-	private class PermissionSettingsClickListener implements DialogInterface.OnClickListener {
-		private int requestCode;
-		PermissionSettingsClickListener(int requestCode) {
-			this.requestCode = requestCode;
-		}
-
-		@Override
-		public void onClick(DialogInterface dialogInterface, int i) {
-			Intent intent = new Intent();
-			intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-			Uri uri = Uri.fromParts("package", getPackageName(), null);
-			intent.setData(uri);
-			startActivityForResult(intent, requestCode);
-		}
-	}
-
-	private DialogInterface.OnClickListener exportPermissionSettingsClickListener = new PermissionSettingsClickListener(REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE);
-	private DialogInterface.OnClickListener importPermissionSettingsClickListener = new PermissionSettingsClickListener(REQUEST_PERMISSION_READ_EXTERNAL_STORAGE);
 
 	@Override
 	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-		switch (requestCode) {
-			case REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE: {
-				if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-					exportWithoutPermissionCheck();
-				} else {
-					if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-						//ask again
-						importExportPermissionFailDialogBuilder.setPositiveButton(R.string.allow, exportClickListener);
-					} else {
-						//go to settings
-						importExportPermissionFailDialogBuilder.setPositiveButton(R.string.allow, exportPermissionSettingsClickListener);
-					}
-					importExportPermissionFailDialogBuilder.show();
-				}
-				break;
-			}
-			case REQUEST_PERMISSION_READ_EXTERNAL_STORAGE: {
-				if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-					importWithoutPermissionCheck();
-				} else {
-					if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE))  {
-						//ask again
-						importExportPermissionFailDialogBuilder.setPositiveButton(R.string.allow, importClickListener);
-					} else {
-						//go to settings
-						importExportPermissionFailDialogBuilder.setPositiveButton(R.string.allow, importPermissionSettingsClickListener);
-					}
-					importExportPermissionFailDialogBuilder.show();
-				}
-				break;
-			}
-			case REQUEST_PERMISSION_SET_ALARM: {
-				if (grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-					if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.SET_ALARM)) {
-						AlertDialog.Builder builder = new AlertDialog.Builder(this);
-						builder.setTitle(R.string.set_alarm_permissions_explanation_title);
-						builder.setMessage(R.string.set_alarm_permissions_explanation_text);
-						builder.setCancelable(false);
-						builder.setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialogInterface, int i) {
-								ActivityCompat.requestPermissions(MainActivity.this,
-										new String[] {Manifest.permission.SET_ALARM},
-										REQUEST_PERMISSION_SET_ALARM);
-							}
-						});
-						builder.show();
-					}
+		if (requestCode == REQUEST_PERMISSION_SET_ALARM) {
+			if (grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+				if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.SET_ALARM)) {
+					AlertDialog.Builder builder = new AlertDialog.Builder(this);
+					builder.setTitle(R.string.set_alarm_permissions_explanation_title);
+					builder.setMessage(R.string.set_alarm_permissions_explanation_text);
+					builder.setCancelable(false);
+					builder.setNeutralButton(R.string.ok, (dialogInterface, i) ->
+							ActivityCompat.requestPermissions(MainActivity.this,
+									new String[]{Manifest.permission.SET_ALARM},
+									REQUEST_PERMISSION_SET_ALARM
+							)
+					);
+					builder.show();
 				}
 			}
 		}

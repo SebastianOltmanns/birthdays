@@ -3,8 +3,6 @@ package com.woodplantation.geburtstagsverwaltung.activities;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import android.text.Editable;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -13,8 +11,12 @@ import android.view.View;
 import android.webkit.WebView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import com.woodplantation.geburtstagsverwaltung.BuildConfig;
 import com.woodplantation.geburtstagsverwaltung.R;
+import com.woodplantation.geburtstagsverwaltung.view.AppTheme;
 
 import org.xml.sax.XMLReader;
 
@@ -23,17 +25,25 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
+
 /**
  * Created by Sebu on 22.03.2016.
  * Contact: sebastian.oltmanns.developer@googlemail.com
  */
+@AndroidEntryPoint
 public class InfoActivity extends AppCompatActivity {
+	@Inject
+	AppTheme appTheme;
 
-	private AlertDialog aboutDialog, motivationDialog, notificationDialog, developerDialog, githubDialog, privacyDialog;
+	private AlertDialog aboutDialog, motivationDialog, notificationDialog, developerDialog, privacyDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		appTheme.applyAppTheme(this);
 		setContentView(R.layout.activity_info);
 		Toolbar toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
@@ -47,16 +57,13 @@ public class InfoActivity extends AppCompatActivity {
 	}
 
 	private static DialogInterface.OnShowListener makeLinksClickableListener(final AlertDialog dialog, final boolean email) {
-		return new DialogInterface.OnShowListener() {
-			@Override
-			public void onShow(DialogInterface dialogInterface) {
-				if (email) ((TextView) dialog.findViewById(android.R.id.message)).setAutoLinkMask(Linkify.EMAIL_ADDRESSES);
-				((TextView) dialog.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
-			}
+		return dialogInterface -> {
+			if (email) ((TextView) dialog.findViewById(android.R.id.message)).setAutoLinkMask(Linkify.EMAIL_ADDRESSES);
+			((TextView) dialog.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
 		};
 	}
 
-	private class UlTagHandler implements Html.TagHandler{
+	private static class UlTagHandler implements Html.TagHandler{
 		@Override
 		public void handleTag(boolean opening, String tag, Editable output,
 							  XMLReader xmlReader) {
@@ -78,7 +85,7 @@ public class InfoActivity extends AppCompatActivity {
 		motivationDialog =
 				new AlertDialog.Builder(this).
 						setTitle(R.string.info_motivation_title).
-						setMessage(getString(R.string.info_motivation_text, getResources().getInteger(R.integer.MAXIMUM_DATA_SIZE))).
+						setMessage(R.string.info_motivation_text).
 						setNeutralButton(R.string.ok, null).
 						create();
 
@@ -123,7 +130,7 @@ public class InfoActivity extends AppCompatActivity {
 			String line;
 			StringBuilder builder = new StringBuilder();
 			while ((line = br.readLine()) != null) {
-				builder.append(line + "\n");
+				builder.append(line).append("\n");
 			}
 			text += "\n\n" + builder.toString();
 
@@ -149,27 +156,16 @@ public class InfoActivity extends AppCompatActivity {
 	}
 
 	public void openDialog(View view) {
-		switch(view.getId()) {
-			case R.id.information_activity_about_button: {
-				aboutDialog.show();
-				break;
-			}
-			case R.id.information_activity_motivation_button: {
-				motivationDialog.show();
-				break;
-			}
-			case R.id.information_activity_notification_button: {
-				notificationDialog.show();
-				break;
-			}
-			case R.id.information_activity_developer_button: {
-				developerDialog.show();
-				break;
-			}
-			case R.id.information_activity_privacy_button: {
-				privacyDialog.show();
-				break;
-			}
+		if (view.getId() == R.id.information_activity_about_button) {
+			aboutDialog.show();
+		} else if (view.getId() == R.id.information_activity_motivation_button) {
+			motivationDialog.show();
+		} else if (view.getId() == R.id.information_activity_notification_button) {
+			notificationDialog.show();
+		} else if (view.getId() == R.id.information_activity_developer_button) {
+			developerDialog.show();
+		} else if (view.getId() == R.id.information_activity_privacy_button) {
+			privacyDialog.show();
 		}
 	}
 

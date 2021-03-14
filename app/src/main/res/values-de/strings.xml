@@ -2,16 +2,18 @@
     xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Geburtstage verwalten</string>
     <string name="activity_main_label">Übersicht</string>
-    <string name="activity_add_label">Hinzufügen</string>
-    <string name="activity_edit_label">Bearbeiten</string>
     <string name="activity_info_label">Informationen</string>
+    <string name="activity_input_label">Hinzufügen/Bearbeiten</string>
     <string name="activity_notifications_label">Benachrichtigungen</string>
     <string name="activity_settings_label">Einstellungen</string>
 
     <string name="first_name">Vorname</string>
     <string name="last_name">Nachname</string>
-    <string name="birthday">Geburtstag</string>
-    <string name="others">Sonstiges</string>
+    <string name="day">Tag</string>
+    <string name="month">Monat</string>
+    <string name="year">Jahr</string>
+    <string name="ignore_year">Jahr ignorieren</string>
+    <string name="notes">Notizen</string>
 
     <string name="today">Heute</string>
     <string name="tomorrow">Morgen</string>
@@ -22,61 +24,59 @@
     <string name="yes">Ja</string>
     <string name="no">Nein</string>
     <string name="ok">OK</string>
-    <string name="allow">Erlauben</string>
     <string name="rate_app">App bewerten</string>
     <string name="cancel">Abbrechen</string>
+    <string name="add">Hinzufügen</string>
+    <string name="edit">Bearbeiten</string>
 
     <string name="activity_main_nothing_to_show">Keine Einträge verfügbar.</string>
-
-    <string name="activity_input_day_hint">tt</string>
-    <string name="activity_input_month_hint">mm</string>
-    <string name="activity_input_year_hint">jjjj</string>
 
     <!-- - - - - - - - - - - - - - - - - - - DIALOGS - - - - - - - - - - - - - - - - - - - - - -->
     <string name="sure_delete_title">Wirklich entfernen?</string>
     <string name="sure_delete_text">Möchtest Du diesen Geburtstag wirklich entfernen?</string>
-
-    <string name="wrong_input_title">Falsche Eingabe</string>
-    <string name="wrong_input_no_name">Du hast keinen Namen angegeben.</string>
-    <string name="wrong_input_birthday">Du hast keinen oder einen ungültigen Geburtstag angegeben.</string>
-
-    <string name="failure_loading_data_title">Fehler</string>
-    <string name="failure_loading_data_text">Es gab einen Fehler beim Laden der Daten. Bitte schließe die App und starte sie erneut.</string>
-
-    <string name="maximum_data_achieved_title">Maximale Anzahl erreicht</string>
-    <string name="maximum_data_achieved_text">Du hast die maximale Anzahl an Geburtstagen eingetragen (%1$d). Bevor du einen neuen Geburtstag eintragen kannst, musst du einen anderen entfernen.</string>
+    <string name="sure_delete_text_with_name">Möchtest Du wirklich den Eintrag mit dem Geburtstag von %s entfernen?</string>
 
     <string name="rating_title">App bewerten</string>
     <string name="rating_text">Wenn Dir diese App gefällt, dann bewerte Sie im Google Play Store!</string>
 
     <string name="import_export_dialog_title">Import/Export</string>
-    <string name="import_export_dialog_text" tools:ignore="PluralsCandidate">
+    <string name="import_export_dialog_text">
         Du kannst alle eingegebenen Geburtstage in eine Datei exportieren. Diese Datei wird in dem Primärspeicher des Smartphones gespeichert und wird nicht verschlüsselt. Das Risiko, welches hiervon ausgeht, insbesondere Datenschutz betreffend, liegt ganz alleine bei Dir.
-        \n\nFalls Du Geburtstage aus einer solchen Datei importieren möchtest, beachte, dass sie zu den aktuell in der App gespeicherten Geburtstagen hinzugefügt werden. Falls die Anzahl der Geburtstage aus beiden Quellen die maximale Anzahl von %1$d übersteigt, ist das Importieren nicht möglich.
+        \n\nFalls Du Geburtstage aus einer solchen Datei importieren möchtest, beachte, dass sie zu den aktuell in der App gespeicherten Geburtstagen hinzugefügt werden.
     </string>
     <string name="import_export_import">Importieren</string>
     <string name="import_export_export">Exportieren</string>
 
-    <string name="import_export_failed_title">Fehler beim Import/Export</string>
-    <string name="import_export_failed_text">Es gab ein Problem beim Importieren oder Exportieren.</string>
+    <string name="export_successful_title">Erfolgreich exportiert</string>
+    <string name="export_successful_text">Die gespeicherten Daten wurden erfolgreich exportiert.</string>
 
-    <string name="import_export_storage_error_title">Problem mit dem Speicher</string>
-    <string name="import_export_storage_error_text">Es gab ein Problem mit der Verfügbarkeit des Speichers.</string>
+    <string name="import_successful_title">Erfolgreich importiert</string>
+    <string name="import_successful_text">Die Datei wurde erfolgreich importiert und die Geburtstage zur App hinzugefügt.</string>
 
-    <string name="import_export_permissions_fail_title">Berechtigungen fehlen</string>
-    <string name="import_export_permissions_fail_text">Die App kann ohne fehlende Berechtigung nicht auf den externen Speicher zugreifen. Bitte erlaube der App den Zugriff, damit der Import/Export durchgeführt werden kann.</string>
+    <string name="export_failed_title">Export fehlgeschlagen</string>
+    <string name="export_failed_text">Der Export ist mit folgender Meldung fehlgeschlagen:\n\n%s</string>
 
-    <string name="import_export_export_successfull_title">Erfolgreich exportiert</string>
-    <string name="import_export_export_successfull_text">Die gespeicherten Daten wurden erfolgreich exportiert. Die Datei befindet sich hier: %1$s</string>
+    <string name="import_failed_title">Import fehlgeschlagen</string>
+    <string name="import_failed_text">Der Import ist mit folgender Meldung fehlgeschlagen:\n\n%s</string>
 
-    <string name="import_export_import_successfull_title">Erfolgreich importiert</string>
-    <string name="import_export_import_successfull_text">Die Datei wurde erfolgreich importiert und die Geburtstage zur App hinzugefügt.</string>
-
-    <string name="import_export_maximum_data_size_title">Maximale Anzahl überschritten</string>
-    <string name="import_export_maximum_data_size_text">Deine bereits gespeicherten Geburtstage sind zusammen mit den zu importierenden zu viele. Die maximale Anzahl beträgt %1$d. Damit die Datei erfolgreich importiert werden kann, musst Du Geburtstage entfernen.</string>
+    <string name="no_data_to_export">Keine Daten zum Exportieren</string>
+    <string name="unable_to_create_file">Erstellen der Datei war nicht möglich</string>
+    <string name="unable_to_open_file">Öffnen der Datei war nicht möglich</string>
 
     <string name="set_alarm_permissions_explanation_title">Bitte Berechtigung aktivieren</string>
     <string name="set_alarm_permissions_explanation_text">Damit die App Dich an Geburtstage erinnern kann, benötigt sie die Berechtigung, Alarme zu erstellen. Falls Du der App diese Berechtigung verweigerst, kann Dich die App auch nicht erinnern.</string>
+
+    <string name="save_failed_title">Eintrag speichern ist fehlgeschlagen</string>
+    <string name="save_failed_text">Das Speichern des Eintrags ist mit der folgenden Meldung fehlgeschlagen:\n\n%s</string>
+    <string name="no_first_name_specified">Kein Vorname angegeben</string>
+    <string name="invalid_date">Ungültiges Datum angegeben</string>
+
+    <string name="delete_failed_title">Eintrag löschen ist fehlgeschlagen</string>
+    <string name="delete_failed_text">Das Löschen des Eintrags ist mit der folgenden Meldung fehlgeschlagen:\n\n%s</string>
+    <string name="no_id_to_delete">Kein Eintrag gefunden</string>
+
+    <string name="loading_failed_title">Laden der Daten ist fehlgeschlagen</string>
+    <string name="loading_failed_text">Das Laden der Daten ist mit der folgenden Meldung fehlgeschlagen:\n\n%s</string>
 
     <!-- - - - - - - - - - - - - - - - - - - NOTIFICATION - - - - - - - - - - - - - - - - - - - -->
     <string name="content_title">Geburtstagserinnerung</string>
@@ -96,7 +96,8 @@
     <string name="menu_title_sort">Sortieren</string>
     <string name="menu_title_sort_next">Nächster Geburtstag</string>
     <string name="menu_title_sort_calendric">Kalendarisch</string>
-    <string name="menu_title_sort_lexicographic">Lexikographisch</string>
+    <string name="menu_title_sort_lexicographic_full_name">Ganzer Name</string>
+    <string name="menu_title_sort_lexicographic_last_name">Nachname</string>
     <string name="menu_title_sort_age">Alter</string>
 
     <!-- - - - - - - - - - - - - - - - - - - NOTIFICATION SETTINGS - - - - - - - - - - - - - - - - - - - -->
@@ -104,8 +105,9 @@
     <string-array name="activity_notifications_settings">
         <item>Am Geburtstag um %1$s</item>
         <item>Einen Tag vor dem Geburtstag um %1$s</item>
-        <item>%1$d Tage vor dem Geburtstag %2$s</item>
+        <item>%s vor dem Geburtstag %2$s</item>
     </string-array>
+    <string name="activity_notifications_x_days_clickable">%d Tage</string>
     <string name="activity_notifications_x_days_before_without_time" tools:ignore="PluralsCandidate">%1$d Tage vor dem Geburtstag</string>
 
     <string name="activity_notifications_time_picker_title">Zeit wählen</string>
@@ -118,7 +120,6 @@
         \n\nDie App benötigt die Berechtigungen \"Alarm einstellen\" und \"Beim Start ausführen\", um korrekte Benachrichtigungen zu erstellen.
         \n\nDie App benötigt die Berechtigungen \"SD-Karteninhalte ändern oder löschen\" und \"SD-Karteninhalte lesen\", um auf Deinen Wunsch hin Daten zu importieren oder exportieren. Die App macht dies niemals automatisch.
         \n\nEs wird keine Verantwortung übernommen, falls die App Notifikationen falsch oder nicht anzeigt.
-        \n\nDas Modul, mit dem eine Datei zum Importieren ausgewählt werden kann, ist unter der <a href="http://choosealicense.com/licenses/apache-2.0/">Apache 2.0 Lizenz</a> auf <a href="https://github.com/nbsp-team/MaterialFilePicker">Github</a> veröffentlicht. Copyright für dieses Modul: <a href="https://github.com/nbsp-team">nbsp-team</a>.
         \n\nDer Code dieser App ist unter der <a href="http://choosealicense.com/licenses/mit/">MIT-Lizenz</a> auf <a href="https://github.com/SebastianOltmanns/birthdays">GitHub</a> veröffentlicht.
     </string>
 
@@ -126,7 +127,7 @@
     <string name="info_motivation_text">
         Ich habe diese App entwickelt, um unabhängiger von anderen Diensten zu sein. Ich realisierte, dass ich den Geburtstag meines Mitbewohners nicht vergessen möchte, nur weil er sein Konto bei einem bestimmten sozialen Netzwerk gelöscht hat, welches mir seinen Geburtstag sonst angezeigt hätte.
         \nAußerdem wollte ich einen simplen Dienst, keine bereits in Smartphone vorinstallierten Kalender-Funktionen, welche meistens eine große Anzahl an Zusatz-Features haben. Und ich wollte einen Dienst, der auf keinen Fall diese Daten weitergibt oder im Internet abspeichert.
-        \n\nDiese App ist sehr simpel gehalten, hat eine Begrenzung der Einträge auf %1$d und besitzt gar nicht die Möglichkeit, auf das Internet zuzugreifen. Alles wird auf Deinem Smartphone gespeichert.
+        \n\nDiese App ist sehr simpel gehalten und besitzt gar nicht die Möglichkeit, auf das Internet zuzugreifen. Alles wird auf Deinem Smartphone gespeichert.
     </string>
 
     <string name="info_notification_title">Die App benachrichtigt mich nicht. Warum?</string>
@@ -146,5 +147,6 @@
 
     <!-- - - - - - - - - - - - - - - - - - - SETTINGS ACTIVITY - - - - - - - - - - - - - - - - - - - - - -->
     <string name="activity_settings_fab">Button zum Geburtstage hinzufügen anzeigen</string>
+    <string name="activity_settings_theme">Farben</string>
 
 </resources>

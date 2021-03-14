@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
         
-        <Switch
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/activity_notifications_switch_active"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -45,7 +45,6 @@
                     android:layout_height="@dimen/checkbox_size"
                     android:background="?android:attr/listChoiceIndicatorMultiple"
                     android:button="@null"
-                    android:layout_marginRight="@dimen/activity_horizontal_margin"
                     android:layout_marginEnd="@dimen/activity_horizontal_margin"/>
 
                 <TextView
@@ -69,7 +68,6 @@
                     android:layout_height="@dimen/checkbox_size"
                     android:background="?android:attr/listChoiceIndicatorMultiple"
                     android:button="@null"
-                    android:layout_marginRight="@dimen/activity_horizontal_margin"
                     android:layout_marginEnd="@dimen/activity_horizontal_margin"/>
 
                 <TextView
@@ -92,7 +90,6 @@
                     android:layout_height="@dimen/checkbox_size"
                     android:background="?android:attr/listChoiceIndicatorMultiple"
                     android:button="@null"
-                    android:layout_marginRight="@dimen/activity_horizontal_margin"
                     android:layout_marginEnd="@dimen/activity_horizontal_margin"/>
 
                 <TextView

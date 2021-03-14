@@ -1,7 +1,5 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:ignore="HardcodedText"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -10,152 +8,128 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <GridLayout
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:columnCount="2"
-        android:orientation="horizontal"
-        android:rowCount="4">
-
-        <TextView
-            android:layout_marginBottom="5dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_gravity="center_vertical"
-            android:text="@string/birthday"
-            android:textColor="@color/text_color"
-            />
+        android:layout_height="wrap_content">
 
         <LinearLayout
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-            <EditText
-                android:id="@+id/text_input_birthday_day"
-                android:ems="2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:lines="1"
-                android:maxLength="2"
-                android:gravity="center"
-                android:inputType="number"
-                android:textColor="@color/text_color"
-                android:textSize="@dimen/text_size"
-                android:nextFocusForward="@+id/text_input_birthday_month"
-                android:nextFocusDown="@+id/text_input_birthday_month"
-                android:hint="@string/activity_input_day_hint"
-                >
-                <requestFocus />
-            </EditText>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="."
-                android:textColor="@color/text_color"/>
-            <EditText
-                android:id="@+id/text_input_birthday_month"
-                android:ems="2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:lines="1"
-                android:maxLength="2"
-                android:gravity="center"
-                android:inputType="number"
-                android:textColor="@color/text_color"
-                android:textSize="@dimen/text_size"
-                android:nextFocusForward="@+id/text_input_birthday_year"
-                android:nextFocusDown="@+id/text_input_birthday_year"
-                android:hint="@string/activity_input_month_hint"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="."
-                android:textColor="@color/text_color"/>
-            <EditText
-                android:id="@+id/text_input_birthday_year"
-                android:ems="4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:lines="1"
-                android:maxLength="4"
-                android:gravity="center"
-                android:inputType="number"
-                android:textColor="@color/text_color"
-                android:textSize="@dimen/text_size"
-                android:hint="@string/activity_input_year_hint"
-                />
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/birthday_day"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:hint="@string/day">
+                    <requestFocus />
+                </com.google.android.material.textfield.TextInputEditText>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/birthday_month"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:hint="@string/month"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/birthday_year"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:hint="@string/year"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <ImageButton
+                android:id="@+id/birthday_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/text_gap"
+                android:layout_gravity="center"
                 android:layout_marginStart="@dimen/text_gap"
                 android:background="@drawable/rounded_corners_button"
                 android:padding="@dimen/rounded_button_corner_radius"
-                android:onClick="changeBirthday"
                 android:src="@drawable/ic_event" />
-
 
         </LinearLayout>
 
-        <TextView
-            android:layout_gravity="center_vertical"
-            android:text="@string/first_name"
-            android:textColor="@color/text_color"/>
-
-        <EditText
-            android:id="@+id/text_input_firstname"
-            android:maxEms="25"
-            android:minEms="15"
-            android:layout_gravity="fill_horizontal"
-            android:layout_width="0dp"
-            android:lines="1"
-            android:inputType="textCapWords"
-            android:maxLength="25"
-            android:textColor="@color/text_color"
-            android:textSize="@dimen/text_size"/>
-
-        <TextView
-            android:layout_gravity="center_vertical"
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/ignore_year"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/last_name"
-            android:textColor="@color/text_color"/>
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:text="@string/ignore_year" />
 
-        <EditText
-            android:id="@+id/text_input_lastname"
-            android:maxEms="25"
-            android:minEms="15"
-            android:layout_gravity="fill_horizontal"
-            android:layout_width="0dp"
-            android:lines="1"
-            android:inputType="textCapWords"
-            android:maxLength="25"
-            android:textColor="@color/text_color"
-            android:textSize="@dimen/text_size"/>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_gravity="center_vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/others"
-            android:textColor="@color/text_color"/>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/first_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top"
+                android:lines="1"
+                android:inputType="textCapWords"
+                android:hint="@string/first_name"/>
 
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <EditText
-            android:id="@+id/text_input_others"
-            android:maxEms="25"
-            android:minEms="15"
-            android:layout_gravity="fill_horizontal"
-            android:layout_width="0dp"
-            android:gravity="top"
-            android:inputType="textMultiLine"
-            android:lines="8"
-            android:maxLength="200"
-            android:scrollbars="vertical"
-            android:textColor="@color/text_color"
-            android:textSize="@dimen/text_size"/>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
 
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/last_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top"
+                android:lines="1"
+                android:inputType="textCapWords"
+                android:hint="@string/last_name"/>
 
-    </GridLayout>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/notes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lines="8"
+                android:gravity="top"
+                android:inputType="textMultiLine"
+                android:scrollbars="vertical"
+                android:hint="@string/notes"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </LinearLayout>
+
 </ScrollView>

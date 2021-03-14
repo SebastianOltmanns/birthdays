@@ -46,14 +46,16 @@
             <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/main_sort_next"
-                    android:title="@string/menu_title_sort_next"
-                    android:checked="true" />
+                    android:title="@string/menu_title_sort_next" />
                 <item
                     android:id="@+id/main_sort_calendric"
                     android:title="@string/menu_title_sort_calendric" />
                 <item
-                    android:id="@+id/main_sort_lexicographic"
-                    android:title="@string/menu_title_sort_lexicographic" />
+                    android:id="@+id/main_sort_lexicographic_full_name"
+                    android:title="@string/menu_title_sort_lexicographic_full_name" />
+                <item
+                    android:id="@+id/main_sort_lexicographic_last_name"
+                    android:title="@string/menu_title_sort_lexicographic_last_name" />
                 <item
                     android:id="@+id/main_sort_age"
                     android:title="@string/menu_title_sort_age" />

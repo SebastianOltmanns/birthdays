@@ -2,9 +2,16 @@ package com.woodplantation.geburtstagsverwaltung.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import androidx.appcompat.app.AppCompatActivity;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
 
 import com.woodplantation.geburtstagsverwaltung.R;
+import com.woodplantation.geburtstagsverwaltung.view.AppTheme;
+
+import javax.inject.Inject;
+
+import dagger.hilt.android.qualifiers.ApplicationContext;
 
 /**
  * Created by Sebu on 19.10.2016.
@@ -13,15 +20,34 @@ import com.woodplantation.geburtstagsverwaltung.R;
 
 public class MyPreferences {
 
-	public static final String FILEPATH_NOTIFICATION = "notification_settings";
-	public static final String FILEPATH_SETTINGS = "settings";
+	private static final String FILEPATH_NOTIFICATION = "notification_settings";
+	private static final String FILEPATH_SETTINGS = "settings";
 
-	private Context context;
-	public SharedPreferences preferences;
+	private final Context context;
+	public final SharedPreferences preferences;
 
-	public MyPreferences(Context context, String filepath) {
+	@Inject
+	public MyPreferences(@ApplicationContext Context context) {
+		this(context, FILEPATH_SETTINGS);
+	}
+
+	private MyPreferences(Context context, String filepath) {
 		this.context = context;
 		this.preferences = context.getSharedPreferences(filepath, Context.MODE_PRIVATE);
+	}
+
+	/**
+	 * should not be used anymore.
+	 */
+	@SuppressWarnings("DeprecatedIsStillUsed")
+	@Deprecated
+	public static MyPreferences getNotificationPreferences(Context context) {
+		return new MyPreferences(context, FILEPATH_NOTIFICATION);
+	}
+
+	@RequiresApi(api = Build.VERSION_CODES.N)
+	public static void removeNotificationsPreferences(Context context) {
+		context.deleteSharedPreferences(MyPreferences.FILEPATH_NOTIFICATION);
 	}
 
 	public boolean getActive() {
@@ -111,6 +137,24 @@ public class MyPreferences {
 				getOneDayBeforeClock(),
 				getXDaysBeforeClock()
 		};
+	}
+
+	public boolean isStorageMigrated() {
+		return preferences
+				.getBoolean(context.getString(R.string.preferences_storage_migrated),
+						context.getResources().getBoolean(R.bool.preferences_storage_migrated));
+	}
+
+	public boolean arePreferencesMigrated() {
+		return preferences
+				.getBoolean(context.getString(R.string.preferences_preferences_migrated),
+						context.getResources().getBoolean(R.bool.preferences_preferences_migrated));
+	}
+
+	public AppTheme.Theme getAppTheme() {
+		return AppTheme.Theme.values()[preferences
+				.getInt(context.getString(R.string.preferences_theme),
+						context.getResources().getInteger(R.integer.preferences_theme))];
 	}
 
 }

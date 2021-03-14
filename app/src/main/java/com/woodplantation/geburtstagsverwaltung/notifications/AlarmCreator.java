@@ -11,8 +11,8 @@ import com.woodplantation.geburtstagsverwaltung.R;
 import com.woodplantation.geburtstagsverwaltung.util.IntentCodes;
 import com.woodplantation.geburtstagsverwaltung.util.MyPreferences;
 
+import java.time.OffsetDateTime;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Map;
 
 /**
@@ -26,69 +26,54 @@ public class AlarmCreator {
 	}
 
 	private static boolean allNothing(ChangeType[] changeTypes) {
-		boolean allNothing = true;
-		for (ChangeType ct : changeTypes) {
-			if (ct != ChangeType.NOTHING) {
-				allNothing = false;
-				break;
-			}
-		}
-		return allNothing;
+		return Arrays.stream(changeTypes).allMatch(ChangeType.NOTHING::equals);
 	}
 
-	public static void changeAlarms(Context context, ChangeType[] changeTypes) {
+	public static void changeAlarms(Context context, ChangeType[] changeTypes, MyPreferences preferences) {
 		Log.d("alarmcreator","change alarms!" + Arrays.toString(changeTypes));
 		if (allNothing(changeTypes)) {
 			return;
 		}
-		int[] clocks = new MyPreferences(context, MyPreferences.FILEPATH_NOTIFICATION).getClocks();
+		int[] clocks = preferences.getClocks();
 		AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		for (int i = 0; i < changeTypes.length; i++) {
 			ChangeType changeType = changeTypes[i];
-			if (changeType == ChangeType.NOTHING) {
-				continue;
-			} else {
+			if (changeType != ChangeType.NOTHING) {
 				Intent intent = new Intent(context, AlarmReceiver.class);
 				intent.putExtra(IntentCodes.WHICH, i);
-				Log.d("alamcreator","putting intent extra" + i + " which code:" + IntentCodes.WHICH);
 				if (changeType == ChangeType.CANCEL) {
 					PendingIntent pi = PendingIntent.getBroadcast(context, i, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 					am.cancel(pi);
 				} else {
 					int flag = changeType == ChangeType.UPDATE ? PendingIntent.FLAG_CANCEL_CURRENT : 0;
 					PendingIntent pi = PendingIntent.getBroadcast(context, i, intent, flag);
-					Calendar when = Calendar.getInstance();
+					OffsetDateTime alarm = OffsetDateTime.now();
 					int h = clocks[i] / 60;
 					int m = clocks[i] % 60;
-					if ((when.get(Calendar.HOUR_OF_DAY) > h) || (when.get(Calendar.HOUR_OF_DAY) == h && when.get(Calendar.MINUTE) >= m)) {
+					if ((alarm.getHour() > h) || (alarm.getHour() == h && alarm.getMinute() >= m)) {
 						// the time point today already happened. add one day
-						when.add(Calendar.DAY_OF_YEAR, 1);
+						alarm = alarm.plusDays(1);
 					}
-					when.set(Calendar.MINUTE, m);
-					when.set(Calendar.HOUR_OF_DAY, h);
-					when.set(Calendar.SECOND, 0);
+					alarm = alarm.withSecond(0).withHour(h).withMinute(m);
 					// set the alarm
+					Log.d("alarmcreator", "going to set alarm at time: " + alarm);
 					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-						am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, when.getTimeInMillis(), pi);
-					} else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-						am.setExact(AlarmManager.RTC_WAKEUP, when.getTimeInMillis(), pi);
+						am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, alarm.toEpochSecond()*1000, pi);
 					} else {
-						am.set(AlarmManager.RTC_WAKEUP, when.getTimeInMillis(), pi);
+						am.setExact(AlarmManager.RTC_WAKEUP, alarm.toEpochSecond()*1000, pi);
 					}
 				}
 			}
 		}
 	}
 
-	public static void createFromScratch(Context context) {
-		Log.d("alarmcreator","create from scratch");
+	public static void createFromScratch(Context context, MyPreferences preferences) {
 		// whatever we will create in the following, at first we delete all existing alarms
-		changeAlarms(context, new ChangeType[]{ChangeType.CANCEL, ChangeType.CANCEL, ChangeType.CANCEL});
-		MyPreferences notificationPreferences = new MyPreferences(context, MyPreferences.FILEPATH_NOTIFICATION);
-		if (!notificationPreferences.getActive()) {
+		changeAlarms(context, new ChangeType[]{ChangeType.CANCEL, ChangeType.CANCEL, ChangeType.CANCEL}, preferences);
+		if (!preferences.getActive()) {
 			return;
 		}
-		boolean[] which = notificationPreferences.getWhich();
+		boolean[] which = preferences.getWhich();
 		ChangeType[] changeTypes = {
 				ChangeType.NOTHING,
 				ChangeType.NOTHING,
@@ -99,11 +84,10 @@ public class AlarmCreator {
 				changeTypes[i] = ChangeType.CREATE;
 			}
 		}
-		changeAlarms(context, changeTypes);
+		changeAlarms(context, changeTypes, preferences);
 	}
 
-	public static void preferencesChanged(Context context, Map<String, ?> oldPref) {
-		Log.d("alarmcreator","preferences changed");
+	public static void preferencesChanged(Context context, Map<String, ?> oldPref, MyPreferences preferences) {
 
 		// old settings
 		boolean[] oldWhich = new boolean[3];
@@ -118,11 +102,10 @@ public class AlarmCreator {
 		boolean oldActive = (Boolean) oldPref.get(context.getString(R.string.preferences_active));
 
 		// new settings
-		MyPreferences pref = new MyPreferences(context, MyPreferences.FILEPATH_NOTIFICATION);
-		boolean[] newWhich = pref.getWhich();
-		int[] newClocks = pref.getClocks();
-		int newXDaysBeforeDays = pref.getXDaysBeforeDays();
-		boolean newActive = pref.getActive();
+		boolean[] newWhich = preferences.getWhich();
+		int[] newClocks = preferences.getClocks();
+		int newXDaysBeforeDays = preferences.getXDaysBeforeDays();
+		boolean newActive = preferences.getActive();
 
 		ChangeType[] changeTypes = {
 				ChangeType.NOTHING, ChangeType.NOTHING, ChangeType.NOTHING
@@ -132,13 +115,9 @@ public class AlarmCreator {
 		if (oldActive != newActive) {
 			// notifications got completely activated or deactivated
 			if (newActive) {
-				for (int i = 0; i < changeTypes.length; i++) {
-					changeTypes[i] = ChangeType.CREATE;
-				}
+				Arrays.fill(changeTypes, ChangeType.CREATE);
 			} else {
-				for (int i = 0; i < changeTypes.length; i++) {
-					changeTypes[i] = ChangeType.CANCEL;
-				}
+				Arrays.fill(changeTypes, ChangeType.CANCEL);
 			}
 		} else {
 			// compare single ones
@@ -156,7 +135,7 @@ public class AlarmCreator {
 				}
 			}
 		}
-		changeAlarms(context, changeTypes);
+		changeAlarms(context, changeTypes, preferences);
 	}
 
 }

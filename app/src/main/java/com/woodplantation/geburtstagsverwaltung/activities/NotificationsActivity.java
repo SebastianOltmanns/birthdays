@@ -3,12 +3,8 @@ package com.woodplantation.geburtstagsverwaltung.activities;
 import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import android.text.SpannableStringBuilder;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
@@ -20,44 +16,58 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.woodplantation.geburtstagsverwaltung.util.MyPreferences;
-import com.woodplantation.geburtstagsverwaltung.R;
-import com.woodplantation.geburtstagsverwaltung.util.IntentCodes;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 
-import java.io.Serializable;
-import java.util.Calendar;
+import com.woodplantation.geburtstagsverwaltung.R;
+import com.woodplantation.geburtstagsverwaltung.notifications.AlarmCreator;
+import com.woodplantation.geburtstagsverwaltung.util.MyPreferences;
+import com.woodplantation.geburtstagsverwaltung.view.AppTheme;
+
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Map;
+
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
 
 /**
  * Created by Sebu on 19.10.2016.
  * Contact: sebastian.oltmanns.developer@gmail.com
  */
-
+@AndroidEntryPoint
 public class NotificationsActivity extends AppCompatActivity {
 
-	private MyPreferences preferences;
+	@Inject
+	MyPreferences preferences;
+	@Inject
+	AppTheme appTheme;
 
 	private boolean is24h;
 
-	private Switch switchActive;
+	private SwitchCompat switchActive;
 	private LinearLayout layoutActive;
-	private CheckBox[] checkBoxes = new CheckBox[3];
-	private TextView[] textViews = new TextView[3];
+	private final CheckBox[] checkBoxes = new CheckBox[3];
+	private final TextView[] textViews = new TextView[3];
 
 	private boolean active;
-	private boolean[] actives = new boolean[3];
+	private final boolean[] actives = new boolean[3];
 	int[] clocks = new int[3];
 	private int xDaysBeforeDays;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		appTheme.applyAppTheme(this);
 		setContentView(R.layout.activity_notifications);
-		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		Toolbar toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -66,18 +76,14 @@ public class NotificationsActivity extends AppCompatActivity {
 
 		//initalize the layout variables
 
-		switchActive = (Switch) findViewById(R.id.activity_notifications_switch_active);
-		layoutActive = (LinearLayout) findViewById(R.id.activity_notifications_layout_active);
-		checkBoxes[0] = (CheckBox) findViewById(R.id.activity_notifications_checkbox_on_birthday);
-		textViews[0] = (TextView) findViewById(R.id.activity_notifications_textview_on_birthday);
-		checkBoxes[1] = (CheckBox) findViewById(R.id.activity_notifications_checkbox_one_day_before);
-		textViews[1] = (TextView) findViewById(R.id.activity_notifications_textview_one_day_before);
-		checkBoxes[2] = (CheckBox) findViewById(R.id.activity_notifications_checkbox_x_days_before);
-		textViews[2] = (TextView) findViewById(R.id.activity_notifications_textview_x_days_before);
-
-		//get preferences
-
-		preferences = new MyPreferences(this, MyPreferences.FILEPATH_NOTIFICATION);
+		switchActive = findViewById(R.id.activity_notifications_switch_active);
+		layoutActive = findViewById(R.id.activity_notifications_layout_active);
+		checkBoxes[0] = findViewById(R.id.activity_notifications_checkbox_on_birthday);
+		textViews[0] = findViewById(R.id.activity_notifications_textview_on_birthday);
+		checkBoxes[1] = findViewById(R.id.activity_notifications_checkbox_one_day_before);
+		textViews[1] = findViewById(R.id.activity_notifications_textview_one_day_before);
+		checkBoxes[2] = findViewById(R.id.activity_notifications_checkbox_x_days_before);
+		textViews[2] = findViewById(R.id.activity_notifications_textview_x_days_before);
 
 		//load all preferences and save it once so the preferences are initialized
 
@@ -105,30 +111,23 @@ public class NotificationsActivity extends AppCompatActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.menu_cancel_and_save, menu);
+		getMenuInflater().inflate(R.menu.menu_settings, menu);
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		int id = item.getItemId();
+		if (item.getItemId() == R.id.menu_cancel || item.getItemId() == android.R.id.home) {
+			finish();
+			return true;
+		} else if (item.getItemId() == R.id.menu_ok) {
+			Map<String, ?> oldPreferences = preferences.preferences.getAll();
 
-		switch (id) {
-			case R.id.menu_cancel:
-			case android.R.id.home:
-				setResult(RESULT_CANCELED);
-				finish();
-				return true;
-			case R.id.menu_ok:
-				Map<String, ?> map = preferences.preferences.getAll();
-				Intent resultIntent = new Intent();
-				resultIntent.putExtra(IntentCodes.OLD_PREFERENCES, (Serializable) map);
+			saveThePreferences();
 
-				saveThePreferences();
-
-				setResult(RESULT_OK, resultIntent);
-				finish();
-				return true;
+			AlarmCreator.preferencesChanged(getApplicationContext(), oldPreferences, preferences);
+			finish();
+			return true;
 		}
 
 		return super.onOptionsItemSelected(item);
@@ -175,11 +174,6 @@ public class NotificationsActivity extends AppCompatActivity {
 		}
 	}
 
-	private Calendar c = Calendar.getInstance(); {
-		c.set(Calendar.SECOND, 0);
-		c.set(Calendar.MILLISECOND, 0);
-	}
-
 	private abstract class DisableableClickableSpan extends ClickableSpan {
 		protected int which;
 		DisableableClickableSpan(int which) {
@@ -188,7 +182,7 @@ public class NotificationsActivity extends AppCompatActivity {
 		@Override
 		public void updateDrawState(TextPaint ds) {
 			if (textViews[which].isEnabled()) {
-				ds.setColor(ContextCompat.getColor(NotificationsActivity.this, R.color.colorAccent));
+				ds.setColor(appTheme.getColorAccent(NotificationsActivity.this));
 				ds.setUnderlineText(true);
 			} else {
 				ds.setColor(ContextCompat.getColor(NotificationsActivity.this, R.color.text_color_disabled));
@@ -211,7 +205,7 @@ public class NotificationsActivity extends AppCompatActivity {
 			dialog.show();
 		}
 		class MyOnTimeSetListener implements TimePickerDialog.OnTimeSetListener {
-			private int which;
+			private final int which;
 			private MyOnTimeSetListener(int which) {
 				this.which = which;
 			}
@@ -222,9 +216,9 @@ public class NotificationsActivity extends AppCompatActivity {
 			}
 		}
 
-	};
+	}
 
-	private ClickableSpan clickableSetDaysBeforeSpan = new DisableableClickableSpan(2) {
+	private final ClickableSpan clickableSetDaysBeforeSpan = new DisableableClickableSpan(2) {
 		private AlertDialog dialog;
 		private TextView dialogTextView;
 		private NumberPicker numberPicker;
@@ -238,10 +232,10 @@ public class NotificationsActivity extends AppCompatActivity {
 			View dialogNumberPicker = View.inflate(NotificationsActivity.this, R.layout.dialog_number_picker, null);
 			dialog.setView(dialogNumberPicker);
 
-			dialogTextView = (TextView) dialogNumberPicker.findViewById(R.id.dialog_number_picker_text);
+			dialogTextView = dialogNumberPicker.findViewById(R.id.dialog_number_picker_text);
 			dialogTextView.setText(getResources().getString(R.string.activity_notifications_x_days_before_without_time, xDaysBeforeDays));
 
-			numberPicker = (NumberPicker) dialogNumberPicker.findViewById(R.id.number_picker);
+			numberPicker = dialogNumberPicker.findViewById(R.id.number_picker);
 
 			numberPicker.setMaxValue(28);
 			numberPicker.setMinValue(2);
@@ -274,13 +268,11 @@ public class NotificationsActivity extends AppCompatActivity {
 		String[] stringClocks = getResources().getStringArray(R.array.activity_notifications_settings);
 
 		for (int i = 0; i < clocks.length; i++) {
-			c.set(Calendar.HOUR_OF_DAY, clocks[i]/60);
-			c.set(Calendar.MINUTE, clocks[i]%60);
-			String clock = java.text.DateFormat.getTimeInstance(java.text.DateFormat.SHORT).format(c.getTime());
+			String clock = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).format(LocalTime.ofSecondOfDay(clocks[i]*60));
 
 			String string;
 			if (i == 2) {
-				string = String.format(stringClocks[i], xDaysBeforeDays, clock);
+				string = String.format(stringClocks[i], getString(R.string.activity_notifications_x_days_clickable, xDaysBeforeDays), clock);
 			} else {
 				string = String.format(stringClocks[i], clock);
 			}
@@ -289,7 +281,7 @@ public class NotificationsActivity extends AppCompatActivity {
 			ssb[i].setSpan(new ClickableTimeSpan(i), string.length()-clock.length(), string.length(), 0);
 
 			if (i == 2) {
-				ssb[i].setSpan(clickableSetDaysBeforeSpan, 0, String.valueOf(xDaysBeforeDays).length(), 0);
+				ssb[i].setSpan(clickableSetDaysBeforeSpan, 0, getString(R.string.activity_notifications_x_days_clickable, xDaysBeforeDays).length(), 0);
 			}
 		}
 
