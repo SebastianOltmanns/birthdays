@@ -4,15 +4,11 @@ import android.app.Application;
 
 import androidx.room.Room;
 
-import com.woodplantation.geburtstagsverwaltung.database.AppDatabase;
-import com.woodplantation.geburtstagsverwaltung.database.EntryDao;
-
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
 import dagger.hilt.InstallIn;
-import dagger.hilt.android.components.ApplicationComponent;
 import dagger.hilt.components.SingletonComponent;
 
 @Module

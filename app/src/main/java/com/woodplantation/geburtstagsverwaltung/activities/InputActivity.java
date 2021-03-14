@@ -69,14 +69,12 @@ public class InputActivity extends AppCompatActivity {
 		inputViewModel = new ViewModelProvider(this).get(InputViewModel.class);
 		Long id = getIntent().hasExtra(IntentCodes.ID) ? getIntent().getLongExtra(IntentCodes.ID, -1) : null;
 		setTitle((id != null && id != -1) ? R.string.edit : R.string.add);
-		inputViewModel.init(id, error -> {
-			new AlertDialog.Builder(this)
-					.setTitle(R.string.loading_failed_title)
-					.setMessage(R.string.loading_failed_text)
-					.setNeutralButton(R.string.ok, (a,b) -> finish())
-					.setCancelable(false)
-					.show();
-		});
+		inputViewModel.init(id, error -> new AlertDialog.Builder(this)
+				.setTitle(R.string.loading_failed_title)
+				.setMessage(R.string.loading_failed_text)
+				.setNeutralButton(R.string.ok, (a,b) -> finish())
+				.setCancelable(false)
+				.show());
 
 		inputViewModel.getFirstName().observe(this, ObserverThatSetsTextIfContentIsNotEqual.forString(firstName));
 		inputViewModel.getLastName().observe(this, ObserverThatSetsTextIfContentIsNotEqual.forString(lastName));
@@ -169,16 +167,14 @@ public class InputActivity extends AppCompatActivity {
 			new AlertDialog.Builder(this)
 					.setTitle(R.string.sure_delete_title)
 					.setMessage(R.string.sure_delete_text)
-					.setPositiveButton(R.string.yes, (a, b) -> {
-						inputViewModel.delete(
-								this::finish,
-								error -> new AlertDialog.Builder(this)
-										.setTitle(R.string.delete_failed_title)
-										.setMessage(getString(R.string.delete_failed_text, error instanceof NoIdToDeleteException ? getString(R.string.no_id_to_delete) : error.getLocalizedMessage()))
-										.setNeutralButton(R.string.ok, null)
-										.show()
-						);
-					})
+					.setPositiveButton(R.string.yes, (a, b) -> inputViewModel.delete(
+							this::finish,
+							error -> new AlertDialog.Builder(this)
+									.setTitle(R.string.delete_failed_title)
+									.setMessage(getString(R.string.delete_failed_text, error instanceof NoIdToDeleteException ? getString(R.string.no_id_to_delete) : error.getLocalizedMessage()))
+									.setNeutralButton(R.string.ok, null)
+									.show()
+					))
 					.setNegativeButton(R.string.no, null)
 					.show();
 		}

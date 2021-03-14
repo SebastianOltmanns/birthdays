@@ -48,8 +48,8 @@ public class DateUtil {
         }
     }
 
-    private static DateTimeFormatter formatterWithYear = DateTimeFormatter.ofPattern("dd.MM.yyyy", Locale.US);
-    private static DateTimeFormatter formatterWithoutYear = DateTimeFormatter.ofPattern("dd.MM", Locale.US);
+    private final static DateTimeFormatter formatterWithYear = DateTimeFormatter.ofPattern("dd.MM.yyyy", Locale.US);
+    private final static DateTimeFormatter formatterWithoutYear = DateTimeFormatter.ofPattern("dd.MM", Locale.US);
 
     public static String getBirthdayString(LocalDate birthday, boolean ignoreYear) {
         if (ignoreYear) {

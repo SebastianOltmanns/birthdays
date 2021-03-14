@@ -2,7 +2,6 @@ package com.woodplantation.geburtstagsverwaltung.comparators;
 
 import com.woodplantation.geburtstagsverwaltung.model.Entry;
 
-import java.time.LocalDate;
 import java.util.Comparator;
 
 /**

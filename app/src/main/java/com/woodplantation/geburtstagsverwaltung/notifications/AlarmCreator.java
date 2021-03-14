@@ -38,9 +38,7 @@ public class AlarmCreator {
 		AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		for (int i = 0; i < changeTypes.length; i++) {
 			ChangeType changeType = changeTypes[i];
-			if (changeType == ChangeType.NOTHING) {
-				continue;
-			} else {
+			if (changeType != ChangeType.NOTHING) {
 				Intent intent = new Intent(context, AlarmReceiver.class);
 				intent.putExtra(IntentCodes.WHICH, i);
 				if (changeType == ChangeType.CANCEL) {
@@ -117,13 +115,9 @@ public class AlarmCreator {
 		if (oldActive != newActive) {
 			// notifications got completely activated or deactivated
 			if (newActive) {
-				for (int i = 0; i < changeTypes.length; i++) {
-					changeTypes[i] = ChangeType.CREATE;
-				}
+				Arrays.fill(changeTypes, ChangeType.CREATE);
 			} else {
-				for (int i = 0; i < changeTypes.length; i++) {
-					changeTypes[i] = ChangeType.CANCEL;
-				}
+				Arrays.fill(changeTypes, ChangeType.CANCEL);
 			}
 		} else {
 			// compare single ones

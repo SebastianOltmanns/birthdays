@@ -24,7 +24,6 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="ok">OK</string>
-    <string name="allow">Allow</string>
     <string name="rate_app">Rate app</string>
     <string name="cancel">Cancel</string>
     <string name="add">Add</string>
@@ -48,12 +47,6 @@
     <string name="import_export_import">Import</string>
     <string name="import_export_export">Export</string>
 
-    <string name="import_export_failed_title">Problem with import/export</string>
-    <string name="import_export_failed_text">There was a problem importing or exporting.</string>
-
-    <string name="import_export_permissions_fail_title">Missing permissions</string>
-    <string name="import_export_permissions_fail_text">Without the missing permission, the app can not access the external storage. For a successful import or export, please allow the app access.</string>
-
     <string name="export_successful_title">Export successful</string>
     <string name="export_successful_text">The saved data was exported successfully.</string>
 
@@ -67,8 +60,6 @@
     <string name="import_failed_text">The import failed due to the following reason:\n\n%s</string>
 
     <string name="no_data_to_export">No data to export</string>
-    <string name="no_storage_available">No storage available</string>
-    <string name="unable_to_create_directory">Unable to create directory</string>
     <string name="unable_to_create_file">Unable to create file</string>
     <string name="unable_to_open_file">Unable to open file</string>
 
@@ -116,7 +107,7 @@
         <item>One day before birthday at %1$s</item>
         <item>%s before birthday at %2$s</item>
     </string-array>
-    <string name="activity_notifications_x_days_clickable">%d days</string>
+    <string name="activity_notifications_x_days_clickable" tools:ignore="PluralsCandidate">%d days</string>
     <string name="activity_notifications_x_days_before_without_time" tools:ignore="PluralsCandidate">%1$d days before birthday</string>
 
     <string name="activity_notifications_time_picker_title">Choose time</string>

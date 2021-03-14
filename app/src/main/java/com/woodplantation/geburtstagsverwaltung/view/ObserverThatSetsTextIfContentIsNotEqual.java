@@ -22,10 +22,6 @@ public class ObserverThatSetsTextIfContentIsNotEqual<T> implements Observer<T> {
         return new ObserverThatSetsTextIfContentIsNotEqual<>(textView, stringIdentity);
     }
 
-    public static ObserverThatSetsTextIfContentIsNotEqual<Integer> forInteger(TextView textView) {
-        return new ObserverThatSetsTextIfContentIsNotEqual<>(textView, String::valueOf);
-    }
-
     @Override
     public void onChanged(T value) {
         String strValue = toString.apply(value);

@@ -24,7 +24,6 @@
     <string name="yes">Ja</string>
     <string name="no">Nein</string>
     <string name="ok">OK</string>
-    <string name="allow">Erlauben</string>
     <string name="rate_app">App bewerten</string>
     <string name="cancel">Abbrechen</string>
     <string name="add">Hinzufügen</string>
@@ -43,16 +42,10 @@
     <string name="import_export_dialog_title">Import/Export</string>
     <string name="import_export_dialog_text">
         Du kannst alle eingegebenen Geburtstage in eine Datei exportieren. Diese Datei wird in dem Primärspeicher des Smartphones gespeichert und wird nicht verschlüsselt. Das Risiko, welches hiervon ausgeht, insbesondere Datenschutz betreffend, liegt ganz alleine bei Dir.
-        \n\nFalls Du Geburtstage aus einer solchen Datei importieren möchtest, beachte, dass sie zu den aktuell in der App gespeicherten Geburtstagen hinzugefügt werden. Falls die Anzahl der Geburtstage aus beiden Quellen die maximale Anzahl von %1$d übersteigt, ist das Importieren nicht möglich.
+        \n\nFalls Du Geburtstage aus einer solchen Datei importieren möchtest, beachte, dass sie zu den aktuell in der App gespeicherten Geburtstagen hinzugefügt werden.
     </string>
     <string name="import_export_import">Importieren</string>
     <string name="import_export_export">Exportieren</string>
-
-    <string name="import_export_failed_title">Fehler beim Import/Export</string>
-    <string name="import_export_failed_text">Es gab ein Problem beim Importieren oder Exportieren.</string>
-
-    <string name="import_export_permissions_fail_title">Berechtigungen fehlen</string>
-    <string name="import_export_permissions_fail_text">Die App kann ohne fehlende Berechtigung nicht auf den externen Speicher zugreifen. Bitte erlaube der App den Zugriff, damit der Import/Export durchgeführt werden kann.</string>
 
     <string name="export_successful_title">Erfolgreich exportiert</string>
     <string name="export_successful_text">Die gespeicherten Daten wurden erfolgreich exportiert.</string>
@@ -67,8 +60,6 @@
     <string name="import_failed_text">Der Import ist mit folgender Meldung fehlgeschlagen:\n\n%s</string>
 
     <string name="no_data_to_export">Keine Daten zum Exportieren</string>
-    <string name="no_storage_available">Kein Speichermedium verfügbar</string>
-    <string name="unable_to_create_directory">Erstellen des Ordners war nicht möglich</string>
     <string name="unable_to_create_file">Erstellen der Datei war nicht möglich</string>
     <string name="unable_to_open_file">Öffnen der Datei war nicht möglich</string>
 
@@ -136,7 +127,7 @@
     <string name="info_motivation_text">
         Ich habe diese App entwickelt, um unabhängiger von anderen Diensten zu sein. Ich realisierte, dass ich den Geburtstag meines Mitbewohners nicht vergessen möchte, nur weil er sein Konto bei einem bestimmten sozialen Netzwerk gelöscht hat, welches mir seinen Geburtstag sonst angezeigt hätte.
         \nAußerdem wollte ich einen simplen Dienst, keine bereits in Smartphone vorinstallierten Kalender-Funktionen, welche meistens eine große Anzahl an Zusatz-Features haben. Und ich wollte einen Dienst, der auf keinen Fall diese Daten weitergibt oder im Internet abspeichert.
-        \n\nDiese App ist sehr simpel gehalten, hat eine Begrenzung der Einträge auf %1$d und besitzt gar nicht die Möglichkeit, auf das Internet zuzugreifen. Alles wird auf Deinem Smartphone gespeichert.
+        \n\nDiese App ist sehr simpel gehalten und besitzt gar nicht die Möglichkeit, auf das Internet zuzugreifen. Alles wird auf Deinem Smartphone gespeichert.
     </string>
 
     <string name="info_notification_title">Die App benachrichtigt mich nicht. Warum?</string>
