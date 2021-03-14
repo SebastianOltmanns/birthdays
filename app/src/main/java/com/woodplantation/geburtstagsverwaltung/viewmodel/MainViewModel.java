@@ -1,6 +1,5 @@
 package com.woodplantation.geburtstagsverwaltung.viewmodel;
 
-import androidx.hilt.lifecycle.ViewModelInject;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -19,11 +18,16 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.lifecycle.HiltViewModel;
+
+@HiltViewModel
 public class MainViewModel extends ViewModel {
 
     private final Repository repository;
 
-    @ViewModelInject
+    @Inject
     public MainViewModel(Repository repository) {
         this.repository = repository;
 

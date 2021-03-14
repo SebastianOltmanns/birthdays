@@ -1,6 +1,5 @@
 package com.woodplantation.geburtstagsverwaltung.viewmodel;
 
-import androidx.hilt.lifecycle.ViewModelInject;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -15,13 +14,17 @@ import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.function.Consumer;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.lifecycle.HiltViewModel;
 import io.reactivex.functions.Action;
 
+@HiltViewModel
 public class InputViewModel extends ViewModel {
 
     private final Repository repository;
 
-    @ViewModelInject
+    @Inject
     public InputViewModel(Repository repository) {
         this.repository = repository;
     }
