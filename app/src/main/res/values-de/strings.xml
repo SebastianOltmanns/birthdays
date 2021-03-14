@@ -129,7 +129,6 @@
         \n\nDie App benötigt die Berechtigungen \"Alarm einstellen\" und \"Beim Start ausführen\", um korrekte Benachrichtigungen zu erstellen.
         \n\nDie App benötigt die Berechtigungen \"SD-Karteninhalte ändern oder löschen\" und \"SD-Karteninhalte lesen\", um auf Deinen Wunsch hin Daten zu importieren oder exportieren. Die App macht dies niemals automatisch.
         \n\nEs wird keine Verantwortung übernommen, falls die App Notifikationen falsch oder nicht anzeigt.
-        \n\nDas Modul, mit dem eine Datei zum Importieren ausgewählt werden kann, ist unter der <a href="http://choosealicense.com/licenses/apache-2.0/">Apache 2.0 Lizenz</a> auf <a href="https://github.com/nbsp-team/MaterialFilePicker">Github</a> veröffentlicht. Copyright für dieses Modul: <a href="https://github.com/nbsp-team">nbsp-team</a>.
         \n\nDer Code dieser App ist unter der <a href="http://choosealicense.com/licenses/mit/">MIT-Lizenz</a> auf <a href="https://github.com/SebastianOltmanns/birthdays">GitHub</a> veröffentlicht.
     </string>
 

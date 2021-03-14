@@ -129,7 +129,6 @@
         \n\nThe app needs the permission \"set alarm\" and \"execute after boot completed\" to create correct notifications.
         \n\nThe app needs the permission \"change or delete external storage\" and \"read external storage\" to import or export data when you want it. The app will never do this automatically.
         \n\nNo responsibility will be accepted if the app displays notifications incorrectly or not.
-        \n\nThe module for choosing a file to import is available by <a href="http://choosealicense.com/licenses/apache-2.0/">Apache 2.0 License</a> and published at <a href="https://github.com/nbsp-team/MaterialFilePicker">Github</a>. Copyright for this module: <a href="https://github.com/nbsp-team">nbsp-team</a>.
         \n\nThe code of this app is licensed with <a href="http://choosealicense.com/licenses/mit/">MIT-License</a> and published on <a href="https://github.com/SebastianOltmanns/birthdays">GitHub</a>.
     </string>
 

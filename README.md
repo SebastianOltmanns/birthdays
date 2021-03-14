@@ -12,5 +12,3 @@ If you are willing to translate the Strings of this Application into another lan
 This app is only available for Android, since I myself am only interested in Android programming so far. If you are interested in doing another Version of this app, feel free to contact me about it! 
 ### Google Play Store
 https://play.google.com/store/apps/details?id=com.woodplantation.geburtstagsverwaltung
-### Usage of other Projects
-For importing a file, the Application is using nbsp-team's MaterialFilePicker (https://github.com/nbsp-team/MaterialFilePicker) which is available under Apache Licence 2.0. This Licence is included in this project in the root directory named "APACHE-LICENSE-2.0.txt".
