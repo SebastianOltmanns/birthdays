@@ -53,6 +53,8 @@ public class MigrateToVersion2 {
                                 .putBoolean(context.getString(R.string.preferences_storage_migrated), true)
                                 .apply();
 
+                        // this is commented out until user feedback to migration becomes better
+                        /*
                         // remove previous storage file
                         try {
                             context.deleteFile(StorageHandler.filePath);
@@ -62,7 +64,7 @@ public class MigrateToVersion2 {
                         try {
                             context.deleteFile("id");
                         } catch (Exception ignored) {
-                        }
+                        }*/
 
                         AlarmCreator.createFromScratch(context, preferences);
                         WidgetAlarmReceiver.createNextAlarm(context);
