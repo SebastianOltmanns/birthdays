@@ -128,7 +128,7 @@ public class InputViewModel extends ViewModel {
             } else {
                 repository.insertData(entry, onSuccess, onFailure::accept);
             }
-        } catch (DateTimeException | InvalidDateException e) {
+        } catch (DateTimeException | InvalidDateException | NumberFormatException e) {
             try {
                 onFailure.accept(new InvalidDateException());
             } catch (Exception e2) {
