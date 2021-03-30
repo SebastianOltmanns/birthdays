@@ -35,6 +35,7 @@ import com.woodplantation.geburtstagsverwaltung.model.Entry;
 import com.woodplantation.geburtstagsverwaltung.notifications.AlarmCreator;
 import com.woodplantation.geburtstagsverwaltung.repository.Repository;
 import com.woodplantation.geburtstagsverwaltung.util.IntentCodes;
+import com.woodplantation.geburtstagsverwaltung.util.MigrateToVersion2;
 import com.woodplantation.geburtstagsverwaltung.util.MyPreferences;
 import com.woodplantation.geburtstagsverwaltung.util.SortingCategory;
 import com.woodplantation.geburtstagsverwaltung.view.AppTheme;
@@ -62,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
 	Repository repository;
 	@Inject
 	AppTheme appTheme;
+	@Inject
+	MigrateToVersion2 migrateToVersion2;
 
 	public static final int REQUEST_PERMISSION_SET_ALARM = 7;
 	public static final int REQUEST_EXPORT_FILE_CREATE = 8;
@@ -98,6 +101,9 @@ public class MainActivity extends AppCompatActivity {
 		Toolbar toolbar = findViewById(R.id.toolbar);
 		toolbar.setTitle(R.string.activity_main_label);
 		setSupportActionBar(toolbar);
+
+		// migrate to v2. we only do this because for some users, the migration via updateReceiver did not work
+		migrateToVersion2.migrate(this);
 
 		fab = findViewById(R.id.fab);
 
