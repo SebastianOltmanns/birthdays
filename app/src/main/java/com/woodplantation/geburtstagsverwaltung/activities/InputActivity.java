@@ -110,7 +110,7 @@ public class InputActivity extends AppCompatActivity {
 							Integer.parseInt(inputViewModel.getBirthdayMonth().getValue()),
 							Integer.parseInt(inputViewModel.getBirthdayDay().getValue()));
 				}
-			} catch (DateTimeException ignored) {
+			} catch (DateTimeException | NumberFormatException ignored) {
 			}
 			new DatePickerDialog(
 					this,
