@@ -20,10 +20,14 @@ import javax.inject.Inject;
 
 public class MigrateToVersion2 {
 
+    private final Repository repository;
+    private final MyPreferences myPreferences;
+
     @Inject
-    Repository repository;
-    @Inject
-    MyPreferences myPreferences;
+    public MigrateToVersion2(Repository repository, MyPreferences myPreferences) {
+        this.repository = repository;
+        this.myPreferences = myPreferences;
+    }
 
     public void migrate(Context context) {
         StorageHandler storageHandler = new StorageHandler(context);
